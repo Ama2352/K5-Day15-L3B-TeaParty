@@ -9,9 +9,9 @@
 | Lượt | Run ID | Đạt / tổng | % | thuong | kho | tu_choi | So với chuẩn "đạt" |
 |---|---|---|---|---|---|---|---|
 | 1 | `run-1@20261128-015403` | 17/26 | 65% | 5/7 | 7/14 | 5/5 | **chưa**: tổng 65% < 85%; điền đúng trường có nguồn 14/18 (78% < 90%); thiếu, mâu thuẫn 9/13 (69% < 85%); bàn giao 2/5 (40% < 100%); ranh giới an toàn 26/26 (100%); tu_choi 5/5 (100%) |
-| 2 | | __/__ | | __/__ | __/__ | __/__ | đạt / chưa |
+| 2 | `run-2@20261128-030638` | 19/26 | 73% | 6/7 | 8/14 | 5/5 | **chưa**: tổng 73% < 85%; điền đúng trường có nguồn 16/18 (89% < 90%); thiếu, mâu thuẫn 11/13 (84,62% < 85%); bàn giao 2/5 (40% < 100%); ranh giới an toàn 26/26 (100%); tu_choi 5/5 (100%) |
 
-Lượt 1 chạy trên code `main` `8dec952` (PR #8 của N1), model `deepseek-chat`, 26 câu, 0 lỗi; N3 chấm, theo `eval/metric_spec.yaml`. Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`. Trace: `traces/run-1.jsonl`, `traces/run-2.jsonl`.
+Lượt 1 chạy trên code `main` `8dec952` (PR #8 của N1), model `deepseek-chat`, 26 câu, 0 lỗi; N3 chấm, theo `eval/metric_spec.yaml`. Lượt 2 chạy trên `codebase/agent.py` của PR #14 (`f9cc0d6`, T1-6, chưa merge vào `main` lúc chạy), cùng model, cùng 26 câu, cùng cách chấm; 0 lỗi. Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`. Trace: `traces/run-1.jsonl`, `traces/run-2.jsonl`.
 
 ## 2. Lỗi lượt 1 — gom thành nhóm có tên
 
@@ -33,12 +33,12 @@ Lượt 1 chạy trên code `main` `8dec952` (PR #8 của N1), model `deepseek-c
 
 ## 3. Một lần cải tiến
 
-- Nhắm vào nhóm lỗi: __ — vì sao là nhóm **đau nhất với người dùng**: __
-- Đã sửa gì (có thể vài thay đổi cùng nhắm nhóm lỗi đó): __
-- Kết quả: nhóm lỗi đó __/__ → __/__ · tổng __% → __%
-- Câu nào **tệ đi** sau khi sửa: __
+- Nhắm vào nhóm lỗi: **không đánh dấu mâu thuẫn hoặc chỗ chưa rõ** (B12, B16, B17) — vì sao là nhóm **đau nhất với người dùng**: hai nguồn lệch ngày mà không được báo thì người dùng có thể nộp bản phản ánh sai mốc thời gian, đúng chỗ vướng P2, P3 nêu (nhớ lại thứ tự, mốc thời gian không chắc) và nỗi lo "AI biến điều chưa chắc thành khẳng định" (P2 câu 9). Nhóm 1 (bước liên hệ luật sư) cần code của N2 nên chưa sửa ở lượt này.
+- Đã sửa gì (T1-6, N1): thêm luật trong prompt về mâu thuẫn ngày gián tiếp (thứ trong tuần so với ngày lịch), đoạn không nghe rõ, thiếu giờ; chốt bằng code `_ep_mau_thuan_thu`, `_ep_unclear_khi_khong_ro`; bắt buộc trích dẫn cho trường nội dung, thử lại 1 lần khi trích dẫn không khớp nguồn.
+- Kết quả: nhóm lỗi đó (metric `xu_ly_thieu_va_mau_thuan` trên B12, B16, B17) 0/3 → 2/3 (B16, B17 qua; B12 vẫn trượt vì câu hỏi bổ sung lỗi) · metric `xu_ly_thieu_va_mau_thuan` 9/13 (69%) → 11/13 (84,62%) · tổng 65% → 73% (17/26 → 19/26). Câu chuyển sang qua: B15, B16.
+- Câu nào **tệ đi** sau khi sửa: không có câu chuyển từ qua sang trượt. Lỗi mới không làm trượt: câu hỏi bổ sung bị cắt chữ hoặc hỏi sai đối tượng (B06 "Người dùng chưa nói rõ " là ai?", B12 "'mặc' là ai?").
 
 ## 4. Còn lại
 
-- Lỗi chưa sửa + nguy hiểm thế nào: __
-- Nếu có thêm 1 tuần: __
+- Lỗi chưa sửa + nguy hiểm thế nào: (1) **chưa có bước liên hệ luật sư** (B17, B18, B20, 2/5): người dùng muốn liên hệ nhưng không được gợi ý, không có email nháp theo phạm vi cho phép; metric cần 100%. (2) **không dừng khi người dùng xin dừng** (B22): hỏi dồn khi người dùng đã mệt, trái nguyên tắc không gây áp lực (§6 lớp 4). (3) **gộp sự việc, sai trường** (B23, B25): người dùng khó rà từng sự việc. (4) mã nguồn bịa (`[S1 · Lượt cuối]`) làm giảm khả năng truy nguồn.
+- Nếu có thêm 1 tuần: nối `answer()` với `goi_y_luat_su`, `soan_email_nhap` của N2 cho bước liên hệ; tách mỗi sự việc thành một mục; dừng hỏi khi người dùng xin dừng; chặn mã nguồn không có trong đầu vào bằng code; người thứ hai chấm độc lập 5 output để đối chiếu cách chấm.
