@@ -3,49 +3,45 @@
 # Mọi số phải có nguồn (data / phỏng vấn / khảo sát / quy mô khoá có nguồn) hoặc ghi rõ "(tự ước tính)".
 # Chạy: python run.py simulate --try   (10 phiên, kiểm khung — làm trước CP3)
 #       python run.py simulate         (đủ số phiên dưới đây — bản nộp CP4)
-# Thay mọi dòng "(ví dụ)" bằng số và nguồn của nhóm; simulate nhắc nếu còn sót.
 
 sessions: 50        # số phiên mô phỏng — bản nộp ≥50
 seed: 42            # giữ cố định để chạy lại ra cùng chuỗi phiên
 
 users:              # số người dùng thật nếu đưa vào dùng — 3 kịch bản, ở quy mô thật của sản phẩm
-                    # track A: khoá học · track B–F: người dùng của sản phẩm / nhóm nhắm tới, nguồn công khai có link
-  low: 300
-  base: 700
-  high: 1000
-  source: "(ví dụ) track A — thay bằng số của nhóm. Cơ sở: lớp L3 hơn 700 học viên (README hackathon); thấp, cao: (tự ước tính)"
+  low: 100
+  base: 500
+  high: 2000
+  source: "(tự ước tính) quy mô thử nghiệm qua 1–3 tổ chức hỗ trợ hoặc văn phòng luật; nhóm chưa có số công khai về người cần chuẩn bị hồ sơ quấy rối tình dục nơi làm việc. Khảo sát n = 21: 2/21 tự gặp vấn đề mang tính tình dục (evidence/summary.md), không đủ để suy ra quy mô."
 
 personas:           # ≥3 kiểu người dùng; share cộng lại = 1
+                    # Nguồn chung: khảo sát câu 8 (số lần chuẩn bị hoặc bổ sung tài liệu trong 12 tháng), n = 13 người có trường hợp, chia 12 ra lần / tháng.
+                    # Quy đổi khoảng thành số (tự ước tính): 1 lần = 1 · 2–3 = 2,5 · 4–6 = 5 · 7–12 = 9,5 · trên 12 = 13.
   - name: dung_it
-    share: 0.5              # tỉ lệ người dùng kiểu này
-    uses_per_month: 4       # số phiên / người / tháng
-    turns_per_session: 1    # số lượt hỏi trong một phiên
-    source: "(ví dụ) phỏng vấn P1, P3 — thay bằng nguồn của nhóm"
+    share: 0.385            # 5/13: chọn 1 lần (S04, S21) hoặc 2–3 lần (S12, S16, S20)
+    uses_per_month: 0.16    # (2×1 + 3×2,5) / 5 / 12
+    turns_per_session: 1    # (tự ước tính) mức 1 lượt tạo hoặc sửa bản nháp trong thẻ đề
+    source: "khảo sát câu 8, n = 13 (evidence/survey/results.csv); spec.md §2. Số lượt / phiên: (tự ước tính)"
   - name: dung_vua
-    share: 0.3
-    uses_per_month: 10
-    turns_per_session: 3
-    source: "(ví dụ) khảo sát n = 24, câu 3"
+    share: 0.46             # 6/13: chọn 4–6 lần (S05, S09, S11, S17, S18, S19)
+    uses_per_month: 0.42    # 5 / 12
+    turns_per_session: 2    # (tự ước tính) mức 2 lượt trong thẻ đề
+    source: "khảo sát câu 8, n = 13 (evidence/survey/results.csv); spec.md §2. Số lượt / phiên: (tự ước tính)"
   - name: dung_nhieu
-    share: 0.2
-    uses_per_month: 20
-    turns_per_session: 5
-    source: "(ví dụ) data/preclass: đếm số lượt / người — cách đếm ở evidence/data-mining.md"
+    share: 0.155            # 2/13: chọn 7–12 lần (S13) hoặc trên 12 lần (S14) — cả hai là người hỗ trợ người khác
+    uses_per_month: 0.94    # (9,5 + 13) / 2 / 12
+    turns_per_session: 4    # (tự ước tính) mức 4 lượt trong thẻ đề
+    source: "khảo sát câu 8, n = 13 (evidence/survey/results.csv); spec.md §2. Số lượt / phiên: (tự ước tính)"
 # Mỗi lượt hỏi lấy ngẫu nhiên một đầu vào trong eval/benchmark.csv (type thuong và kho).
-# Persona hỏi kiểu riêng: thêm vào persona đó
-#     types: [thuong, kho, tu_choi]
-# hoặc
-#     inputs: ["câu hỏi kiểu 1", "câu hỏi kiểu 2"]
 
-prices:             # USD / 1 triệu token — chép từ further-reading/model-prices.md của repo đề. ≥2 mức model
-  - model: gemini-3.1-flash-lite
-    input: 0.25
-    output: 1.50
-    source: "(ví dụ) https://ai.google.dev/gemini-api/docs/pricing · xem 25/11/2026"
-  - model: gemini-4-hydrogen
-    input: 1.50
-    output: 7.50
-    source: "(ví dụ) https://ai.google.dev/gemini-api/docs/pricing · xem 25/11/2026"
+prices:             # USD / 1 triệu token — giá giờ cao điểm, input tính cache miss (mức cao, an toàn khi ước chi phí). ≥2 mức model
+  - model: deepseek-flash
+    input: 0.30
+    output: 1.20
+    source: "https://api-docs.deepseek.com/quick_start/pricing · xem 28/11/2026 · DeepSeek-V4.1-Flash-1017, giá peak, cache miss (off-peak bằng một nửa)"
+  - model: deepseek-v4-pro
+    input: 1.32
+    output: 3.96
+    source: "https://api-docs.deepseek.com/quick_start/pricing · xem 28/11/2026 · DeepSeek-V4-Pro-0813, giá peak, cache miss (off-peak bằng một nửa)"
 
 usd_to_vnd:         # tuỳ chọn: điền thì bản tóm tắt in thêm tiền Việt
   rate:
