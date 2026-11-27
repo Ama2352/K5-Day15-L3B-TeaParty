@@ -1,0 +1,203 @@
+{
+  "draft_label": "Bản nháp do AI hỗ trợ soạn, cần kiểm tra trước khi ký",
+  "noi_nhan": {
+    "value": null,
+    "source_refs": [],
+    "status": "missing",
+    "user_confirmed": false
+  },
+  "tu_cach": {
+    "value": "Người trực tiếp nhận tin nhắn trong ảnh chụp (ca giả lập)",
+    "source_refs": [
+      {
+        "source_type": "user_narrative",
+        "source_id": "S1",
+        "locator": "câu 1",
+        "quote": "tôi là người nhận tin nhắn đó"
+      }
+    ],
+    "status": "provided",
+    "user_confirmed": false
+  },
+  "tai_lieu": [
+    {
+      "n": 1,
+      "file_id": "F1-CA-GIA-LAP",
+      "ten_tep": "ca_gia_lap_anh_chup_tin_nhan.png",
+      "loai_tai_lieu": {
+        "value": "Ảnh chụp màn hình tin nhắn",
+        "source_refs": [
+          {
+            "source_type": "user_narrative",
+            "source_id": "S1",
+            "locator": "câu 2",
+            "quote": "tôi chụp màn hình đoạn tin nhắn"
+          }
+        ],
+        "status": "provided",
+        "user_confirmed": false
+      },
+      "mo_ta_noi_dung": {
+        "value": "CA GIẢ LẬP. Ảnh chụp một đoạn hội thoại nhắn tin giữa hai tài khoản; có một tin nhắn được người dùng mô tả là nhận xét không mong muốn. Trích dẫn theo OCR: \"tin nhắn giả lập số 1\".",
+        "source_refs": [
+          {
+            "source_type": "user_narrative",
+            "source_id": "S1",
+            "locator": "câu 2"
+          },
+          {
+            "source_type": "ocr",
+            "source_id": "S2",
+            "locator": "vùng nội dung chính",
+            "quote": "tin nhắn giả lập số 1"
+          }
+        ],
+        "status": "provided",
+        "user_confirmed": false
+      },
+      "nguoi_tao": {
+        "kind": "self",
+        "field": {
+          "value": "Người dùng tự chụp màn hình",
+          "source_refs": [
+            {
+              "source_type": "user_narrative",
+              "source_id": "S1",
+              "locator": "câu 2",
+              "quote": "tôi chụp màn hình"
+            }
+          ],
+          "status": "provided",
+          "user_confirmed": false
+        }
+      },
+      "thoi_diem_tao": {
+        "value": null,
+        "source_refs": [
+          {
+            "source_type": "user_narrative",
+            "source_id": "S1",
+            "locator": "câu 3",
+            "quote": "chụp vào thứ Hai 23/11/2026"
+          },
+          {
+            "source_type": "ocr",
+            "source_id": "S2",
+            "locator": "góc trên ảnh",
+            "quote": "24/11/2026"
+          }
+        ],
+        "status": "conflicting",
+        "conflict_note": "S1 (lời kể) ghi chụp ngày 2026-11-23; S2 (OCR ảnh) hiện ngày 2026-11-24. Chưa chọn giá trị nào, cần người dùng xác nhận.",
+        "user_confirmed": false,
+        "precision": "unknown"
+      },
+      "dia_diem_hoan_canh": {
+        "value": "Ở nơi làm việc, có thể là phòng họp",
+        "source_refs": [
+          {
+            "source_type": "user_narrative",
+            "source_id": "S1",
+            "locator": "câu 4",
+            "quote": "lúc đó tôi đang ở chỗ làm, hình như trong phòng họp"
+          }
+        ],
+        "status": "unclear",
+        "user_confirmed": false
+      },
+      "thiet_bi_ung_dung": {
+        "value": null,
+        "source_refs": [],
+        "status": "missing",
+        "user_confirmed": false
+      },
+      "nguoi_co_mat": {
+        "value": null,
+        "source_refs": [],
+        "status": "missing",
+        "user_confirmed": false
+      },
+      "cach_luu_giu": {
+        "value": "Lưu trong máy, có thể đã gửi bản sao cho ai đó",
+        "source_refs": [
+          {
+            "source_type": "user_narrative",
+            "source_id": "S1",
+            "locator": "câu 5",
+            "quote": "ảnh vẫn trong máy, hình như tôi có gửi cho một người bạn"
+          }
+        ],
+        "status": "unclear",
+        "user_confirmed": false
+      },
+      "tinh_trang_chinh_sua": {
+        "edits": [
+          "none_reported"
+        ],
+        "field": {
+          "value": "Người dùng cho biết không cắt, không sửa ảnh",
+          "source_refs": [
+            {
+              "source_type": "user_narrative",
+              "source_id": "S1",
+              "locator": "câu 6",
+              "quote": "tôi không cắt hay sửa gì"
+            }
+          ],
+          "status": "provided",
+          "user_confirmed": false
+        }
+      },
+      "file_facts": {
+        "dung_luong_bytes": 245760,
+        "thoi_luong_giay": null,
+        "sha256": "e3ede1ab6b982cbc55c4ba76721062989b914173bc8599ed6b574d9d2fbee7d0"
+      },
+      "lien_quan_su_viec": {
+        "value": "Ảnh ghi lại tin nhắn mà người dùng kể là có nội dung không mong muốn",
+        "source_refs": [
+          {
+            "source_type": "user_narrative",
+            "source_id": "S1",
+            "locator": "câu 1"
+          }
+        ],
+        "status": "provided",
+        "user_confirmed": false
+      },
+      "nguoi_cung_cap": null
+    }
+  ],
+  "questions_for_user": [
+    {
+      "field_path": "noi_nhan",
+      "question": "Bạn dự định gửi văn bản này tới đâu (ví dụ: bộ phận nhân sự, luật sư)? Có thể bỏ qua.",
+      "skippable": true
+    },
+    {
+      "field_path": "tai_lieu[0].thoi_diem_tao",
+      "question": "Lời kể ghi ngày 23/11/2026, còn ảnh hiện ngày 24/11/2026. Bạn có thể xác nhận ngày chụp không?",
+      "skippable": true
+    },
+    {
+      "field_path": "tai_lieu[0].dia_diem_hoan_canh",
+      "question": "Bạn có nhớ rõ lúc chụp mình đang ở đâu không?",
+      "skippable": true
+    },
+    {
+      "field_path": "tai_lieu[0].thiet_bi_ung_dung",
+      "question": "Ảnh được chụp bằng thiết bị nào, tin nhắn nằm trong ứng dụng nào?",
+      "skippable": true
+    },
+    {
+      "field_path": "tai_lieu[0].nguoi_co_mat",
+      "question": "Lúc chụp có ai khác ở cùng bạn không?",
+      "skippable": true
+    },
+    {
+      "field_path": "tai_lieu[0].cach_luu_giu",
+      "question": "Từ lúc chụp tới nay, ảnh được lưu ở đâu và đã gửi cho ai chưa?",
+      "skippable": true
+    }
+  ]
+}
