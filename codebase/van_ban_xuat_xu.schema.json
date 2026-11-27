@@ -1,0 +1,401 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ho-so-an-toan/van-ban-trinh-bay-xuat-xu/v0.1",
+  "title": "Văn bản trình bày xuất xứ tài liệu (bản nháp do LLM điền)",
+  "description": "Đầu ra có cấu trúc cho LLM. Mỗi trường gồm giá trị, nguồn, trạng thái và việc người dùng đã xác nhận hay chưa. Các trường danh tính (họ tên, ngày sinh, số định danh, địa chỉ, điện thoại) không có trong schema này: người dùng tự điền sau khi tải bản nháp xuống. Mã băm, dung lượng, thời lượng do code tính và ghi vào, LLM không tạo ra.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "draft_label",
+    "noi_nhan",
+    "tu_cach",
+    "tai_lieu",
+    "questions_for_user"
+  ],
+  "$defs": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "provided",
+        "missing",
+        "unclear",
+        "conflicting"
+      ],
+      "description": "provided: có từ nguồn; missing: chưa có thông tin; unclear: có nhưng mơ hồ; conflicting: các nguồn mâu thuẫn."
+    },
+    "source_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_type",
+        "source_id"
+      ],
+      "properties": {
+        "source_type": {
+          "type": "string",
+          "enum": [
+            "user_narrative",
+            "user_answer",
+            "file_metadata",
+            "ocr",
+            "asr",
+            "system"
+          ]
+        },
+        "source_id": {
+          "type": "string",
+          "description": "ID của lời kể, câu trả lời hoặc tệp."
+        },
+        "locator": {
+          "type": "string",
+          "description": "Đoạn, offset ký tự hoặc mốc thời gian (mm:ss) trong nguồn."
+        },
+        "quote": {
+          "type": "string",
+          "description": "Trích nguyên văn ngắn nếu có."
+        }
+      }
+    },
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "source_refs",
+        "status",
+        "user_confirmed"
+      ],
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "null khi status là missing. Không đoán."
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_ref"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "conflict_note": {
+          "type": "string",
+          "description": "Bắt buộc khi status là conflicting: ghi cả hai giá trị và nguồn của chúng."
+        },
+        "user_confirmed": {
+          "type": "boolean",
+          "description": "Chỉ true sau khi người dùng xác nhận trên giao diện. LLM luôn đặt false."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "conflicting"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "conflict_note"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "missing"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "time_field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "source_refs",
+        "status",
+        "user_confirmed",
+        "precision"
+      ],
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "null khi status là missing. Không đoán."
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_ref"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "conflict_note": {
+          "type": "string",
+          "description": "Bắt buộc khi status là conflicting: ghi cả hai giá trị và nguồn của chúng."
+        },
+        "user_confirmed": {
+          "type": "boolean",
+          "description": "Chỉ true sau khi người dùng xác nhận trên giao diện. LLM luôn đặt false."
+        },
+        "precision": {
+          "type": "string",
+          "enum": [
+            "exact",
+            "from_metadata",
+            "user_estimate",
+            "unknown"
+          ],
+          "description": "Độ chính xác của thời điểm."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "conflicting"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "conflict_note"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "missing"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "tai_lieu_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "n",
+        "file_id",
+        "ten_tep",
+        "loai_tai_lieu",
+        "mo_ta_noi_dung",
+        "nguoi_tao",
+        "thoi_diem_tao",
+        "dia_diem_hoan_canh",
+        "thiet_bi_ung_dung",
+        "nguoi_co_mat",
+        "cach_luu_giu",
+        "tinh_trang_chinh_sua",
+        "lien_quan_su_viec",
+        "nguoi_cung_cap"
+      ],
+      "properties": {
+        "n": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "file_id": {
+          "type": "string"
+        },
+        "ten_tep": {
+          "type": "string",
+          "description": "Do hệ thống điền từ tên tệp gốc."
+        },
+        "loai_tai_lieu": {
+          "$ref": "#/$defs/field"
+        },
+        "mo_ta_noi_dung": {
+          "$ref": "#/$defs/field",
+          "description": "Trung tính, ngắn; trích dẫn ghi rõ là trích dẫn; không đánh giá hành vi, không gán tội danh."
+        },
+        "nguoi_tao": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "field"
+          ],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "self",
+                "provided_by_other",
+                "unknown"
+              ],
+              "description": "self: người dùng tự thu, tự chụp. provided_by_other: cần phần xác nhận của người cung cấp."
+            },
+            "field": {
+              "$ref": "#/$defs/field"
+            }
+          }
+        },
+        "thoi_diem_tao": {
+          "$ref": "#/$defs/time_field"
+        },
+        "dia_diem_hoan_canh": {
+          "$ref": "#/$defs/field"
+        },
+        "thiet_bi_ung_dung": {
+          "$ref": "#/$defs/field"
+        },
+        "nguoi_co_mat": {
+          "$ref": "#/$defs/field"
+        },
+        "cach_luu_giu": {
+          "$ref": "#/$defs/field"
+        },
+        "tinh_trang_chinh_sua": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "edits",
+            "field"
+          ],
+          "properties": {
+            "edits": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "none_reported",
+                  "trimmed",
+                  "compressed",
+                  "format_converted",
+                  "re_screenshotted",
+                  "merged",
+                  "other",
+                  "unknown"
+                ]
+              },
+              "description": "Liệt kê đúng những thay đổi người dùng hoặc metadata cho biết."
+            },
+            "field": {
+              "$ref": "#/$defs/field"
+            }
+          }
+        },
+        "file_facts": {
+          "type": "object",
+          "description": "Do code điền sau khi LLM chạy. LLM không được tạo các giá trị này.",
+          "properties": {
+            "dung_luong_bytes": {
+              "type": "integer"
+            },
+            "thoi_luong_giay": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        },
+        "lien_quan_su_viec": {
+          "$ref": "#/$defs/field"
+        },
+        "nguoi_cung_cap": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "Chỉ điền khi nguoi_tao.kind = provided_by_other. Người cung cấp phải tự ký.",
+          "additionalProperties": false,
+          "properties": {
+            "quan_he_hoac_vai_tro": {
+              "$ref": "#/$defs/field"
+            },
+            "thoi_diem_cung_cap": {
+              "$ref": "#/$defs/time_field"
+            },
+            "cach_cung_cap": {
+              "$ref": "#/$defs/field"
+            },
+            "nguon_cua_nguoi_cung_cap": {
+              "$ref": "#/$defs/field"
+            }
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "draft_label": {
+      "const": "Bản nháp do AI hỗ trợ soạn, cần kiểm tra trước khi ký"
+    },
+    "noi_nhan": {
+      "$ref": "#/$defs/field"
+    },
+    "tu_cach": {
+      "$ref": "#/$defs/field"
+    },
+    "tai_lieu": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/tai_lieu_item"
+      }
+    },
+    "questions_for_user": {
+      "type": "array",
+      "description": "Mỗi trường missing, unclear hoặc conflicting sinh tối đa một câu hỏi trung tính, người dùng có thể bỏ qua.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "field_path",
+          "question",
+          "skippable"
+        ],
+        "properties": {
+          "field_path": {
+            "type": "string",
+            "description": "Ví dụ: tai_lieu[0].thoi_diem_tao"
+          },
+          "question": {
+            "type": "string"
+          },
+          "skippable": {
+            "const": true
+          }
+        }
+      }
+    }
+  }
+}
