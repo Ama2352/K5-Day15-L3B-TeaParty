@@ -20,7 +20,12 @@ Data BTC cấp đã dùng: không có.
 - Việc họ cố làm xong: thu thập và hệ thống hóa nguồn đã có để soạn bản phản ánh một sự việc.
 - Cách làm hiện tại: tự ghi lại, gom tài liệu và viết bằng công cụ phổ thông (§0). Trong 6 người tự trải qua, cả 6 phải sửa hoặc viết lại ít nhất một lần.
 - Pain: nhân viên bị quấy rối tình dục tại nơi làm việc gặp khó khăn trong việc thu thập, hệ thống hóa bằng chứng và chuẩn bị hồ sơ phản ánh sự việc.
-- Bằng chứng: khảo sát n = 21, trong đó 6/21 tự chuẩn bị bản phản ánh trong 12 tháng, **2/21** tự gặp vấn đề mang tính tình dục. Việc mất công nhất: ghi lại sự việc 5/13 (tự trải qua 3/6); đối chiếu, tìm phần thiếu 4/13 (1/6). **Kết luận:** chưa đủ bằng chứng cho đúng người dùng của lát cắt; [giả thuyết](evidence/hypothesis.md) (đặt cho phỏng vấn) chưa kiểm được. Chi tiết: `evidence/summary.md`.
+- Bằng chứng: khảo sát n = 21, trong đó 6/21 tự chuẩn bị bản phản ánh trong 12 tháng, **2/21** tự gặp vấn đề mang tính tình dục. Việc mất công nhất: ghi lại sự việc 5/13 (tự trải qua 3/6); đối chiếu, tìm phần thiếu 4/13 (1/6). Phỏng vấn có **3 người ngoài nhóm**, tự nguyện tham gia và đều đã thực hiện bước chuẩn bị. Đã đạt ngưỡng phỏng vấn. [Giả thuyết](evidence/hypothesis.md) vẫn chưa kiểm được vì thiếu số lần chuẩn bị trong tháng và bước người tham gia tự nêu là mất thời gian nhất. Chi tiết: `evidence/summary.md`.
+
+- **Trích dẫn nguyên văn từ phỏng vấn**
+  - “... chị tính ghi lại ông đó rồi mà không dám tại lương ổng trả cao, giờ chưa chắc kiếm được việc như thế... danh tiếng bác sĩ này lớn ... khó tìm được việc khác” — [P1](evidence/interviews/P1.md)
+  - “Em từng định viết mail cho HR nhưng ngồi một lúc không biết viết như thế nào. Không biết nên kể hết từ đầu hay chỉ kể những lần nghiêm trọng nhất.” — [P2](evidence/interviews/P2.md)
+  - “Mỗi thứ nằm một chỗ, có những chi tiết mình nhớ nhưng không chắc về thời điểm.” — [P3](evidence/interviews/P3.md)
 
 ## §2. Impact & quyết định chọn *(guide 1.3)*
 
@@ -176,7 +181,7 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 - So với impact / người / tháng (§2): đáng làm không, vì sao:
 
 ## §9. Rủi ro & an toàn
-- Dữ liệu: demo và bộ câu thử chỉ dùng dữ liệu giả lập (A, B, phòng M). Phỏng vấn chỉ hỏi quy trình, không thu hồ sơ, tin nhắn, ảnh, ghi âm thật; ghi bằng mã P1, P2. Không đưa dữ liệu thật vào model, kể cả gói miễn phí.
+- Dữ liệu: demo và bộ câu thử chỉ dùng dữ liệu giả lập (A, B, phòng M). Phỏng vấn chỉ hỏi quy trình, không thu hồ sơ, tin nhắn, ảnh, ghi âm thật; ghi bằng mã P1–P3. Không đưa dữ liệu thật vào model, kể cả gói miễn phí.
 - AI **không được** làm, kể cả khi người dùng yêu cầu: bịa tình tiết, bằng chứng hoặc luật sư; kết luận phạm tội hay giá trị chứng cứ; gửi hoặc nói đã gửi hồ sơ, email; chia sẻ phần người dùng chưa cho phép.
 - Ai có thể bị hại nếu AI sai, và cách chặn:
   - Người phản ánh (mất uy tín, bị trả đũa): dẫn nguồn, đánh dấu chỗ chưa rõ, người dùng duyệt.
@@ -197,6 +202,10 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 | 27/11 đêm | Sửa phân công ở `TEAMS.md`, `canvas.md` dòng 7 và §10 cho khớp việc thật; không đổi nội dung bài | Phân công cũ lệch với phần mỗi người làm trong repo |
 | 28/11 sáng | Thêm B11–B26 (B23, B24 theo P3; B25, B26 theo P1) vào `eval/benchmark.csv` (giữ nguyên B01–B10 và `expected` cũ); thêm `data/luat_su.json` giả lập; cập nhật `data/DATA_CARD.md`, `eval/README.md` mục 1–2, §7; điền `cost/personas.yaml` (khảo sát câu 8, giá DeepSeek xem 28/11/2026). Không đổi metric và chuẩn đạt | `run.py check` cảnh báo thiếu số câu (10/20) và nguồn thật (0/10); metric `ban_giao_theo_lua_chon` chưa có ca áp dụng; chưa có ca ảnh, âm thanh |
 | 28/11 sáng | Chạy eval lượt 1 (`run-1@20261128-015403`, code `8dec952`, `deepseek-chat`), N3 chấm 17/26; điền `eval/report.md` §1–2, `eval/README.md` §5–6, §7; không đổi chuẩn đạt, câu thử | T3-4; mở khoá T1-6 cho N1 |
+| 28/11 | Bổ sung thông tin phỏng vấn P1–P3 và cập nhật tổng hợp bằng chứng, §1 | N3 xác nhận cả ba ngoài nhóm và tự nguyện tham gia |
+| 28/11 | Bổ sung hai ví dụ báo chí vào `evidence/summary.md` §3 và bối cảnh từ báo cáo bình đẳng giới 2021 vào §4 | Đủ 5 mục dẫn nguồn. Hai ví dụ ghi nhận rào cản về chứng cứ và diễn biến sau khi phản ánh |
+| 28/11 | Ghi trích dẫn nguyên văn của P1–P3 vào [Canvas dòng 4](canvas.md) và §1, dẫn từ data card và giả thuyết về tổng hợp, đồng bộ thông tin phỏng vấn và nguồn công khai trong [data card](data/DATA_CARD.md), ghi rõ bài Báo Phụ Nữ là bài ý kiến trong [tổng hợp bằng chứng](evidence/summary.md) | Đáp ứng yêu cầu một trích dẫn trên Canvas và làm rõ xuất xứ của bằng chứng |
+| 28/11 | Rà hồ sơ P1–P3, đồng bộ Canvas, tổng hợp bằng chứng và data card | Khớp mức độ xác nhận trong ghi chép phỏng vấn |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
