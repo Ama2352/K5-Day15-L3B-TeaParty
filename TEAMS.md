@@ -11,8 +11,8 @@
 
 | STT | Họ và tên | Mã học viên | Vai trò | Phần việc chính |
 |---|---|---|---|---|
-| 1 | Hồ Nguyễn Minh Sang | 2A202603905 | Đội trưởng | Chốt lát cắt, Canvas, nối model và chạy bản chạy thử, nộp các checkpoint |
-| 2 | Nguyễn Thảo Quyên | 2A202603895 | Thành viên | Viết spec.md và báo cáo đánh giá |
+| 1 | Hồ Nguyễn Minh Sang | 2A202603905 | Đội trưởng | Phụ trách backend và giao diện rà soát hồ sơ, cấu hình CI và Railway, nộp các checkpoint |
+| 2 | Nguyễn Thảo Quyên | 2A202603895 | Thành viên | Phụ trách lõi AI, tích hợp DeepSeek để trích xuất bản nháp và cập nhật khi người dùng bổ sung thông tin |
 | 3 | Vũ Ngọc Quỳnh Anh | 2A202603875 | Thành viên | Phỏng vấn người dùng và tổng hợp bằng chứng pain |
 | 4 | Nguyễn Thị Khánh Linh | 2A202603845 | Thành viên | Xây bộ câu thử benchmark và data card |
 
