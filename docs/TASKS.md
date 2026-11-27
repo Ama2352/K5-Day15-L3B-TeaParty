@@ -6,7 +6,7 @@
 
 Điền tên trước khi bắt đầu:
 
-- **Người 1 — Lõi AI:** ____
+- **Người 1 — Lõi AI:** Nguyễn Thảo Quyên
 - **Người 2 — Backend + giao diện:** ____
 - **Người 3 — Dữ liệu + đánh giá + hồ sơ:** ____
 
