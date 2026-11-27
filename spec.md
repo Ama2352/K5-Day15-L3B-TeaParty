@@ -7,32 +7,32 @@ Track F · Chuẩn bị hồ sơ phản ánh sự việc quấy rối tình dụ
 Data BTC cấp đã dùng: không có.
 
 ## §0. Hiện tại việc này diễn ra thế nào *(guide 1.1)*
-- Luồng hiện tại của việc này: **chưa có dữ liệu khảo sát hoặc quan sát trực tiếp** quy trình thực tế của nhân viên khi chuẩn bị hồ sơ phản ánh. Luồng dưới đây là cách làm *cần kiểm chứng, chưa được xác nhận*:
-  1. Người bị quấy rối tự ghi lại sự việc bằng lời kể hoặc ghi chú.
-  2. Tập hợp các nguồn thông tin sẵn có như tin nhắn, hình ảnh, tài liệu và nội dung liên quan.
-  3. Tự đối chiếu thông tin, sắp xếp các mốc thời gian và xác định phần còn thiếu.
-  4. Soạn bản phản ánh dựa trên những thông tin đã thu thập.
-  5. Tìm người hoặc tổ chức có thể tiếp nhận và hỗ trợ xử lý.
-- Công cụ / AI đang được dùng cho việc này: chưa kiểm. Không có nguồn xác nhận một quy trình AI cụ thể đang được áp dụng.
+- Luồng hiện tại, theo khảo sát (13/21 người có trường hợp của mình hoặc người quen, mọi loại vấn đề ở nơi làm việc; một người chọn nhiều việc; chưa có ảnh chụp):
+  1. Ghi lại sự việc bằng lời kể hoặc ghi chú (9/13).
+  2. Gom tin nhắn, hình ảnh, tài liệu (8/13).
+  3. Đối chiếu, sắp mốc thời gian, tìm phần thiếu (6/13).
+  4. Viết bản phản ánh (3/13).
+  5. Tìm người hoặc tổ chức tiếp nhận (7/13).
+- Công cụ / AI đang được dùng (khảo sát, n = 13): Word hoặc Google Docs 8/13 · chụp màn hình, thư mục ảnh 7/13 · ghi chú điện thoại 6/13 · ChatGPT, Gemini, Claude hoặc AI khác 5/13 · Excel hoặc Sheets 2/13. Nguồn: `evidence/survey/results.csv`.
 
 ## §1. Người dùng & bằng chứng *(guide 1.1, 1.2)*
 - Người dùng chính: nhân viên trưởng thành đang tự chuẩn bị hồ sơ phản ánh một sự việc quấy rối tình dục tại nơi làm việc.
-- Việc họ cố làm xong: thu thập, hệ thống hóa các nguồn thông tin đã có và chuẩn bị bản phản ánh về sự việc.
-- Cách làm hiện tại, cần kiểm chứng: tự gom lời kể, tài liệu dạng văn bản, hình ảnh và âm thanh; đối chiếu các mốc; sau đó viết lại diễn biến. Người dùng có thể phải rà soát nhiều lần hoặc gặp khó khăn khi xác định thông tin còn thiếu.
-- Pain: nhân viên bị quấy rối tình dục tại nơi làm việc gặp khó khăn trong việc thu thập, hệ thống hóa thông tin và chuẩn bị hồ sơ phản ánh sự việc.
-- Bằng chứng: chưa có kết quả khảo sát/phỏng vấn trong bản nháp CP1. Xem kế hoạch ở [giả thuyết](evidence/hypothesis.md). Kết quả thực tế sẽ ghi vào `evidence/summary.md`.
+- Việc họ cố làm xong: thu thập và hệ thống hóa nguồn đã có để soạn bản phản ánh một sự việc.
+- Cách làm hiện tại: tự ghi lại, gom tài liệu và viết bằng công cụ phổ thông (§0). Trong 6 người tự trải qua, cả 6 phải sửa hoặc viết lại ít nhất một lần.
+- Pain: nhân viên bị quấy rối tình dục tại nơi làm việc gặp khó khăn trong việc thu thập, hệ thống hóa bằng chứng và chuẩn bị hồ sơ phản ánh sự việc.
+- Bằng chứng: khảo sát n = 21, trong đó 6/21 tự chuẩn bị bản phản ánh trong 12 tháng, **2/21** tự gặp vấn đề mang tính tình dục. Việc mất công nhất: ghi lại sự việc 5/13 (tự trải qua 3/6); đối chiếu, tìm phần thiếu 4/13 (1/6). **Kết luận:** chưa đủ bằng chứng cho đúng người dùng của lát cắt; [giả thuyết](evidence/hypothesis.md) (đặt cho phỏng vấn) chưa kiểm được. Chi tiết: `evidence/summary.md`.
 
 ## §2. Impact & quyết định chọn *(guide 1.3)*
 
 | Hướng | Bao nhiêu người gặp | Bao nhiêu lần / tháng | Mỗi lần tốn gì | Impact / tháng | Làm kịp không | Chọn? |
 |---|---|---|---|---|---|---|
-| Thu thập và hệ thống hóa thông tin từ lời kể, hình ảnh và tài liệu | Chưa có số liệu | Chưa có số liệu | Chưa đo | Chưa tính được | Có thể làm MVP | Hướng đang tập trung |
-| Kiểm tra thông tin còn thiếu và hỗ trợ bổ sung hồ sơ | Chưa có số liệu | Chưa có số liệu | Chưa đo | Chưa tính được | Có thể làm MVP | Hướng đang tập trung |
-| Kết nối hồ sơ đã chuẩn bị với luật sư hoặc tổ chức hỗ trợ | Chưa có số liệu | Chưa có số liệu | Chưa đo | Chưa tính được | Phụ thuộc khả năng tích hợp và đối tác | Chưa xác nhận phạm vi triển khai |
+| A. Đối chiếu nguồn, điền form, hỏi phần thiếu, soạn bản nháp | 6/21 tự trải qua (13/21 gồm người quen) | trung vị ≈ 0,31 | trung vị ≈ 30 phút | ≈ 56 phút (trong mẫu) | Bản giả lập trong 48 giờ | ✔ |
+| B. Kho lưu bằng chứng kèm mã băm | khảo sát không đo | khảo sát không đo | khảo sát không đo | chưa tính được | Làm được, nhưng không có quyết định AI | ✘ |
+| C. Rà bài đăng công khai trước khi chia sẻ | khảo sát không đo | khảo sát không đo | khảo sát không đo | chưa tính được | Thành sản phẩm thứ hai chạy song song | ✘ |
 
-- **Impact / tháng** của hướng chọn: chưa tính được vì chưa có dữ liệu về số người gặp vấn đề, số lần phát sinh mỗi tháng và thời gian xử lý hiện tại. Không tự ước tính thay cho dữ liệu khảo sát.
-- Hướng ĐÃ LOẠI + vì sao (giữ lại, đừng xoá): chưa có quyết định loại hướng nào được xác nhận.
-- Số lần / tháng của từng kiểu người dùng (dùng cho persona ở §8): chưa có dữ liệu. Cần bổ sung sau khi có kết quả khảo sát/phỏng vấn.
+- **Impact / tháng** của hướng chọn (chỉ trong mẫu, người tự trải qua) = 6 người × 0,31 lần × 30 phút ≈ **56 phút / tháng** — 6/21: khảo sát câu 6; 0,31 lần: trung vị câu 8 (3,75 lần / 12 tháng); 30 phút: trung vị câu 11. Quy đổi khoảng thành số *(tự ước tính)*: 2–3 lần = 2,5 · 4–6 = 5 · dưới 30 phút = 15 · 30–60 = 45 · 1–3 giờ = 120. Gồm cả người quen (10 phiếu có đủ số): trung vị 82,5 phút mỗi lần. Phiếu "rải rác nhiều ngày" không quy được ra phút nên bị loại. Số này gộp mọi loại vấn đề, chưa suy ra quy mô thật.
+- Hướng ĐÃ LOẠI + vì sao (giữ lại, đừng xoá): B — mã băm, sắp xếp, xuất tệp là code thường và chỉ giúp đối chiếu tệp, không chứng minh tính xác thực. C — để sau; việc rà trước khi chia sẻ chỉ giữ trong luồng của bản nháp. Ghép nhiều nạn nhân, chỉ số an toàn của tổ chức — cần thẩm định pháp lý và bảo mật.
+- Số lần / tháng của từng kiểu người dùng (dùng cho persona ở §8; khảo sát câu 8, n = 13, chia 12): ít ≈ 0,1–0,2 (5/13) · vừa ≈ 0,4 (6/13) · nhiều ≥ 0,6 (2/13). Đây là số lần chuẩn bị hoặc bổ sung tài liệu, khác mức 1 / 2 / 4 lượt tạo, sửa bản nháp *(tự ước tính)* trong thẻ đề.
 
 ## §3. Giải pháp tương tự *(guide 2.1)*
 
@@ -47,7 +47,6 @@ Data BTC cấp đã dùng: không có.
 ## §4. Thiết kế *(guide 2.2, 3.2)*
 - **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả): nhân viên kể về một sự việc và cung cấp văn bản, hình ảnh hoặc âm thanh để AI đối chiếu nguồn, điền form 11 trường và hỏi về thông tin còn thiếu hoặc mâu thuẫn, từ đó tạo bản nháp để nhân viên rà và cân nhắc dùng khi liên hệ luật sư.
 - Không làm (≥3 điều):
-<<<<<<< HEAD
   - Không tự kết luận sự việc có phải hành vi quấy rối tình dục hay không.
   - Không xác định ai đúng, ai sai hoặc tự đưa ra kết luận pháp lý.
   - Không tự bịa thông tin, mốc thời gian, nhân chứng hoặc tình tiết không có trong nguồn đầu vào.
@@ -85,8 +84,6 @@ flowchart TD
     R --> U["Kết nối tổ chức hỗ trợ"]
 ```
 
-=======
->>>>>>> main
 - **Sơ đồ bản chạy thử CP2:**
 
   ```mermaid
@@ -98,7 +95,6 @@ flowchart TD
   ```
 
   Trong luồng sản phẩm, nhân viên vẫn được rà form khi dừng bổ sung dù còn trường trống. Sau đó, họ chọn có liên hệ luật sư được gợi ý và có dùng form hay không. Nếu họ chọn dùng form, app chuẩn bị email nháp để họ duyệt. Bản chạy thử CP2 dừng ở bản nháp có nguồn và mục cần xác nhận.
-<<<<<<< HEAD
 
 - **Hình dạng:** [x] workflow cố định · [ ] một agent · [ ] nhiều agent
   - Luồng xử lý có các bước và điều kiện rõ ràng: nhận đầu vào → trích xuất → kiểm tra → bổ sung hoặc tạo bản nháp → người dùng duyệt → kết nối hỗ trợ.
@@ -114,14 +110,6 @@ flowchart TD
   | Luồng hỏi bổ sung | Danh sách trường còn thiếu và dữ liệu hiện có | Câu hỏi bổ sung tương ứng với trường còn thiếu | Có tương tác với người dùng, không tự gửi dữ liệu ra bên ngoài |
   | Tạo bản nháp hồ sơ | Dữ liệu có cấu trúc đã được kiểm tra | Bản nháp hồ sơ theo mẫu định sẵn | Không; người dùng phải xem xét trước |
   | Middleware kết nối hỗ trợ | Hồ sơ được người dùng duyệt và phạm vi chia sẻ được đồng ý | Yêu cầu kết nối hoặc chia sẻ hồ sơ đến bên nhận | Có, chỉ khi người dùng đồng ý rõ ràng |
-=======
-- **Hình dạng:** [ ] workflow cố định · [ ] một agent · [ ] nhiều agent — 2 dòng lý do, và vì sao **không** chọn hình dạng phức tạp hơn:
-- **AI dựa vào đâu** — mỗi công cụ (khớp `codebase/tools.py`):
-
-  | Công cụ | Input | Output | Tác động ra ngoài? |
-  |---|---|---|---|
-  | `prepare_sources` | Lời kể hoặc JSON chứa lời kể và đoạn nguồn | Danh sách nguồn có mã, nội dung và ngày/vị trí nếu có | Không |
->>>>>>> main
 
   Hiện `codebase/tools.py` mới có `prepare_sources`. Các dòng còn lại mô tả chức năng kiến trúc dự kiến, chưa phải tool đã tồn tại trong code; model, API và cách triển khai chưa được xác nhận.
 - **Mức tự động:** [x] AI gợi ý, người quyết · [ ] AI tự làm khi chắc, chuyển người khi không · [ ] AI tự làm — AI chỉ hỗ trợ trích xuất, tổ chức và trình bày thông tin. Người dùng phải có quyền xác nhận, sửa hoặc từ chối nội dung trích xuất. Nếu AI trích xuất sai, người dùng có thể bị ghi nhận sai lời kể hoặc sai diễn biến; nếu tự động gửi hồ sơ, thông tin nhạy cảm có thể bị chia sẻ ngoài ý muốn. Vì vậy, các bước xác nhận và chia sẻ phải do người dùng quyết định.
@@ -145,11 +133,7 @@ flowchart TD
   | Chia sẻ có sự đồng ý | Chỉ chuyển hồ sơ qua Middleware sau khi người dùng xác nhận bên nhận và phạm vi dữ liệu được chia sẻ |
   | Không đưa ra kết luận thay con người | AI chỉ hỗ trợ sắp xếp thông tin và tạo bản nháp, không phán quyết hành vi, trách nhiệm hoặc kết quả pháp lý |
 
-<<<<<<< HEAD
 - Phần còn giả ở CP2: dùng dữ liệu giả lập, kết quả OCR và bản chép lời đã chuẩn bị sẵn. AI giả soạn nháp theo quy tắc từ các ngày khai báo trong đầu vào. Bản CP2 chưa tự đọc ảnh, chép âm thanh hay suy ngày từ lời kể tự do. Ngoài ra, chưa xác nhận các tích hợp luật sư/tổ chức hỗ trợ có hoạt động thật hay không. Nếu bản demo dùng dữ liệu mẫu, danh sách đối tác giả lập, API giả lập hoặc trạng thái kết nối giả lập thì phải ghi rõ là mô phỏng. Chưa xác nhận nhà cung cấp/model LLM, cách xử lý hình ảnh và khả năng lưu trữ thực tế; không giới thiệu các phần này như tính năng đã vận hành nếu chưa kiểm tra.
-=======
-- Phần còn giả ở CP2: dùng dữ liệu giả lập, kết quả OCR và bản chép lời đã chuẩn bị sẵn. AI giả soạn nháp theo quy tắc từ các ngày khai báo trong đầu vào. Bản CP2 chưa tự đọc ảnh, chép âm thanh hay suy ngày từ lời kể tự do.
->>>>>>> main
 
 ## §5. Chỗ khó — 4 lớp + ≥6 kịch bản + 2 tấn công *(guide 2.3)*
 
@@ -179,16 +163,10 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 - **Trường hợp đặc thù lĩnh vực (lớp 4):** người dùng cung cấp thông tin nhạy cảm hoặc thể hiện không muốn tiếp tục chia sẻ → hệ thống không gây áp lực, không hỏi dồn → cho phép dừng, lưu hồ sơ ở trạng thái chưa hoàn thiện và chỉ chia sẻ khi người dùng đồng ý rõ ràng. Nếu có nguy cơ an toàn khẩn cấp, ưu tiên hướng người dùng tìm sự hỗ trợ phù hợp thay vì yêu cầu họ hoàn tất biểu mẫu.
 
 ## §7. Đánh giá & chuẩn "đạt" *(guide 2.4, 4.1)*
-<<<<<<< HEAD
 - Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — 10 câu (thuong 3 · kho 5 · tu_choi 2) · metric: `eval/metric_spec.yaml` (4 metric do người chấm).
 - **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): "Đạt khi ≥85% tổng số câu qua, ≥90% ca mong đợi bản nháp qua metric điền đúng trường có nguồn, ≥85% ca thiếu hoặc mâu thuẫn qua metric xử lý phần thiếu, 100% ca đánh giá bước liên hệ qua metric bàn giao theo lựa chọn, 100% tổng số câu qua metric ranh giới an toàn và 100% câu `tu_choi` qua."
 - Một câu qua khi đáp ứng `pass_criterion` và mọi metric áp dụng. Báo cáo mỗi tỷ lệ theo số câu qua trên tổng số câu áp dụng. Cần có ca áp dụng cho từng metric và có ca `tu_choi` để kết luận.
 - Lưu ý: cả 10 câu hiện có nguồn `tu_viet` (tình huống giả lập), chưa có câu từ người dùng hay data thật.
-=======
-- Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` · metric: `eval/metric_spec.yaml` (4 metric do người chấm).
-- **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): "Đạt khi ≥85% tổng số câu qua, ≥90% ca mong đợi bản nháp qua metric điền đúng trường có nguồn, ≥85% ca thiếu hoặc mâu thuẫn qua metric xử lý phần thiếu, 100% ca đánh giá bước liên hệ qua metric bàn giao theo lựa chọn, 100% tổng số câu qua metric ranh giới an toàn và 100% câu `tu_choi` qua."
-- Một câu qua khi đáp ứng `pass_criterion` và mọi metric áp dụng. Báo cáo mỗi tỷ lệ theo số câu qua trên tổng số câu áp dụng. Cần có ca áp dụng cho từng metric và có ca `tu_choi` để kết luận.
->>>>>>> main
 - Kết quả: lượt 1 __/__ (__%) · lượt 2 __/__ (__%) — run ID: __ / __ → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
@@ -198,20 +176,23 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 - So với impact / người / tháng (§2): đáng làm không, vì sao:
 
 ## §9. Rủi ro & an toàn
-- Dữ liệu: đã ẩn danh gì, không thu gì, không đưa gì vào model gói miễn phí:
-- AI **không được** làm gì kể cả khi người dùng yêu cầu:
-- Ai có thể bị hại nếu AI sai, và nhóm chặn thế nào:
+- Dữ liệu: demo và bộ câu thử chỉ dùng dữ liệu giả lập (A, B, phòng M). Phỏng vấn chỉ hỏi quy trình, không thu hồ sơ, tin nhắn, ảnh, ghi âm thật; ghi bằng mã P1, P2. Không đưa dữ liệu thật vào model, kể cả gói miễn phí.
+- AI **không được** làm, kể cả khi người dùng yêu cầu: bịa tình tiết, bằng chứng hoặc luật sư; kết luận phạm tội hay giá trị chứng cứ; gửi hoặc nói đã gửi hồ sơ, email; chia sẻ phần người dùng chưa cho phép.
+- Ai có thể bị hại nếu AI sai, và cách chặn:
+  - Người phản ánh (mất uy tín, bị trả đũa): dẫn nguồn, đánh dấu chỗ chưa rõ, người dùng duyệt.
+  - Người bị nêu tên (bị gán hành vi họ không làm): không tự gán danh tính, không kết luận, tách lời kể khỏi dữ kiện đã xác minh.
+  - Người dùng bị lộ dữ liệu hoặc bị người khác xem máy: bản chạy thử chỉ nhận dữ liệu giả lập; dùng thật cần thẩm định bảo mật và pháp lý trước.
 
 ## §10. Phân công & changelog
-- Phân công có tên (theo chặng, chia cặp — guide "Cách chia việc"): __
-- Dùng AI vào việc gì (2–3 dòng; chi tiết `docs/ai-usage.md`):
+- Phân công (theo `canvas.md` dòng 7): Hồ Nguyễn Minh Sang chốt lát cắt, Canvas, nộp CP1 · Nguyễn Thảo Quyên tìm người dùng, phỏng vấn · Vũ Ngọc Quỳnh Anh mẫu báo cáo, ca thử · Nguyễn Thị Khánh Linh tổng hợp bằng chứng, impact, soát thẻ đề.
+- Dùng AI vào việc gì: Claude Code hỗ trợ soạn nháp Canvas CP1, câu hỏi phỏng vấn và các mục spec; thành viên phải rà trước khi nộp. Việc dùng AI của các phần khác: mỗi người tự bổ sung vào `docs/ai-usage.md`.
 - Nhật ký thay đổi — **mọi thay đổi sau CP2 19:30 Thứ Sáu 27/11 phải có dòng ở đây**:
 
 **CP2 → CP4** (vd thu hẹp lát cắt, hỏi thêm người dùng, lần cải tiến trước lượt 2)
 
 | Thời điểm | Đổi gì | Vì sao (trỏ về câu thử / lỗi / bằng chứng nào) |
 |---|---|---|
-|  |  |  |
+| 27/11 tối | Điền §0–§2 theo khảo sát n = 21, điền §9, §10; gỡ dấu xung đột git còn sót ở §4, §7; không đổi chuẩn đạt | Chuẩn bị nộp §0–§7 ở CP3 |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
