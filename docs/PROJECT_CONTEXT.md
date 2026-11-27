@@ -17,7 +17,7 @@ Vai trò dưới đây là đề xuất CP2. Điền tên khi cả nhóm chốt.
 |---|---|---|---|
 | Dev | Chưa chốt | Có luồng giả lập để nhóm rà | Chạy `python run.py` rồi nhập `demo`. [Ca mẫu](../data/cp2_demo.json) và sơ đồ ở [spec §4](../spec.md). Bước tiếp theo là BA và hai DS rà cấu trúc bản nháp và dùng ca này làm cơ sở viết câu thử. |
 | BA | Chưa chốt | Cần cập nhật | Cập nhật [Canvas](../canvas.md), phần thay đổi so với CP1 và tiến độ thu [bằng chứng](../evidence/summary.md). Cùng Dev thống nhất cấu trúc đầu ra. |
-| Data Science 1 | Chưa chốt | Còn file mẫu | Chuẩn bị ≥10 câu thử ở [benchmark](../eval/benchmark.csv) và bản đầu [data card](../data/DATA_CARD.md). Gửi một ca mẫu cho Dev và DS 2. |
+| Data Science 1 | Chưa chốt | Có bản đầu 10 câu thử văn bản giả lập | [Benchmark](../eval/benchmark.csv) có 3 ca thường, 5 ca khó và 2 ca tấn công, tất cả nguồn `tu_viet`; thay đổi được đưa vào `main` theo yêu cầu. `python run.py check` đọc đủ cột, loại ca và 4 metric; còn thiếu ≥1/3 ca nguồn thật và 20–30 câu cho CP3. Bước tiếp theo: cùng Dev và DS 2 rà theo form 11 trường, bổ sung ca ảnh/âm thanh và bước liên hệ luật sư theo scope mới, rồi cập nhật [data card](../data/DATA_CARD.md). |
 | Data Science 2 | Chưa chốt | Đã điền 4 metric và chuẩn đạt | Xem [metric](../eval/metric_spec.yaml), [spec §7](../spec.md) và [cách chấm](../eval/README.md). Hai người còn cần chấm độc lập 5 output để đối chiếu. |
 
 ## Cách bàn giao
