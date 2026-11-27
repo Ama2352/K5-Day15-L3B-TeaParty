@@ -1,0 +1,14 @@
+{
+  "name": "teaparty-draft",
+  "private": true,
+  "scripts": {
+    "build": "esbuild draft.jsx --bundle --minify --legal-comments=eof --jsx=automatic --global-name=TeaPartyDraft --outfile=static/draft.js"
+  },
+  "dependencies": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.1"
+  }
+}
