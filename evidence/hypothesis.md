@@ -10,3 +10,5 @@
 - **Có thể còn cách giải thích khác.** Bước mất công nhất có thể là tìm kênh tiếp nhận, tìm lại tài liệu gốc hoặc cân nhắc phần thông tin họ muốn chia sẻ.
 - **Giả thuyết được ủng hộ nếu** ít nhất 2 trong 3 người đầu tiên tự nhắc đến việc đối chiếu các nguồn hoặc xác định chi tiết còn thiếu như một trong những bước mất thời gian nhất khi chuẩn bị hồ sơ phản ánh trong tháng qua. Hỏi câu mở trước khi nhắc đến việc đối chiếu.
 - **Nguồn dự kiến.** Phỏng vấn ≥3 người ngoài nhóm, đúng đối tượng và tự nguyện. Hỏi các bước họ đã làm, bước mất thời gian, số phút ước nhớ và việc phải làm lại. Ghi P1, P2… và trích dẫn về quy trình đã bỏ định danh. Người tham gia có thể bỏ qua câu hỏi. Chưa có kết quả trong bản nháp này.
+
+**Đối chiếu sau phỏng vấn.** Có [trích dẫn nguyên văn của P1–P3](summary.md#3-5-trích-dẫn-hoặc-ví-dụ-nguyên-văn-có-nguồn-bỏ-tên). Chưa đủ thông tin để áp dụng tiêu chí 2/3 vì hồ sơ chưa ghi rõ lần chuẩn bị trong tháng qua và bước người tham gia tự nêu là mất thời gian nhất.
