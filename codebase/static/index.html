@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hồ sơ an toàn</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172d37;
+      --muted: #4a636e;
+      --surface: #fff;
+      --canvas: #eef3f5;
+      --line: #d3dfe4;
+      --accent: #086451;
+      --accent-soft: #e3f3ee;
+      --warn: #8e4223;
+      --warn-soft: #fff0e7;
+      font: 16px/1.55 system-ui, "Segoe UI", sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; background: var(--canvas); color: var(--ink); }
+    .wrap { width: min(1080px, calc(100% - 2.5rem)); margin-inline: auto; }
+    header { background: var(--ink); color: #fff; padding: 2.7rem 0 3.2rem; }
+    header p { color: #dce9ed; max-width: 62ch; margin-bottom: 0; }
+    h1, h2 { font-weight: 700; line-height: 1.15; }
+    h1 { font-size: clamp(2.5rem, 7vw, 4.15rem); margin: 0; letter-spacing: -.04em; }
+    h2 { font-size: clamp(1.55rem, 4vw, 2rem); margin: 0 0 .75rem; letter-spacing: -.02em; }
+    h3, p { margin: 0 0 .65rem; }
+    p:last-child { margin-bottom: 0; }
+    main { padding: 1.8rem 0 3rem; }
+    .layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 1.1rem; align-items: start; }
+    .stack { display: grid; gap: 1.1rem; min-width: 0; }
+    .panel { padding: clamp(1rem, 4vw, 1.6rem); background: var(--surface); border: 1px solid var(--line); border-radius: .8rem; min-width: 0; }
+    .aside { background: transparent; border: 0; border-left: 3px solid var(--accent); border-radius: 0; }
+    .aside h2 { font: 700 1.05rem/1.3 system-ui, sans-serif; letter-spacing: 0; }
+    .muted, .help { color: var(--muted); }
+    .help { font-size: .9rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; margin-top: .9rem; }
+    :is(button, textarea, select, input) { font: inherit; }
+    :is(button, summary, a, textarea, select, input):focus-visible { outline: 3px solid #167bc1; outline-offset: 3px; }
+    button { font-weight: 650; min-height: 2.75rem; padding: .5rem .85rem; border: 1px solid var(--accent); border-radius: .4rem; background: var(--accent); color: #fff; cursor: pointer; }
+    button:hover { filter: brightness(.91); }
+    .secondary { background: #fff; color: var(--accent); }
+    button:disabled { border-color: #c6d1d6; background: #e7eef0; color: #4a636e; cursor: default; }
+    textarea, select, input[type="text"] { display: block; width: 100%; padding: .55rem .65rem; border: 1px solid #8ca1aa; border-radius: .35rem; background: #fff; color: var(--ink); }
+    textarea { resize: vertical; }
+    label, legend { font-weight: 650; }
+    label[for] { display: block; margin-bottom: .3rem; }
+    fieldset { border: 0; padding: 0; margin: 0 0 1rem; min-width: 0; }
+    fieldset legend { padding: 0; margin-bottom: .3rem; }
+    .choice { display: flex; align-items: flex-start; min-height: 2rem; gap: .55rem; font-weight: 400; overflow-wrap: anywhere; }
+    .choice input { accent-color: var(--accent); width: 1rem; height: 1rem; margin: .35rem 0 0; flex: 0 0 auto; }
+    :is(.note, .error, .conflict) { overflow-wrap: anywhere; }
+    .note { padding: .7rem .9rem; border-radius: .35rem; background: var(--accent-soft); }
+    #intake-notices { margin: 0; padding-left: 2rem; }
+    .error { margin-bottom: 1rem; color: #791d14; background: #fce9e6; border-left: 3px solid currentColor; padding: .65rem .9rem; }
+    .progress:empty { display: none; }
+    .progress { padding-bottom: .7rem; color: var(--muted); }
+    .form-group { margin-top: .8rem; }
+    .document { border: 1px solid var(--line); border-radius: .4rem; margin-top: .8rem; }
+    .document > summary { padding: .7rem .9rem; font-weight: 700; background: var(--canvas); border-radius: .35rem; }
+    summary { cursor: pointer; overflow-wrap: anywhere; }
+    .field-list { padding-inline: .9rem; }
+    .field { border-top: 1px solid var(--line); padding-block: .9rem; }
+    .field:first-child { border-top: 0; }
+    .field-top { display: flex; gap: .35rem .65rem; justify-content: space-between; align-items: start; flex-wrap: wrap; }
+    .badge { display: inline-block; max-width: 100%; padding: .1rem .45rem; border-radius: .25rem; color: var(--muted); background: var(--canvas); font-size: .82rem; font-weight: 650; }
+    .badge[data-status="provided"] { background: var(--accent-soft); color: var(--accent); }
+    .badge[data-status="conflicting"], .conflict { background: var(--warn-soft); color: var(--warn); }
+    .conflict { padding: .45rem .65rem; margin-top: .5rem; border-radius: .3rem; }
+    .citations { color: var(--muted); margin: .4rem 0; font-size: .9rem; }
+    .citations ul { padding-left: 1.4rem; margin-block: .35rem; overflow-wrap: anywhere; }
+    .metadata { margin: .65rem 0 0; }
+    .preview { margin-top: .9rem; }
+    pre { margin: .65rem 0 0; padding: .75rem; border: 1px solid var(--line); border-radius: .35rem; background: var(--canvas); color: var(--ink); font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
+    #lawyer-results, #permission, #email-preview { margin-top: 1rem; }
+    #answer-label { overflow-wrap: anywhere; }
+    @media (max-width: 760px) {
+      .wrap { width: calc(100% - 1.5rem); }
+      .layout { grid-template-columns: minmax(0, 1fr); }
+      .aside { grid-row: 1; padding-block: 0; }
+      header { padding-block: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Hồ sơ an toàn</h1>
+      <p>Soạn bản trình bày xuất xứ tài liệu từ lời kể, bản chép lời hoặc nội dung trích từ ảnh.</p>
+    </div>
+  </header>
+  <main class="wrap">
+    <div id="error" class="error" role="alert" tabindex="-1" hidden></div>
+    <div id="progress" class="progress" role="status"></div>
+    <div class="layout" id="workspace">
+      <div class="stack">
+        <section class="panel" aria-labelledby="intake-title">
+          <h2 id="intake-title">Nhập nội dung nguồn</h2>
+          <form id="intake-form">
+            <label for="narrative">Lời kể hoặc dữ liệu nguồn</label>
+            <textarea id="narrative" rows="7" required aria-describedby="narrative-help" placeholder="Ví dụ: Tôi chụp màn hình tin nhắn sau ca làm và lưu ảnh gốc trên điện thoại."></textarea>
+            <p id="narrative-help" class="help">Bạn có thể dán văn bản, nội dung OCR, bản chép lời hoặc JSON nguồn. Hãy dùng dữ liệu giả lập đã bỏ thông tin nhận dạng.</p>
+            <div class="actions">
+              <button type="submit">Tạo bản nháp</button>
+              <button type="button" class="secondary" id="example">Dùng ca mẫu</button>
+            </div>
+          </form>
+        </section>
+        <ul id="intake-notices" class="note" aria-live="polite" hidden></ul>
+        <section id="follow-up" class="panel" aria-labelledby="follow-up-title" hidden>
+          <h2 id="follow-up-title" tabindex="-1">Bổ sung thông tin</h2>
+          <p id="question-count" class="help"></p>
+          <form id="answer-form">
+            <label id="answer-label" for="answer"></label>
+            <textarea id="answer" rows="3" required></textarea>
+            <div class="actions">
+              <button type="submit">Lưu câu trả lời</button>
+              <button type="button" class="secondary" id="skip">Bỏ qua câu này</button>
+            </div>
+          </form>
+          <div class="actions">
+            <button type="button" class="secondary" id="review-now">Dừng bổ sung và rà soát</button>
+          </div>
+        </section>
+        <section id="review" class="panel" aria-labelledby="review-title" hidden>
+          <h2 id="review-title" tabindex="-1">Rà soát bản nháp</h2>
+          <p id="draft-label" class="note"></p>
+          <p class="help">Đối chiếu giá trị với nguồn, sửa nếu cần rồi đánh dấu từng trường bạn xác nhận.</p>
+          <div id="fields"></div>
+          <div class="actions">
+            <button type="button" id="download">Tải bản nháp JSON</button>
+            <button type="button" class="secondary" id="open-help">Xem lựa chọn liên hệ</button>
+            <button type="button" class="secondary" id="resume" hidden>Quay lại câu hỏi bổ sung</button>
+          </div>
+          <details class="preview">
+            <summary id="preview-summary">Xem văn bản trình bày</summary>
+            <pre id="draft-preview"></pre>
+          </details>
+        </section>
+        <section id="support" class="panel" aria-labelledby="support-title" hidden>
+          <h2 id="support-title" tabindex="-1">Liên hệ hỗ trợ</h2>
+          <fieldset id="contact-choice" aria-describedby="support-note">
+            <legend>Bạn có muốn liên hệ luật sư không?</legend>
+            <label class="choice"><input type="radio" name="contact" value="yes"> Có, xem danh sách gợi ý</label>
+            <label class="choice"><input type="radio" name="contact" value="no"> Không, dừng tại bản nháp hồ sơ</label>
+          </fieldset>
+          <p id="support-note" class="help">Danh sách luật sư dùng dữ liệu giả lập. Email chỉ được tạo dưới dạng bản nháp để bạn xem và chép.</p>
+          <div id="contact-next" hidden>
+            <form id="lawyer-form" class="form-group">
+              <label for="need">Nhu cầu hỗ trợ (không bắt buộc)</label>
+              <input type="text" id="need" placeholder="Ví dụ: lao động" autocomplete="off">
+              <div class="actions"><button type="submit" class="secondary">Tìm luật sư giả lập</button></div>
+            </form>
+            <div id="lawyer-results" hidden>
+              <label for="lawyer">Luật sư nhận email nháp</label>
+              <select id="lawyer"></select>
+              <p id="lawyer-empty" class="help" hidden>Hiện chưa có luật sư giả lập phù hợp.</p>
+              <p id="lawyer-details" class="help metadata" hidden></p>
+            </div>
+            <form id="email-form" class="form-group" hidden>
+              <fieldset id="form-choice">
+                <legend>Bạn có muốn dùng thông tin từ biểu mẫu không?</legend>
+                <label class="choice"><input type="radio" name="use-form" value="yes" required> Có, để tôi chọn từng trường</label>
+                <label class="choice"><input type="radio" name="use-form" value="no"> Không, dừng trước bước soạn email</label>
+              </fieldset>
+              <fieldset id="permission" hidden>
+                <legend>Chọn các trường được đưa vào email</legend>
+                <div id="share-fields"></div>
+              </fieldset>
+              <button type="submit" id="compose" disabled>Soạn email nháp</button>
+            </form>
+            <div id="email-preview" hidden>
+              <label for="email-text">Email nháp để bạn kiểm tra và chép</label>
+              <textarea id="email-text" rows="10" readonly></textarea>
+              <div class="actions"><button type="button" id="copy" class="secondary">Chép email</button></div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <aside class="panel aside" aria-labelledby="aside-title">
+        <h2 id="aside-title">Trước khi bắt đầu</h2>
+        <p class="help">Bạn có thể bỏ qua câu hỏi chưa có câu trả lời và tải bản nháp ở bất kỳ mức độ hoàn thiện nào.</p>
+        <p id="mode" class="help" hidden></p>
+      </aside>
+    </div>
+  </main>
+  <script>
+    'use strict';
+
+    const byId = id => document.getElementById(id);
+    const show = (id, visible = true) => { byId(id).hidden = !visible; };
+    const radio = name => document.querySelector(`input[name="${name}"]:checked`)?.value;
+    const rootLabels = {noi_nhan: 'Nơi nhận', tu_cach: 'Tư cách người trình bày'};
+    const documentLabels = {
+      loai_tai_lieu: 'Loại tài liệu', mo_ta_noi_dung: 'Mô tả nội dung', 'nguoi_tao.field': 'Người tạo',
+      thoi_diem_tao: 'Thời điểm tạo', dia_diem_hoan_canh: 'Địa điểm và hoàn cảnh',
+      thiet_bi_ung_dung: 'Thiết bị và ứng dụng', nguoi_co_mat: 'Người có mặt', cach_luu_giu: 'Cách lưu giữ',
+      'tinh_trang_chinh_sua.field': 'Tình trạng chỉnh sửa', lien_quan_su_viec: 'Liên quan đến sự việc'
+    };
+    const providerLabels = {
+      'nguoi_cung_cap.quan_he_hoac_vai_tro': 'Quan hệ hoặc vai trò của người cung cấp',
+      'nguoi_cung_cap.thoi_diem_cung_cap': 'Thời điểm cung cấp',
+      'nguoi_cung_cap.cach_cung_cap': 'Cách cung cấp',
+      'nguoi_cung_cap.nguon_cua_nguoi_cung_cap': 'Nguồn tài liệu của người cung cấp'
+    };
+    const statuses = {provided: 'Có thông tin', missing: 'Còn thiếu', unclear: 'Chưa rõ', conflicting: 'Mâu thuẫn'};
+    const sourceTypes = {user_narrative: 'Lời kể', user_answer: 'Người dùng bổ sung', file_metadata: 'Thông tin tệp', ocr: 'Nội dung trích từ ảnh', asr: 'Bản chép lời', system: 'Hệ thống'};
+    const creatorTypes = {self: 'Tự ghi hoặc chụp', provided_by_other: 'Do người khác cung cấp', unknown: 'Chưa rõ'};
+    const precisionTypes = {exact: 'Chính xác', from_metadata: 'Theo thông tin tệp', user_estimate: 'Người dùng ước lượng', unknown: 'Chưa rõ'};
+    const editTypes = {none_reported: 'Chưa ghi nhận chỉnh sửa', trimmed: 'Cắt', compressed: 'Nén', format_converted: 'Đổi định dạng', re_screenshotted: 'Chụp lại màn hình', merged: 'Ghép', other: 'Khác', unknown: 'Chưa rõ'};
+    const timeFields = new Set(['thoi_diem_tao', 'nguoi_cung_cap.thoi_diem_cung_cap']);
+    const state = {
+      draft: null, questions: [], skipped: new Set(), history: new Map(), selected: new Set(),
+      lawyers: [], nextEdit: 0, reviewing: false, paused: false, supportOpen: false, busy: false, previewDirty: false
+    };
+
+    function element(tag, className, value) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (value !== undefined) node.textContent = value;
+      return node;
+    }
+
+    async function request(path, body) {
+      const response = await fetch(path, {
+        method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        const detail = typeof data.error === 'string' ? data.error : data.detail;
+        throw new Error(typeof detail === 'string' ? detail : `Máy chủ báo lỗi (${response.status}).`);
+      }
+      return data;
+    }
+
+    async function perform(message, work) {
+      if (state.busy) return;
+      const active = document.activeElement;
+      let focusTarget;
+      state.busy = true;
+      byId('workspace').inert = true;
+      show('error', false);
+      byId('progress').textContent = message;
+      try {
+        focusTarget = await work();
+      } catch (error) {
+        byId('error').textContent = `Không thể hoàn tất. ${error.message || ''} Bạn có thể thử lại.`;
+        show('error');
+        focusTarget = byId('error');
+      } finally {
+        state.busy = false;
+        byId('workspace').inert = false;
+        byId('progress').textContent = '';
+        const target = focusTarget || active;
+        if (target.isConnected) target.focus();
+      }
+    }
+
+    function makeField(parent, key, path, label, title) {
+      return {parent, key, path, label, title, field: parent[key]};
+    }
+
+    function rootFields() {
+      return Object.entries(rootLabels).map(([key, label]) => makeField(state.draft, key, key, label, label));
+    }
+
+    function documentFields(document, index) {
+      const labels = {...documentLabels};
+      if (document.nguoi_cung_cap || document.nguoi_tao.kind === 'provided_by_other') {
+        document.nguoi_cung_cap ??= {};
+        Object.assign(labels, providerLabels);
+      }
+      return Object.entries(labels).map(([key, label]) => {
+        const parts = key.split('.');
+        const parent = parts.length === 2 ? document[parts[0]] : document;
+        return makeField(parent, parts.at(-1), `tai_lieu[${index}].${key}`, label, `Tài liệu ${index + 1} · ${label}`);
+      });
+    }
+
+    function allFields() {
+      return [...rootFields(), ...state.draft.tai_lieu.flatMap(documentFields)];
+    }
+
+    function resolved(field) {
+      return field?.status === 'provided' && !!field.value?.trim()
+        && field.source_refs.some(source => source.source_id.trim());
+    }
+
+    function currentQuestion() {
+      return state.paused ? undefined : state.questions.find(question => !state.skipped.has(question.field_path));
+    }
+
+    function applyDraft(result) {
+      state.draft = result.draft;
+      state.questions = result.questions || result.draft.questions_for_user;
+      state.draft.questions_for_user = state.questions;
+      state.previewDirty = false;
+      byId('draft-preview').textContent = result.output || '';
+      byId('mode').textContent = result.mode === 'fake' ? 'Đang dùng chế độ trích xuất mô phỏng.' : 'Đang dùng chế độ trích xuất AI.';
+      show('mode', Boolean(result.mode));
+    }
+
+    function renderQuestion(clearAnswer = true) {
+      const question = currentQuestion();
+      show('follow-up', Boolean(question));
+      show('resume', state.reviewing && state.questions.length > 0 && !question);
+      if (!question) return;
+      const left = state.questions.filter(item => !state.skipped.has(item.field_path)).length;
+      byId('question-count').textContent = `Còn ${left} câu có thể bổ sung. Bạn có thể bỏ qua nếu chưa biết.`;
+      byId('answer-label').textContent = question.question;
+      if (clearAnswer) byId('answer').value = '';
+    }
+
+    function citations(field, caption) {
+      const block = element('details', 'citations');
+      const sources = field.source_refs;
+      block.append(element('summary', '', `${caption} (${sources.length})`));
+      const list = element('ul');
+      for (const source of sources) {
+        const parts = [`[${source.source_id}] ${sourceTypes[source.source_type] || source.source_type}`];
+        if (source.locator) parts.push(source.locator);
+        if (source.quote) parts.push(`“${source.quote}”`);
+        list.append(element('li', '', parts.join(' · ')));
+      }
+      block.append(list);
+      return block;
+    }
+
+    function renderField(entry) {
+      const field = entry.field || {value: null, status: 'missing', source_refs: [], user_confirmed: false};
+      const row = element('div', 'field');
+      const top = element('div', 'field-top');
+      const label = element('label', '', entry.label);
+      const input = element('textarea');
+      input.id = `field-${entry.path}`;
+      input.rows = Math.max(1, Math.min(4, (field.value || '').split('\n').length));
+      input.value = field.value ?? '';
+      label.htmlFor = input.id;
+      const status = resolved(field) || field.status !== 'provided' ? field.status : 'unclear';
+      const badge = element('span', 'badge', statuses[status]);
+      badge.dataset.status = status;
+      badge.id = `status-${entry.path}`;
+      input.setAttribute('aria-describedby', badge.id);
+      top.append(label, badge);
+      row.append(top, input);
+      if (field.conflict_note) row.append(element('p', 'conflict', field.conflict_note));
+      if (field.precision) row.append(element('p', 'help metadata', `Độ chính xác: ${precisionTypes[field.precision]}`));
+      if (field.source_refs.length) row.append(citations(field, 'Xem nguồn'));
+      const earlier = state.history.get(entry.path);
+      if (earlier?.length) {
+        const history = element('details', 'citations');
+        history.append(element('summary', '', 'Xem thông tin trước khi sửa'));
+        for (const previous of earlier) {
+          history.append(element('p', '', `${statuses[previous.status]} · ${previous.value || 'Chưa có giá trị'}`));
+          if (previous.conflict_note) history.append(element('p', 'conflict', previous.conflict_note));
+          if (previous.source_refs.length) history.append(citations(previous, 'Nguồn trước khi sửa'));
+        }
+        row.append(history);
+      }
+
+      const actions = element('div', 'actions');
+      const save = element('button', 'secondary', 'Lưu chỉnh sửa');
+      save.type = 'button';
+      const canClarify = !resolved(field) && !!field.value?.trim();
+      save.disabled = !canClarify;
+      if (canClarify) save.textContent = 'Dùng giá trị này';
+      const confirmLabel = element('label', 'choice');
+      const confirm = element('input');
+      confirm.type = 'checkbox';
+      confirm.checked = field.user_confirmed;
+      confirm.disabled = !resolved(field);
+      confirm.setAttribute('aria-label', `Xác nhận ${entry.title}`);
+      confirmLabel.append(confirm, document.createTextNode('Tôi xác nhận thông tin này'));
+      actions.append(save, confirmLabel);
+      row.append(actions);
+
+      input.addEventListener('input', () => {
+        const changed = input.value.trim() !== (field.value || '').trim();
+        save.textContent = !changed && canClarify ? 'Dùng giá trị này' : 'Lưu chỉnh sửa';
+        save.disabled = !changed && !canClarify;
+        confirm.disabled = !save.disabled || !resolved(field);
+      });
+      save.addEventListener('click', () => {
+        const value = input.value.trim();
+        const previousQuestion = currentQuestion()?.field_path;
+        const updated = {
+          value: value || null, status: value ? 'provided' : 'missing', user_confirmed: false,
+          source_refs: value ? [{source_type: 'user_answer', source_id: `U-edit-${++state.nextEdit}`}]: []
+        };
+        if (timeFields.has(entry.path.split('].').at(-1))) updated.precision = 'unknown';
+        remember(entry.path, entry.field);
+        entry.parent[entry.key] = updated;
+        updateQuestions(entry, updated);
+        state.previewDirty = true;
+        byId('preview-summary').parentElement.open = false;
+        invalidateShare(entry.path);
+        const replacement = renderField({...entry, field: updated});
+        row.replaceWith(replacement);
+        replacement.querySelector('textarea').focus();
+        renderQuestion(previousQuestion !== currentQuestion()?.field_path);
+      });
+      confirm.addEventListener('change', () => {
+        field.user_confirmed = confirm.checked;
+        invalidateShare(entry.path);
+      });
+      return row;
+    }
+
+    function remember(path, field) {
+      if (!field) return;
+      const earlier = state.history.get(path) || [];
+      earlier.push(structuredClone(field));
+      state.history.set(path, earlier);
+    }
+
+    function updateQuestions(entry, updated) {
+      state.questions = state.questions.filter(item => item.field_path !== entry.path);
+      state.skipped.delete(entry.path);
+      if (!resolved(updated)) {
+        state.questions.push({field_path: entry.path, question: `Bạn có thể bổ sung thông tin cho mục ${entry.title} không?`, skippable: true});
+      }
+      state.draft.questions_for_user = state.questions;
+    }
+
+    function renderReview() {
+      state.reviewing = true;
+      show('review');
+      byId('draft-label').textContent = state.draft.draft_label;
+      const list = byId('fields');
+      list.replaceChildren();
+      const general = element('details', 'document');
+      general.append(element('summary', '', 'Thông tin chung'));
+      const generalFields = element('div', 'field-list');
+      generalFields.append(...rootFields().map(renderField));
+      general.append(generalFields);
+      list.append(general);
+      state.draft.tai_lieu.forEach((entry, index) => {
+        const documentPanel = element('details', 'document');
+        documentPanel.open = index === 0;
+        const name = entry.ten_tep ? ` · ${entry.ten_tep}` : '';
+        documentPanel.append(element('summary', '', `Tài liệu ${index + 1}${name}`));
+        const fields = element('div', 'field-list');
+        const edits = entry.tinh_trang_chinh_sua.edits.map(edit => editTypes[edit]).join(', ');
+        fields.append(element('p', 'help metadata', `Nguồn gốc tài liệu: ${creatorTypes[entry.nguoi_tao.kind]}`));
+        if (edits) fields.append(element('p', 'help metadata', `Chỉnh sửa được ghi nhận: ${edits}`));
+        fields.append(...documentFields(entry, index).map(renderField));
+        if (!entry.nguoi_cung_cap) fields.append(element('p', 'help metadata', 'Thông tin người cung cấp áp dụng cho tài liệu do người khác cung cấp.'));
+        documentPanel.append(fields);
+        list.append(documentPanel);
+      });
+    }
+
+    function moveToReview() {
+      state.paused = true;
+      renderReview();
+      renderQuestion();
+      return byId('review-title');
+    }
+
+    function clearEmail() {
+      byId('email-text').value = '';
+      show('email-preview', false);
+    }
+
+    function invalidateShare(path) {
+      state.selected.delete(path);
+      clearEmail();
+      if (state.supportOpen && radio('use-form') === 'yes') renderShareFields();
+    }
+
+    function resetSupport() {
+      show('support', false);
+      show('contact-next', false);
+      show('lawyer-results', false);
+      show('lawyer-details', false);
+      show('email-form', false);
+      show('permission', false);
+      byId('lawyer').replaceChildren();
+      byId('lawyer-form').reset();
+      byId('email-form').reset();
+      for (const choice of byId('contact-choice').querySelectorAll('input')) choice.checked = false;
+      clearEmail();
+      state.selected.clear();
+      state.lawyers = [];
+      state.supportOpen = false;
+    }
+
+    function updateCompose() {
+      const useForm = radio('use-form');
+      byId('compose').disabled = radio('contact') !== 'yes' || !byId('lawyer').value
+        || useForm !== 'yes' || !state.selected.size;
+    }
+
+    function renderShareFields() {
+      const list = byId('share-fields');
+      list.replaceChildren();
+      const eligible = allFields().filter(({field}) => field?.user_confirmed && resolved(field));
+      const paths = new Set(eligible.map(({path}) => path));
+      state.selected = new Set([...state.selected].filter(path => paths.has(path)));
+      if (!eligible.length) list.append(element('p', 'help', 'Hãy xác nhận trường bạn muốn chia sẻ trong phần rà soát bản nháp.'));
+      for (const {path, title, field} of eligible) {
+        const label = element('label', 'choice');
+        const input = element('input');
+        input.type = 'checkbox';
+        input.checked = state.selected.has(path);
+        label.append(input, document.createTextNode(`${title}: ${field.value}`));
+        list.append(label);
+        input.addEventListener('change', () => {
+          if (input.checked) state.selected.add(path);
+          else state.selected.delete(path);
+          clearEmail();
+          updateCompose();
+        });
+      }
+      updateCompose();
+    }
+
+    byId('example').addEventListener('click', () => {
+      byId('narrative').value = 'demo';
+      byId('narrative').focus();
+    });
+
+    byId('intake-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const text = byId('narrative').value.trim();
+      if (!text) return;
+      perform('Đang tạo bản nháp…', async () => {
+        const notices = byId('intake-notices');
+        notices.replaceChildren();
+        show('intake-notices', false);
+        const result = await request('/ask', {text, structured: true});
+        if (!result.draft) throw new Error('Chưa nhận được biểu mẫu từ máy chủ.');
+        for (const message of result.notices || []) notices.append(element('li', '', message));
+        show('intake-notices', notices.childElementCount > 0);
+        state.skipped.clear();
+        state.history.clear();
+        state.nextEdit = 0;
+        state.paused = false;
+        state.reviewing = false;
+        show('review', false);
+        resetSupport();
+        applyDraft(result);
+        renderQuestion();
+        return currentQuestion() ? byId('follow-up-title') : moveToReview();
+      });
+    });
+
+    byId('answer-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const question = currentQuestion();
+      const text = byId('answer').value.trim();
+      if (!question || !text) return;
+      perform('Đang cập nhật câu trả lời…', async () => {
+        const {field_path} = question;
+        const preceding = new Map(allFields().map(entry => [entry.path, entry.field]));
+        const result = await request('/follow-up', {draft: state.draft, field_path, text});
+        applyDraft(result);
+        for (const {path, field} of allFields()) {
+          if (JSON.stringify(preceding.get(path)) !== JSON.stringify(field)) {
+            remember(path, preceding.get(path));
+            invalidateShare(path);
+          }
+        }
+        if (state.reviewing) renderReview();
+        renderQuestion();
+        return currentQuestion() ? byId('answer') : moveToReview();
+      });
+    });
+
+    byId('skip').addEventListener('click', () => {
+      state.skipped.add(currentQuestion().field_path);
+      renderQuestion();
+      (currentQuestion() ? byId('answer') : moveToReview()).focus();
+    });
+
+    byId('review-now').addEventListener('click', () => moveToReview().focus());
+
+    byId('resume').addEventListener('click', () => {
+      state.skipped.clear();
+      state.paused = false;
+      renderQuestion();
+      byId('follow-up-title').focus();
+    });
+
+    byId('preview-summary').addEventListener('click', event => {
+      if (!state.previewDirty || event.currentTarget.parentElement.open) return;
+      event.preventDefault();
+      perform('Đang cập nhật văn bản trình bày…', async () => {
+        const {questions, output} = await request('/review', {draft: state.draft});
+        state.questions = questions;
+        state.draft.questions_for_user = questions;
+        state.previewDirty = false;
+        byId('draft-preview').textContent = output;
+        renderQuestion(false);
+        byId('preview-summary').parentElement.open = true;
+      });
+    });
+
+    byId('download').addEventListener('click', () => {
+      const file = new Blob([JSON.stringify(state.draft, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(file);
+      const link = element('a');
+      link.href = url;
+      link.download = 'ho-so-an-toan.json';
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+
+    byId('open-help').addEventListener('click', () => {
+      state.supportOpen = true;
+      show('support');
+      byId('support-title').focus();
+    });
+
+    byId('contact-choice').addEventListener('change', event => {
+      const wantsContact = event.target.value === 'yes';
+      show('contact-next', wantsContact);
+      clearEmail();
+      if (!wantsContact) {
+        byId('email-form').reset();
+        show('permission', false);
+        state.selected.clear();
+        updateCompose();
+      }
+    });
+
+    byId('lawyer-form').addEventListener('submit', event => {
+      event.preventDefault();
+      if (radio('contact') !== 'yes') return;
+      perform('Đang tra danh sách giả lập…', async () => {
+        const {lawyers} = await request('/lawyers', {nhu_cau: byId('need').value.trim()});
+        state.lawyers = lawyers;
+        const select = byId('lawyer');
+        const placeholder = element('option', '', 'Chọn luật sư');
+        placeholder.value = '';
+        select.replaceChildren(placeholder);
+        for (const lawyer of lawyers) {
+          const option = element('option', '', lawyer.name);
+          option.value = lawyer.id;
+          select.append(option);
+        }
+        show('lawyer-results');
+        show('lawyer-details', false);
+        show('lawyer-empty', lawyers.length === 0);
+        select.disabled = lawyers.length === 0;
+        show('email-form', false);
+        byId('email-form').reset();
+        show('permission', false);
+        state.selected.clear();
+        clearEmail();
+        updateCompose();
+        return lawyers.length ? select : byId('need');
+      });
+    });
+
+    byId('lawyer').addEventListener('change', () => {
+      const lawyer = state.lawyers.find(item => item.id === byId('lawyer').value);
+      const details = [lawyer?.email, lawyer?.specialties?.join(', ')].filter(Boolean);
+      byId('lawyer-details').textContent = details.join(' · ');
+      show('lawyer-details', details.length > 0);
+      show('email-form', Boolean(lawyer));
+      byId('email-form').reset();
+      show('permission', false);
+      state.selected.clear();
+      clearEmail();
+      updateCompose();
+    });
+
+    byId('form-choice').addEventListener('change', event => {
+      const useForm = event.target.value === 'yes';
+      show('permission', useForm);
+      state.selected.clear();
+      clearEmail();
+      if (useForm) renderShareFields();
+      updateCompose();
+    });
+
+    byId('email-form').addEventListener('submit', event => {
+      event.preventDefault();
+      if (byId('compose').disabled) return;
+      perform('Đang soạn email nháp…', async () => {
+        const {email} = await request('/email-draft', {
+          draft: state.draft, lawyer_id: byId('lawyer').value,
+          allowed_paths: [...state.selected], contact: true, use_form: true
+        });
+        byId('email-text').value = email;
+        show('email-preview');
+        return byId('email-text');
+      });
+    });
+
+    byId('copy').addEventListener('click', async () => {
+      const email = byId('email-text');
+      try {
+        await navigator.clipboard.writeText(email.value);
+        byId('progress').textContent = 'Đã chép email nháp.';
+      } catch {
+        email.focus();
+        email.select();
+        byId('progress').textContent = 'Đã chọn nội dung email. Bạn có thể dùng lệnh sao chép của thiết bị.';
+      }
+    });
+  </script>
+</body>
+</html>
