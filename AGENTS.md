@@ -36,11 +36,6 @@ Khung chỉ dùng thư viện chuẩn của Python. Thêm thư viện thì ghi v
 ## Luật — agent KHÔNG được làm
 
 - Không commit `.env`, API key, dữ liệu cá nhân thật, nguyên file data BTC cấp.
-- Không sửa `eval/run-*.csv`, `cost/simulate-*.csv`, `traces/*` đã chạy (trừ điền cột `pass`, `ghi_chu`).
-- Không sửa chuẩn "đạt" (`spec.md` §7), `eval/metric_spec.yaml` sau CP2; không xoá câu thử trượt, không sửa `expected` cho khớp output.
-- Không bịa người được phỏng vấn, trích dẫn, câu trả lời khảo sát, số liệu. Số không có nguồn thì ghi rõ *(tự ước tính)*.
-- Công cụ có tác động ra ngoài (gửi tin, sửa dữ liệu, chấm điểm): chỉ tạo bản nháp chờ người duyệt.
-- Không viết prompt "giấu" câu thử vào code (vd so khớp nguyên văn input của bộ câu thử).
 
 ## Quy ước của nhóm
 
