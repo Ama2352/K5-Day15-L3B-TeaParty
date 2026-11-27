@@ -256,18 +256,36 @@ def _quote_dung(quote: str, text: str) -> bool:
     return False
 
 
-def _bo_quote_sai(draft, texts: dict) -> list:
-    """Quote không nguyên văn / quá ngắn → XOÁ khoá quote (giữ source_id, locator), không bắt thử lại cả bản.
-    schema cho phép source_ref thiếu quote. → danh sách đường dẫn đã xoá (để ghi note)."""
-    removed = []
+QUOTE_SAI = "không có trong nguồn"   # dấu hiệu của lỗi quote trong danh sách lỗi
+
+
+def _xu_ly_quote(draft, texts: dict, labels=None) -> list:
+    """Soát quote của mọi source_ref có nguồn trong `texts`.
+
+    - Quote VÔ HẠI (< 2 từ, hoặc chỉ là label/tên nguồn) → xoá khoá quote, ghi note, không tính lỗi.
+    - Quote khớp nguyên văn (chỉ khác dấu câu / khoảng trắng / chữ hoa) → giữ.
+    - Quote ≥ 2 từ không khớp (kể cả vi phạm luật mảnh "…") → GIỮ NGUYÊN và trả về: đây là tín hiệu chi tiết bịa.
+    → list[{"field_path", "field" (dict FIELD), "quote", "source_id"}] các quote không khớp.
+    """
+    labels = labels or {}
+    removed, bad = [], []
 
     def walk(node, path):
         if isinstance(node, dict):
-            for i, ref in enumerate(node.get("source_refs") or []):
-                if (isinstance(ref, dict) and ref.get("source_id") in texts and "quote" in ref
-                        and not (isinstance(ref["quote"], str) and _quote_dung(ref["quote"], texts[ref["source_id"]]))):
-                    removed.append(f"{path}.source_refs[{i}]: {str(ref['quote'])[:50]!r}")
+            refs = node.get("source_refs")
+            for i, ref in enumerate(refs if isinstance(refs, list) else []):
+                if not (isinstance(ref, dict) and ref.get("source_id") in texts and "quote" in ref):
+                    continue
+                sid, quote = ref["source_id"], ref["quote"]
+                if isinstance(quote, str) and _quote_dung(quote, texts[sid]):
+                    continue
+                words = _tu(quote) if isinstance(quote, str) else []
+                if len(words) < 2 or words == _tu(labels.get(sid, "")):
+                    removed.append(f"{path.lstrip('.') or '$'}.source_refs[{i}]: {str(quote)[:50]!r}")
                     del ref["quote"]
+                else:
+                    field_path = re.sub(r"\.field$", "", path.lstrip("."))
+                    bad.append({"field_path": field_path, "field": node, "quote": quote, "source_id": sid})
             for key, value in node.items():
                 if key != "source_refs":
                     walk(value, f"{path}.{key}")
@@ -275,17 +293,15 @@ def _bo_quote_sai(draft, texts: dict) -> list:
             for i, value in enumerate(node):
                 walk(value, f"{path}[{i}]")
 
-    walk(draft, "$")
+    walk(draft, "")
     if removed:
-        note(f"quote: bỏ {len(removed)} quote không nguyên văn, vd {removed[0]}")
-    return removed
+        note(f"quote: xoá {len(removed)} quote vô hại (quá ngắn / chỉ là tên nguồn), vd {removed[0]}")
+    return bad
 
 
-def _kiem_nguon_ids(draft: dict, ids: set, texts=None) -> list:
-    """Mọi source_refs[].source_id phải là mã có thật (nguồn S…, câu trả lời A…) — lỗi thì thử lại.
-    texts {id: text nguồn}: có thì trước đó xoá quote không nguyên văn (_bo_quote_sai), không tính là lỗi."""
-    if texts:
-        _bo_quote_sai(draft, texts)
+def _kiem_nguon_ids(draft: dict, ids: set, texts=None, labels=None) -> list:
+    """Lỗi (→ thử lại): source_id không có thật; quote ≥ 2 từ không khớp nguyên văn text nguồn.
+    Quote vô hại được xoá lặng lẽ (xem _xu_ly_quote)."""
     errors = []
 
     def walk(node, path):
@@ -301,12 +317,16 @@ def _kiem_nguon_ids(draft: dict, ids: set, texts=None) -> list:
                 walk(value, f"{path}[{i}]")
 
     walk(draft, "$")
+    for b in _xu_ly_quote(draft, texts or {}, labels):
+        errors.append(f"{b['field_path']} · quote {str(b['quote'])[:80]!r} · {QUOTE_SAI} {b['source_id']} "
+                      "(chi tiết không có trong nguồn thì bỏ khỏi value)")
     return errors
 
 
 def _kiem_nguon(draft: dict, sources: list) -> list:
-    """source_id phải là mã nguồn có thật (lỗi → thử lại); quote không nguyên văn trong text bị xoá, không thử lại."""
-    return _kiem_nguon_ids(draft, {s["id"] for s in sources}, {s["id"]: s.get("text") or "" for s in sources})
+    """source_id có thật và quote khớp nguyên văn text nguồn (lỗi → thử lại); quote vô hại bị xoá."""
+    return _kiem_nguon_ids(draft, {s["id"] for s in sources}, {s["id"]: s.get("text") or "" for s in sources},
+                           {s["id"]: s.get("label") or "" for s in sources})
 
 
 def _canh_bao_locator(draft: dict, sources: list) -> list:
@@ -355,7 +375,8 @@ def _loi_message(errors: list) -> str:
             + lines + more +
             "\nHãy trả lại TOÀN BỘ đối tượng json theo đúng khung, sửa hết các lỗi trên. Nhắc lại: mọi trường là "
             "object FIELD đủ khoá; status \"missing\" thì value phải là null; source_id chỉ dùng mã có trong đầu vào; "
-            "mọi tài liệu phải đủ khoá, kể cả nguoi_tao và tinh_trang_chinh_sua.")
+            "mọi tài liệu phải đủ khoá, kể cả nguoi_tao và tinh_trang_chinh_sua; quote phải chép nguyên văn, "
+            "chi tiết không có trong nguồn thì bỏ khỏi value.")
 
 
 def _goi_co_thu_lai(system: str, user: str, kiem, buoc: str) -> dict:
@@ -395,6 +416,16 @@ def _trich_xuat_day_du(sources: list) -> dict:
     result = _goi_co_thu_lai(SYSTEM, _user_message(sources),
                              lambda d: _kiem_nguon(d, sources) + kiem_tra_schema(d), "trich_xuat")
     if result["draft"] is not None:
+        # Sau thử lại vẫn còn quote không khớp: KHÔNG sửa/xoá value; ép trường về "unclear" và báo để người dùng rà.
+        bad = _xu_ly_quote(result["draft"], {s["id"]: s.get("text") or "" for s in sources},
+                           {s["id"]: s.get("label") or "" for s in sources})
+        for b in bad:
+            if b["field"].get("status") == "provided":
+                b["field"]["status"] = "unclear"
+        if bad:
+            note(f"trich_xuat: còn {len(bad)} quote không khớp nguồn sau thử lại → ép unclear, báo người dùng")
+        result["quote_sai"] = bad
+        result["errors"] = [e for e in result["errors"] if QUOTE_SAI not in e]
         warns = _canh_bao_locator(result["draft"], sources)
         if warns:
             note(f"trich_xuat: cảnh báo locator ({len(warns)}), vd: {warns[0][:120]}")
@@ -459,12 +490,13 @@ def _dong_ngoai_pham_vi(items: list) -> list:
     for item in items:
         yeu_cau = str(item.get("yeu_cau") or "").strip().rstrip(".")
         ly_do = str(item.get("ly_do") or "").strip().rstrip(".")
-        text = yeu_cau + (f" — {ly_do}" if ly_do else "")
+        # Hiện yeu_cau trong ngoặc kép như lời được đòi — tránh đổi nghĩa khi AI viết dạng phủ định ("Không…", "Đừng…").
+        text = (f"\"{yeu_cau}\"" if yeu_cau else "") + (f" — {ly_do}" if ly_do else "")
         if text:
             lines.append(f"- {_TIEN_TO.get(item.get('loai'), '')}{text}{_GHI_THEM.get(item.get('loai'), '')}.")
     if not lines:
         return []
-    return ["Hệ thống sẽ không tự làm những việc sau:", *lines,
+    return ["Những yêu cầu sau hệ thống không làm:", *lines,
             "Bản nháp dưới đây chỉ dùng thông tin có thật trong nội dung bạn gửi.", ""]
 
 
@@ -504,8 +536,25 @@ def answer(text: str) -> dict:
 
     errors = result["errors"]
     gaps, questions = _gan_cau_hoi(draft)
+    quote_sai = result.get("quote_sai") or []
+    if quote_sai:   # câu hỏi cho trường có trích dẫn không khớp nguồn được ưu tiên đầu
+        dau, seen = [], set()
+        for b in quote_sai:
+            if b["field_path"] in seen:
+                continue
+            seen.add(b["field_path"])
+            dau.append({"field_path": b["field_path"], "skippable": True, "question": (
+                f"{_label_of(b['field_path'])}: trích dẫn \"{_ngan(b['quote'], 60)}\" không có nguyên văn trong nguồn "
+                f"{b['source_id']}. Chi tiết này có đúng như bạn kể không, hay cần bỏ đi? (Có thể bỏ qua.)")})
+        questions = (dau + [q for q in questions if q["field_path"] not in seen])[:MAX_CAU_HOI]
+        draft["questions_for_user"] = questions
 
     lines = head + [tao_ban_nhap(draft), ""]
+    if quote_sai:
+        lines.append("Cần rà: trích dẫn không khớp nguồn (các trường này đã chuyển sang \"chưa rõ\")")
+        lines.extend(f"- {_label_of(b['field_path'])}: \"{_ngan(b['quote'], 80)}\" — không tìm thấy nguyên văn trong "
+                     f"{b['source_id']}" for b in quote_sai)
+        lines.append("")
     lines.append("Câu hỏi bổ sung (có thể bỏ qua)")
     if questions:
         lines.extend(f"{i}. {q['question']}" for i, q in enumerate(questions, start=1))
