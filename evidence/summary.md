@@ -60,4 +60,5 @@ Giả thuyết ở `evidence/hypothesis.md`: **đúng / sai / phải đổi** �
 
 | Vai | Giờ hẹn | Đã xong? |
 |---|---|---|
-| | | |
+| Bệnh nhân, không phải người dùng chính (P1) | khoảng 17:00 ngày 27/11, nhắn tin | Có ghi chép lời kể tự do |
+| Nhân viên gặp hành vi mang tính tình dục tại nơi làm việc, chưa phản ánh với HR (P2) | khoảng 22:00 ngày 27/11 | Có ghi chép (`interviews/P2.md`) |
