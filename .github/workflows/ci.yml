@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths: &ci_paths
+      - '.github/workflows/ci.yml'
+      - '.railway/**'
+      - 'run.py'
+      - 'requirements.txt'
+      - 'codebase/**'
+      - 'data/**'
+      - 'eval/**'
+      - 'cost/**'
+  push:
+    branches: [main]
+    paths: *ci_paths
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      MODEL_PROVIDER: fake
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Check submission files
+        run: python run.py check
+      - name: Test the demo API
+        run: |
+          python -m pip install httpx==0.28.1
+          python -m unittest discover -s codebase -p test_web.py
+      - name: Smoke test the CLI with the fake model
+        shell: bash
+        run: |
+          output=$(printf '%s\n' 'TeaParty CI smoke test' | python run.py)
+          printf '%s\n' "$output"
+          grep -Fq 'model: fake' <<< "$output"

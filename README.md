@@ -89,6 +89,23 @@ Gói miễn phí báo hết lượt: thêm `--wait 4` sau `eval` hoặc `simulat
 
 Nhóm dùng stack khác (Node, Streamlit, notebook…): sửa hàm `run_app()` trong `run.py` để `python run.py` vẫn chạy được bản chạy thử, và giữ `answer()` trong `codebase/agent.py` để `eval`, `simulate` chạy được.
 
+## Demo web và Railway
+
+Chạy từ thư mục gốc repo với Python 3.13.
+
+```sh
+python -m pip install -r requirements.txt
+python -m uvicorn --app-dir codebase web:app --host 127.0.0.1 --port 8000
+```
+
+Mở `http://127.0.0.1:8000/docs` để thử `POST /ask` với `{"text":"..."}`. Endpoint `GET /health` kiểm tra tiến trình web và không gọi model. Bản demo hiện dùng AI giả theo cấu hình mặc định của khung.
+
+GitHub Actions kiểm tra các thay đổi liên quan đến runtime, dữ liệu, bộ thử và pipeline trên PR vào `main` hoặc khi push lên `main`. Trình kiểm tra bài nộp in cảnh báo trong log. Smoke test CLI và test API dùng `MODEL_PROVIDER=fake`.
+
+Để kết nối Railway lần đầu, dùng project dành riêng cho TeaParty. Sau khi workflow có trên `main` và tài khoản Railway có quyền truy cập repo, chạy `railway login`, `railway link`, `railway config plan` rồi `railway config apply`. Cấu hình trong `.railway/railway.ts` nối GitHub `main`, chạy Uvicorn trên `$PORT` và kiểm tra `/health`.
+
+Trong service `teaparty-demo`, bật **Wait for CI** và đặt **Watch Paths** theo các đường dẫn `/codebase/**`, `/data/**`, `/requirements.txt`. Tạo Railway domain trong **Public Networking** nếu nhóm cần URL demo. Khi đã triển khai model thật, đặt biến model và API key trong Railway Variables.
+
 ## Bản chạy thử — viết ở đâu
 
 | File | Viết gì | Bước guide |
