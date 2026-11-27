@@ -6,7 +6,7 @@
 
 - Tên nhóm: TeaParty
 - Lớp: L3B
-- Track: ____
+- Track: F
 - Link repo: https://github.com/Ama2352/K5-Day15-L3B-TeaParty
 
 | STT | Họ và tên | Mã học viên | Vai trò | Phần việc chính |
