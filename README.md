@@ -65,7 +65,8 @@ Gõ `dir` (Windows) hoặc `ls` (macOS / Linux): thấy `run.py` và `README.md`
 
 - Windows: gõ `python` mà mở Microsoft Store hoặc báo không có lệnh → dùng `py`. Chưa có Python: cài từ python.org, **tick "Add python.exe to PATH"**, mở lại PowerShell.
 - macOS: báo `command not found: python` là bình thường → dùng `python3`.
-- `python run.py` in ra "[câu trả lời giả — chưa nối model] …" là khung chạy đúng. Nối model thật: [docs/connect-model.md](docs/connect-model.md).
+- Gõ `demo` trong `python run.py` để mở ca [giả lập CP2](data/cp2_demo.json). Bản nháp dẫn mã từng nguồn và ghi ngày **cần xác nhận** vì lời kể và ảnh cho hai ngày khác nhau. Dòng trace hiện `model: fake`. OCR, bản chép lời và ngày gắn với từng nguồn được chuẩn bị sẵn trong JSON.
+- Có thể nhập lời kể thuần hoặc JSON một dòng cùng định dạng với ca mẫu. JSON cần `statement`, có thể kèm `incident_date` và danh sách `sources`. Mỗi nguồn có `kind` (`text`, `image`, `audio`), `text` và có thể kèm `locator`, `incident_date` dạng YYYY-MM-DD. Bản giả dùng các ngày khai báo trong trường này. Nối model thật: [docs/connect-model.md](docs/connect-model.md).
 
 Trong README này lệnh viết là `python …`; máy nhóm cần `python3` hay `py` thì gõ thay.
 

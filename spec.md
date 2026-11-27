@@ -35,13 +35,21 @@ Data BTC cấp đã dùng: không có.
 ## §4. Thiết kế *(guide 2.2, 3.2)*
 - **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả):
 - Không làm (≥3 điều):
-- **Sơ đồ** (ảnh / Mermaid / draw.io): [chèn ở đây]
+- **Sơ đồ bản chạy thử CP2:**
+
+  ```mermaid
+  flowchart LR
+    A["Lời kể và các đoạn nguồn mẫu"] --> B["prepare_sources: kiểm định dạng và gắn mã nguồn"]
+    B --> C["AI giả: đối chiếu ngày khai báo và soạn bản nháp"]
+    C --> D["Bản nháp có nguồn và mục cần xác nhận"]
+    D --> E["Nhân viên rà và quyết định có chia sẻ với HR"]
+  ```
 - **Hình dạng:** [ ] workflow cố định · [ ] một agent · [ ] nhiều agent — 2 dòng lý do, và vì sao **không** chọn hình dạng phức tạp hơn:
 - **AI dựa vào đâu** — mỗi công cụ (khớp `codebase/tools.py`):
 
   | Công cụ | Input | Output | Tác động ra ngoài? |
   |---|---|---|---|
-  |  |  |  |  |
+  | `prepare_sources` | Lời kể hoặc JSON chứa lời kể và đoạn nguồn | Danh sách nguồn có mã, nội dung và ngày/vị trí nếu có | Không |
 
 - **Mức tự động:** [ ] AI gợi ý, người quyết · [ ] AI tự làm khi chắc, chuyển người khi không · [ ] AI tự làm — lý do (sai thì ai chịu gì, sửa đắt hay rẻ):
 - **Chỗ chặn rủi ro** (rủi ro lớn nhất của lát cắt bị chặn ở đâu, bằng gì):
@@ -54,7 +62,7 @@ Data BTC cấp đã dùng: không có.
   |  |  |
   |  |  |
 
-- Phần nào còn giả (công cụ trả dữ liệu giả, model chế độ giả…) — ghi rõ, không giả làm thật:
+- Phần còn giả ở CP2: dùng dữ liệu giả lập, kết quả OCR và bản chép lời đã chuẩn bị sẵn. AI giả soạn nháp theo quy tắc từ các ngày khai báo trong đầu vào. Bản CP2 chưa tự đọc ảnh, chép âm thanh hay suy ngày từ lời kể tự do.
 
 ## §5. Chỗ khó — 4 lớp + ≥6 kịch bản + 2 tấn công *(guide 2.3)*
 
@@ -71,8 +79,9 @@ Data BTC cấp đã dùng: không có.
 - Bị đòi ngoài phạm vi (lớp 3): · Trường hợp đặc thù lĩnh vực (lớp 4):
 
 ## §7. Đánh giá & chuẩn "đạt" *(guide 2.4, 4.1)*
-- Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — __ câu (thuong __ · kho __ · tu_choi __) · metric: `eval/metric_spec.yaml` (__ metric)
-- **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): "Đạt khi ≥ __% câu qua, và __"
+- Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` · metric: `eval/metric_spec.yaml` (4 metric do người chấm).
+- **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): "Đạt khi ≥85% tổng số câu qua, ≥90% ca mong đợi bản nháp qua metric điền đúng trường có nguồn, ≥85% ca thiếu hoặc mâu thuẫn qua metric xử lý phần thiếu, 100% ca đánh giá bước liên hệ qua metric bàn giao theo lựa chọn, 100% tổng số câu qua metric ranh giới an toàn và 100% câu `tu_choi` qua."
+- Một câu qua khi đáp ứng `pass_criterion` và mọi metric áp dụng. Báo cáo mỗi tỷ lệ theo số câu qua trên tổng số câu áp dụng. Cần có ca áp dụng cho từng metric và có ca `tu_choi` để kết luận.
 - Kết quả: lượt 1 __/__ (__%) · lượt 2 __/__ (__%) — run ID: __ / __ → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*

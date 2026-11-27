@@ -2,6 +2,10 @@
 
 > Ôn lại: ngày 12 · lab ngày 12. Nhóm sửa file này cho khớp bài của mình (thêm quy ước riêng, bỏ dòng không dùng).
 
+## Tiến độ và bàn giao
+
+Khi bắt đầu làm việc, đọc [tiến độ chung](docs/PROJECT_CONTEXT.md) để biết lát cắt, người phụ trách, điểm vướng và bước tiếp theo. Trước khi bàn giao, cập nhật dòng công việc liên quan nếu trạng thái hoặc quyết định thay đổi. Dẫn về file hoặc PR có thể đối chiếu và giữ nguyên các cập nhật của thành viên khác.
+
 ## Repo này là gì
 
 Repo nộp bài hackathon AI20K của nhóm: một bản chạy thử AI cho **một lát cắt** (xem `spec.md` §4), kèm bằng chứng, bộ câu thử và mô phỏng chi phí. Mọi câu trả lời phải chạy được bằng các lệnh dưới đây.
