@@ -1,21 +1,21 @@
-# AI SPEC — [Tên lát cắt] · Nhóm [tên nhóm] · Phòng [XXX] · Zone [X]
+# AI SPEC — AI Evidence Assistant · Nhóm TeaParty · Phòng [XXX] · Zone [X]
 
 > Mốc nộp: §7 chốt chuẩn "đạt" tại **CP2 19:30 Thứ Sáu 27/11** · §0–§7 nộp **CP3 10:00 Thứ Bảy 28/11** · đủ §0–§10 **CP4 14:30 Thứ Bảy 28/11** · §10 changelog ghi tiếp đến **23:59 Thứ Bảy 28/11**.
 > Đầu mỗi mục ghi bước guide (`02-guide.md` trong repo đề) chỉ cách điền. Mỗi mục ngắn, có số và nguồn; chi tiết để ở file được trỏ tới. Xoá dòng hướng dẫn trong ngoặc vuông khi điền xong.
 
-Track: [ ] A · [ ] B · [ ] C · [ ] D · [ ] E — bài toán: [đề gợi ý trong file track, hoặc bài toán nhóm tự mở rộng] __
-Data BTC cấp đã dùng (nếu có — không commit nguyên file): __
+Track F · Chuẩn bị hồ sơ phản ánh sự việc quấy rối tình dục tại nơi làm việc.
+Data BTC cấp đã dùng: không có.
 
 ## §0. Hiện tại việc này diễn ra thế nào *(guide 1.1)*
 - Luồng hiện tại của việc này, trong khoá hoặc trên app thật (3–5 bước; ảnh chụp từ tài khoản của mình, đã che thông tin):
 - Công cụ / AI đang được dùng cho việc này (nếu có) + nguồn. Không kiểm được thì ghi "chưa kiểm":
 
 ## §1. Người dùng & bằng chứng *(guide 1.1, 1.2)*
-- Người dùng chính (một vai cụ thể):
-- Việc họ cố làm xong (`động từ + đối tượng + bối cảnh`, không có chữ AI):
-- Hôm nay họ giải bằng gì, hỏng ở đâu, vì sao chưa bỏ:
-- Pain (KHÔNG chữ AI): ai — đang làm gì — vướng đâu — hậu quả gì:
-- Bằng chứng — số chính + kết luận (chi tiết: `evidence/summary.md`): __
+- Người dùng chính: nhân viên trưởng thành đang tự chuẩn bị hồ sơ phản ánh một sự việc quấy rối tình dục tại nơi làm việc.
+- Việc họ cố làm xong: thu thập và hệ thống hóa nguồn đã có để soạn bản phản ánh một sự việc.
+- Cách làm hiện tại, cần kiểm chứng: tự gom lời kể, tài liệu dạng văn bản, hình ảnh và âm thanh, đối chiếu các mốc và viết lại diễn biến. Có thể phải rà nhiều lần hoặc bỏ sót thông tin.
+- Pain: nhân viên bị quấy rối tình dục tại nơi làm việc gặp khó khăn trong việc thu thập, hệ thống hóa bằng chứng và chuẩn bị hồ sơ phản ánh sự việc.
+- Bằng chứng: chưa có kết quả trong bản nháp CP1. Xem kế hoạch ở [giả thuyết](evidence/hypothesis.md). Kết quả sẽ ghi vào `evidence/summary.md`.
 
 ## §2. Impact & quyết định chọn *(guide 1.3)*
 

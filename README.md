@@ -1,8 +1,8 @@
-# TeaParty — [Tên lát cắt]
+# TeaParty — AI Evidence Assistant
 
 Nhóm TeaParty, lớp L3B. Xem [thành viên và phân công](TEAMS.md) và [Canvas CP1](canvas.md).
 
-*Lát cắt = phần nhỏ nhất làm xong được trong hackathon: một người dùng · một việc · một quyết định AI · một kết quả.*
+Lát cắt CP1 giúp nhân viên chuyển lời kể và bằng chứng về một sự việc quấy rối tình dục tại nơi làm việc thành bản nháp báo cáo có cấu trúc. Bản nháp đánh dấu thông tin còn thiếu và gắn nguồn đối chiếu từ văn bản, hình ảnh hoặc âm thanh để nhân viên tự rà trước khi chia sẻ.
 
 ---
 
