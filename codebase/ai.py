@@ -11,12 +11,13 @@ Hợp đồng (giữ nguyên để khung đo được token):
     Lỗi gọi model (hết lượt, sai key, mất mạng): cứ để exception bay ra — khung ghi lỗi vào cột error.
 
 Chế độ giả (mặc định khi .env chưa có MODEL_PROVIDER, hoặc MODEL_PROVIDER=fake):
-    trả một câu giả cố định, model "fake", token 0 — để luồng chạy hết từ trước CP2 (guide bước 3.2).
+    tạo bản nháp theo quy tắc đơn giản từ danh sách nguồn, model "fake", token 0.
     Lượt `run.py eval` / `run.py simulate` chạy bằng model giả KHÔNG được tính.
 
 Nối model thật: điền .env (chép từ .env.example), rồi viết nhánh gọi API ở dưới theo docs/connect-model.md
 (có ví dụ OpenAI, Claude, model chạy trên máy, và cách nối nhà cung cấp khác). Không dán API key vào file này.
 """
+import json
 import os
 
 from tracing import model_call
@@ -43,11 +44,47 @@ MODEL_NAME = (os.environ.get("MODEL_NAME") or "").strip()
 API_KEY = (os.environ.get("API_KEY") or "").strip()
 
 
+def _fake_draft(sources: list) -> str:
+    dates = {}
+    for source in sources:
+        if source["incident_date"]:
+            dates.setdefault(source["incident_date"], []).append(f'[{source["id"]}]')
+
+    references = "; ".join(f"{day} {' '.join(ids)}" for day, ids in dates.items())
+    if len(dates) > 1:
+        date_line = f"Ngày xảy ra: cần xác nhận (các nguồn mâu thuẫn: {references})."
+    elif dates:
+        date_line = f"Ngày xảy ra: theo nguồn {references}."
+    else:
+        date_line = "Ngày xảy ra: chưa cung cấp."
+
+    statement = sources[0]
+    lines = [
+        "BẢN NHÁP PHẢN ÁNH — MÔ PHỎNG CP2",
+        "",
+        "1. Diễn biến theo lời kể",
+        f'[S1] {json.dumps(statement["text"], ensure_ascii=False)}',
+        "",
+        "2. Nguồn đối chiếu",
+    ]
+    for source in sources:
+        locator = f' · {source["locator"]}' if source["locator"] else ""
+        excerpt = json.dumps(source["text"], ensure_ascii=False)
+        lines.append(f'[{source["id"]}] {source["label"]}{locator}: {excerpt}')
+    lines.extend([
+        "",
+        "3. Thông tin cần rà",
+        date_line,
+        "Rà lại nội dung và nguồn trước khi chọn có liên hệ luật sư và có dùng bản nháp hay không.",
+    ])
+    return "\n".join(lines)
+
+
 @model_call
 def call_model(system: str, user: str) -> dict:
     if MODEL_PROVIDER == "fake":
-        last = (user.strip().splitlines() or [""])[-1]
-        return {"text": "[câu trả lời giả — chưa nối model] " + last[:60], "model": "fake", "tokens_in": 0, "tokens_out": 0}
+        draft = _fake_draft(json.loads(user))
+        return {"text": draft, "model": "fake", "tokens_in": 0, "tokens_out": 0}
 
     # NHÓM VIẾT: gọi model thật ở đây (theo MODEL_PROVIDER, MODEL_NAME, API_KEY) rồi trả đúng 4 khoá.
     # Ví dụ chép được cho từng nhà cung cấp: docs/connect-model.md mục 2.

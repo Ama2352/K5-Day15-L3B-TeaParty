@@ -21,3 +21,13 @@
 ## Dataset 2 · [tên]
 
 …
+
+## Ca chạy thử CP2 · `cp2_demo.json`
+
+| Mục | Nội dung |
+|---|---|
+| Dùng để làm gì | Lệnh `demo` của CLI và test API cho ca ngày mâu thuẫn. |
+| Nguồn và cách tạo | `synthetic`, viết tay một sự việc hư cấu gồm lời kể, ghi chú, kết quả OCR mẫu và bản chép lời mẫu. Không dùng seed. |
+| Xử lý | Khai báo ngày theo từng nguồn. Để trống ngày khi nguồn thiếu thông tin. CLI giữ tệp gốc và gắn mã nguồn khi đọc. |
+| Quy mô và kiểm tra | 1 ca, 4 đoạn nguồn rà khi soạn. Test đối chiếu hai ngày tới đúng mã và kiểm tra bản chép lời có trong đầu ra. |
+| Giới hạn | Minh họa một tình huống mâu thuẫn về ngày. Không đo chất lượng OCR, chép lời hay bằng chứng về khó khăn của người dùng. |

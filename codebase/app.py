@@ -6,6 +6,7 @@ Nhóm thay bằng giao diện của mình (web, bot…) nhưng giữ `python run
 """
 import os
 import sys
+from pathlib import Path
 
 for _stream in (sys.stdout, sys.stderr, sys.stdin):
     try:
@@ -14,6 +15,8 @@ for _stream in (sys.stdout, sys.stderr, sys.stdin):
         pass
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+DEMO_PATH = Path(__file__).resolve().parents[1] / "data" / "cp2_demo.json"
 
 
 def _where(e):
@@ -34,11 +37,12 @@ def main() -> int:
         print("Không nạp được codebase/ — lỗi ở %s: %s: %s" % (_where(e), type(e).__name__, e))
         print("Sửa lỗi rồi chạy lại. Cách nối model: docs/connect-model.md")
         return 1
-    print("Bản chạy thử — gõ đầu vào rồi Enter. Thoát: Ctrl+C (hoặc Enter 2 lần với dòng trống).")
+    print("Bản chạy thử — gõ demo hoặc nhập lời kể / JSON một dòng rồi Enter.")
+    print("Thoát: Ctrl+C (hoặc Enter 2 lần với dòng trống).")
     blank = 0
     while True:
         try:
-            text = input("> ").strip()
+            text = input("> ").removeprefix("\ufeff").strip()
         except (EOFError, KeyboardInterrupt):
             print()
             return 0
@@ -50,7 +54,7 @@ def main() -> int:
         blank = 0
         tracing.begin("app")
         try:
-            result = answer(text)
+            result = answer(DEMO_PATH.read_text(encoding="utf-8") if text.lower() == "demo" else text)
         except NotImplementedError as e:
             tracing.end()
             print("Chưa nối model: %s" % e)

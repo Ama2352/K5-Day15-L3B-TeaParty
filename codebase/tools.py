@@ -1,18 +1,72 @@
-"""Công cụ của bài toán — NHÓM VIẾT. Điền ở guide bước 2.2 (thiết kế) và 3.2 (code).
+"""Công cụ chuẩn hóa lời kể và các đoạn nguồn cho bản thử CP2."""
 
-Mỗi công cụ là một hàm Python có @tool. Docstring ghi đúng 4 ý như sơ đồ ở spec.md §4:
-    tên · input · output · có tác động ra ngoài không (gửi tin, sửa dữ liệu, chấm điểm…)
-Khung tự ghi mỗi lần gọi công cụ vào trace (tên, input, output rút gọn, thời gian, lỗi).
+import json
+from datetime import date
 
-Số công cụ, kiểu công cụ do thiết kế của nhóm quyết định — có bài chỉ cần một công cụ tra cứu.
-Công cụ có tác động ra ngoài: KHÔNG tự làm. Trả về bản nháp chờ người duyệt (guide bước 2.2, "chỗ người duyệt").
-Dữ liệu công cụ đọc (bài mẫu, thông báo mẫu, lịch…): để trong data/ và mô tả ở data/DATA_CARD.md.
-"""
-from tracing import tool, TOOLS  # noqa: F401  (TOOLS: danh sách công cụ đã đăng ký, dùng khi viết vòng lặp agent)
+from tracing import tool
+
+
+SOURCE_KINDS = {
+    "text": "Văn bản",
+    "image": "OCR ảnh mẫu",
+    "audio": "Bản chép lời mẫu",
+}
+
+
+def _source(source_id, label, text, incident_date=None, locator=None):
+    if not isinstance(text, str) or not text.strip():
+        raise ValueError(f"{source_id} cần nội dung văn bản.")
+    if locator is not None and not isinstance(locator, str):
+        raise ValueError(f"{source_id} cần vị trí trích đoạn dạng văn bản.")
+    if incident_date is not None:
+        try:
+            if date.fromisoformat(incident_date).isoformat() != incident_date:
+                raise ValueError
+        except (TypeError, ValueError):
+            raise ValueError(f"{source_id} cần ngày theo dạng YYYY-MM-DD.") from None
+    return {
+        "id": source_id,
+        "label": label,
+        "text": text,
+        "incident_date": incident_date,
+        "locator": locator,
+    }
 
 
 @tool
-def search_example(query: str) -> list:
-    """(ví dụ — thay bằng công cụ của nhóm) Tra dữ liệu mẫu theo câu hỏi.
-    Input: câu hỏi (str). Output: danh sách đoạn {"code", "text"}. Không tác động ra ngoài."""
-    return [{"code": "VD-1", "text": "(ví dụ) đoạn dữ liệu giả — thay bằng dữ liệu thật của bài toán"}]
+def prepare_sources(text: str) -> list:
+    """Chuẩn hóa nguồn. Input là lời kể hoặc JSON. Output là các đoạn có mã nguồn.
+
+    Chỉ xử lý trong bộ nhớ, không có tác động ra ngoài.
+    """
+    if not text.lstrip().startswith(("{", "[")):
+        return [_source("S1", "Lời kể", text)]
+
+    try:
+        payload = json.loads(text)
+    except json.JSONDecodeError:
+        raise ValueError("JSON phải đúng cú pháp.") from None
+    if not isinstance(payload, dict):
+        raise ValueError("JSON cần là một đối tượng có trường statement.")
+    attachments = payload.get("sources", [])
+    if not isinstance(attachments, list):
+        raise ValueError("sources phải là danh sách nguồn.")
+
+    sources = [_source("S1", "Lời kể", payload.get("statement"), payload.get("incident_date"))]
+    for index, attachment in enumerate(attachments, start=2):
+        source_id = f"S{index}"
+        if not isinstance(attachment, dict):
+            raise ValueError(f"{source_id} phải là một đối tượng nguồn.")
+        kind = attachment.get("kind")
+        if not isinstance(kind, str) or kind not in SOURCE_KINDS:
+            raise ValueError(f"{source_id} cần kind là text, image hoặc audio.")
+        sources.append(
+            _source(
+                source_id,
+                SOURCE_KINDS[kind],
+                attachment.get("text"),
+                attachment.get("incident_date"),
+                attachment.get("locator"),
+            )
+        )
+    return sources

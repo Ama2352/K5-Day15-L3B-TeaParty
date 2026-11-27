@@ -1,0 +1,21 @@
+{
+  "statement": "Tôi nhận được lời nhận xét mang tính tình dục không mong muốn tại nơi làm việc. Theo ghi chú của tôi, sự việc xảy ra vào thứ Hai.",
+  "incident_date": "2026-11-23",
+  "sources": [
+    {
+      "kind": "text",
+      "text": "Ghi chú sau ca: tôi đã trao đổi với quản lý về lời nhận xét đó."
+    },
+    {
+      "kind": "image",
+      "text": "Nội dung ảnh giả lập: Sự việc đã xảy ra vào thứ Ba.",
+      "incident_date": "2026-11-24",
+      "locator": "vùng nội dung chính"
+    },
+    {
+      "kind": "audio",
+      "text": "Bản chép lời giả lập: Tôi nhớ lời nhận xét đó, nhưng không nhớ ngày.",
+      "locator": "00:03–00:08"
+    }
+  ]
+}
