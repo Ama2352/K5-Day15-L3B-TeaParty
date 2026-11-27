@@ -247,6 +247,11 @@ def home():
     return FileResponse(CODEBASE / "static" / "index.html")
 
 
+@app.get("/assets/draft.js", include_in_schema=False)
+def draft_script():
+    return FileResponse(CODEBASE / "static" / "draft.js", media_type="text/javascript")
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}

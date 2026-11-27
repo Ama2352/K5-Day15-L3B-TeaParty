@@ -101,6 +101,13 @@ python -m uvicorn --app-dir codebase web:app --host 127.0.0.1 --port 8000
 
 Mở `http://127.0.0.1:8000/docs` để thử `POST /ask` với `{"text":"..."}`. Endpoint `GET /health` kiểm tra tiến trình web và không gọi model. Bản demo hiện dùng AI giả theo cấu hình mặc định của khung.
 
+Mở `http://127.0.0.1:8000/` và chọn **Dùng ca mẫu** để thử giao diện. FastAPI phục vụ bundle React có sẵn trong repo. Khi sửa [mã nguồn phần rà soát](codebase/draft.jsx), cập nhật bundle bằng hai lệnh sau từ thư mục gốc. Trên Windows PowerShell, có thể dùng `npm.cmd` thay cho `npm`.
+
+```sh
+npm --prefix codebase ci
+npm --prefix codebase run build
+```
+
 GitHub Actions kiểm tra các thay đổi liên quan đến runtime, dữ liệu, bộ thử và pipeline trên PR vào `main` hoặc khi push lên `main`. Trình kiểm tra bài nộp in cảnh báo trong log. Smoke test CLI và test API dùng `MODEL_PROVIDER=fake`.
 
 Service `teaparty-demo` lấy code từ GitHub `main`, dùng thư mục gốc repo làm **Root Directory**. File [railway.toml](railway.toml) cấu hình Railpack, các đường dẫn kích hoạt deploy, lệnh chạy Uvicorn trên `$PORT` và health check `/health`. Cấu hình tạo project và liên kết nguồn nằm trong [.railway/railway.ts](.railway/railway.ts).

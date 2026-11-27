@@ -52,6 +52,13 @@ class DemoWebTest(unittest.TestCase):
         response = self.client.get("/", follow_redirects=False)
         self.assertEqual(response.status_code, 200)
         self.assertIn("text/html", response.headers["content-type"])
+        self.assertIn('<script src="/assets/draft.js"></script>', response.text)
+
+    def test_draft_bundle_is_served_as_javascript(self):
+        response = self.client.get("/assets/draft.js", follow_redirects=False)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("text/javascript", response.headers["content-type"])
+        self.assertIn("TeaPartyDraft", response.text)
 
     def test_partial_case_survives_followup_and_review(self):
         first = self.client.post("/ask", json={"text": "Tôi giữ một ghi chú.", "structured": True})

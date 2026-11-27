@@ -3,147 +3,205 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#172d49">
   <title>Hồ sơ an toàn</title>
   <style>
     :root {
       color-scheme: light;
-      --ink: #282a37;
-      --muted: #565766;
+      --ink: #0f2e2b;
+      --muted: #4b6b66;
       --surface: #fff;
-      --canvas: #f5f4f0;
-      --line: #d9d7d1;
-      --accent: #554276;
-      --accent-soft: #f0ebf6;
-      --warn: #8e4223;
-      --warn-soft: #fff0e7;
-      font: 16px/1.55 system-ui, "Segoe UI", sans-serif;
+      --canvas: #f8fafc;
+      --line: #dbe5e3;
+      --accent: #0f766e;
+      --accent-soft: #ecfdf5;
+      --warn: #9a5b1f;
+      --warn-soft: #fff4e6;
+      --radius: .9rem;
+      --shadow: 0 1px 2px rgba(15,46,43,.06), 0 8px 24px -12px rgba(15,46,43,.16);
+      font: 16px/1.6 "Segoe UI", system-ui, sans-serif;
     }
     *, *::before, *::after { box-sizing: border-box; }
     [hidden] { display: none !important; }
     body { margin: 0; background: var(--canvas); color: var(--ink); }
-    .wrap { width: min(1180px, calc(100% - 3rem)); margin-inline: auto; }
-    header { background: #312b41; color: #fff; padding: 1rem 0; }
-    .brand { display:flex;align-items:center;gap:.8rem;font-size:1.15rem;font-weight:650 }
-    .mark { display:grid;place-items:center;width:2rem;height:2rem;border:1px solid #ccbfdc;border-radius:6px }
-    .mark::before { content:"";width:.65rem;height:.85rem;border:1px solid white;border-radius:1px;box-shadow:3px -3px 0 -1px #312b41,3px -3px 0 0 #cfc2dd }
-    header p { color: #dce9ed; max-width: 62ch; margin-bottom: 0; }
-    h1, h2 { font-weight: 700; line-height: 1.15; }
-    h1 { font-size: clamp(2.5rem, 7vw, 4.15rem); margin: 0; letter-spacing: -.04em; }
-    h2 { font-size: clamp(1.55rem, 4vw, 2rem); margin: 0 0 .75rem; letter-spacing: -.02em; }
+    .wrap { width: min(1480px, calc(100% - 3rem)); margin-inline: auto; }
+    .masthead { background: linear-gradient(135deg, #0b3b36, var(--ink)); color: #fff; padding: 1.1rem 0; }
+    .masthead .wrap { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
+    .brand { display: flex; align-items: center; gap: .75rem; font-size: 1.16rem; font-weight: 700; }
+    .mark { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: .7rem; background: var(--accent-soft); color: var(--accent); font-size: 1.2rem; }
+    .mark::before { content: "\1F6E1"; line-height: 1; }
+    .masthead .help { color: #cfe9e3; margin: 0; }
+    .reassure { margin: .9rem auto 0; padding: .6rem 1rem; color: var(--accent); background: var(--accent-soft); border-radius: .7rem; font-size: .92rem; text-align: center; }
+    h1, h2 { font-weight: 720; line-height: 1.2; letter-spacing: -.025em; }
+    h1 { font-size: clamp(1.9rem, 3vw, 2.65rem); margin: 0 0 .6rem; }
+    h2 { font-size: clamp(1.35rem, 2.2vw, 1.75rem); margin: 0 0 .65rem; }
     h3, p { margin: 0 0 .65rem; }
     p:last-child { margin-bottom: 0; }
-    main { padding: 1.8rem 0 3rem; }
-    .layout { display: grid; grid-template-columns: minmax(180px, .8fr) minmax(0, 2.8fr); gap: clamp(1.2rem,4vw,4rem); align-items: start; }
-    .stack { display: grid; gap: 1.1rem; min-width: 0; }
-    .panel { padding: clamp(1rem, 4vw, 1.6rem); background: var(--surface); border: 1px solid var(--line); border-radius: .8rem; min-width: 0; }
-    .aside { grid-area:1 / 1;position:sticky;top:1rem;background:transparent;border:0;padding:1.3rem 0 }
-    .stack { grid-column:2 }
-    .steps { list-style:none;padding:0;margin:1rem 0 2rem;counter-reset:step }
-    .steps li {counter-increment:step;display:flex;align-items:center;gap:.65rem;padding:.6rem 0;color:var(--muted)}
-    .steps li::before {content:counter(step);display:grid;place-items:center;width:1.6rem;height:1.6rem;border:1px solid var(--line);border-radius:50%;font-size:.83rem}
-    .steps [aria-current=step] {color:var(--accent);font-weight:700}
-    .steps [aria-current=step]::before {background:var(--accent);border-color:var(--accent);color:white}
-    .aside details {border-top:1px solid var(--line);padding-top:.8rem}
-    .aside details p {margin-top:.6rem}
-    .panel:not(.aside) { border-radius:8px;padding:clamp(1rem,3.5vw,2.6rem) }
-    #intake-title,#review-title {font-size:clamp(2rem,4.6vw,3rem);line-height:1.2;letter-spacing:-.04em}
-    #intake-form {margin-top:1.5rem}
-    #narrative {line-height:1.7;padding:1rem}
-    .source-entry {margin:.9rem 0;padding:1rem;border-left:3px solid #9986b4;background:#f7f5fa}
+    main { padding: clamp(1.25rem, 3vw, 2.5rem) 0 3rem; }
+    .layout {
+      display: grid;
+      grid-template-columns: 11.5rem minmax(0, 1.08fr) minmax(0, 1fr);
+      grid-template-areas: "steps intake draft" "steps support draft";
+      gap: 1.1rem clamp(1rem, 2vw, 1.75rem);
+      align-items: start;
+    }
+    .stack { grid-area: intake; display: grid; gap: 1.1rem; min-width: 0; }
+    .panel { padding: clamp(1rem, 2.4vw, 1.9rem); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); min-width: 0; }
+    .aside { grid-area: steps; position: sticky; top: 1rem; min-width: 0; padding: .7rem 0; }
+    .draft-panel { grid-area: draft; position: sticky; top: 1rem; max-height: calc(100dvh - 2rem); min-width: 0; overflow: auto; scrollbar-gutter: stable; }
+    #support { grid-area: support; }
+    #intake, #follow-up { border-top: 3px solid var(--accent); }
+    #intake:has(#intake-body[hidden]) { padding-block: .7rem; border-top-width: 1px; }
+    .draft-panel .panel { padding: clamp(1rem, 2vw, 1.55rem); }
+    .draft-panel .empty-draft { background: var(--accent-soft); border: 1px dashed var(--accent); box-shadow: none; }
+    .empty-draft .mark { margin-bottom: 1.1rem; }
+    .steps { list-style: none; padding: 0; margin: 1rem 0 1.3rem; display: flex; flex-direction: column; gap: .2rem; }
+    .steps li { display: flex; align-items: center; gap: .65rem; padding: .5rem .55rem; color: var(--muted); border-radius: .6rem; transition: color .2s ease, background .2s ease; }
+    .step-dot { width: .85rem; height: .85rem; border-radius: 50%; border: 2px solid var(--line); background: #fff; flex: 0 0 auto; transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+    .steps [aria-current=step] { color: var(--accent); background: var(--accent-soft); font-weight: 700; }
+    .steps [aria-current=step] .step-dot { background: var(--accent); border-color: var(--accent); transform: scale(1.15); }
+    .aside details { border-top: 1px solid var(--line); padding-top: .8rem; }
+    .aside details p, #mode { margin-top: .65rem; }
+    #intake-form { margin-top: 1.5rem; }
+    #narrative { line-height: 1.65; padding: .85rem; min-height: 10rem; }
+    .source-entry { margin: .9rem 0; padding: 1.1rem; border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: .7rem; background: var(--canvas); }
+    .source-entry legend { color: var(--accent); margin-bottom: .4rem; }
     .source-entry select,.source-entry textarea {margin:.3rem 0 .7rem}
-    .filterbar {display:flex;align-items:center;flex-wrap:wrap;gap:.7rem;margin-top:1rem}
+    .filterbar { display: flex; align-items: center; flex-wrap: wrap; gap: .45rem .65rem; margin-top: 1.15rem; }
+    .filterbar label { margin: 0; font-size: .9rem; }
     .filterbar select {width:auto;max-width:100%}
     .field-list .field {padding-block:1.1rem}
     .field textarea {margin-block:.35rem}
     .field-value {white-space:pre-wrap;overflow-wrap:anywhere;margin:.3rem 0}
     .edit-field {background:transparent;color:var(--accent);border:0;padding:.3rem 0;text-decoration:underline;text-underline-offset:3px}
     #toggle-intake:not([hidden]) + div:not([hidden]) {margin-top:1rem}
-    #intake-title {margin-bottom:.5rem}
     #narrative-help {margin:.55rem 0 1rem}
     #intake-form > .actions {border-top:1px solid var(--line);margin-top:1.3rem;padding-top:1.2rem}
-    #example {border-color:transparent;background:transparent}
+    #example { border-color: transparent; background: transparent; }
+    #example:hover { background: var(--accent-soft); }
     .document[open] > summary {border-bottom:1px solid var(--line)}
-    .aside h2 { font: 700 1.05rem/1.3 system-ui, sans-serif; letter-spacing: 0; }
+    .aside h2 { font-size: 1rem; letter-spacing: 0; }
     .muted, .help { color: var(--muted); }
     .help { font-size: .9rem; }
     .actions { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; margin-top: .9rem; }
     :is(button, textarea, select, input) { font: inherit; }
-    :is(button, summary, a, textarea, select, input):focus-visible { outline: 3px solid #167bc1; outline-offset: 3px; }
-    button { font-weight: 650; min-height: 2.75rem; padding: .5rem .85rem; border: 1px solid var(--accent); border-radius: .4rem; background: var(--accent); color: #fff; cursor: pointer; }
-    button:hover { filter: brightness(.91); }
-    .secondary { background: #fff; color: var(--accent); }
-    button:disabled { border-color: #c6d1d6; background: #e7eef0; color: #4a636e; cursor: default; }
-    textarea, select, input[type="text"] { display: block; width: 100%; padding: .55rem .65rem; border: 1px solid #8ca1aa; border-radius: .35rem; background: #fff; color: var(--ink); }
+    :is(button, summary, a, textarea, select, input, [tabindex]):focus-visible { outline: 3px solid #1271ae; outline-offset: 3px; }
+    button { font-weight: 650; min-height: 2.75rem; padding: .55rem 1.1rem; border: 1px solid var(--accent); border-radius: 999px; background: var(--accent); color: #fff; cursor: pointer; transition: transform .12s ease, filter .12s ease, box-shadow .12s ease; }
+    button:hover { filter: brightness(.94); transform: translateY(-1px); box-shadow: 0 4px 10px -4px rgba(15,118,110,.45); }
+    button:active { transform: translateY(0); }
+    .secondary { background: #fff; color: var(--accent); border-color: var(--line); }
+    .secondary:hover { background: var(--accent-soft); filter: none; }
+    button:disabled { border-color: var(--line); background: #e7eef0; color: #4a636e; cursor: default; transform: none; box-shadow: none; }
+    textarea, select, input[type="text"] { display: block; width: 100%; padding: .6rem .75rem; border: 1px solid var(--line); border-radius: .6rem; background: #fff; color: var(--ink); transition: border-color .12s ease, box-shadow .12s ease; }
+    textarea:focus-visible, select:focus-visible, input:focus-visible { border-color: var(--accent); }
     textarea { resize: vertical; }
     label, legend { font-weight: 650; }
     label[for] { display: block; margin-bottom: .3rem; }
     fieldset { border: 0; padding: 0; margin: 0 0 1rem; min-width: 0; }
     fieldset legend { padding: 0; margin-bottom: .3rem; }
-    .choice { display: flex; align-items: flex-start; min-height: 2rem; gap: .55rem; font-weight: 400; overflow-wrap: anywhere; }
+    .choice { display: flex; align-items: flex-start; min-height: 2.25rem; gap: .6rem; font-weight: 400; padding: .5rem .65rem; border: 1px solid var(--line); border-radius: .6rem; overflow-wrap: anywhere; transition: border-color .15s ease, background .15s ease; }
+    .choice:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
     .choice input { accent-color: var(--accent); width: 1rem; height: 1rem; margin: .35rem 0 0; flex: 0 0 auto; }
     :is(.note, .error, .conflict) { overflow-wrap: anywhere; }
-    .note { padding: .7rem .9rem; border-radius: .35rem; background: var(--accent-soft); }
+    .note { padding: .75rem 1rem; border-radius: .6rem; background: var(--accent-soft); color: var(--ink); }
     #intake-notices { margin: 0; padding-left: 2rem; }
-    .error { margin-bottom: 1rem; color: #791d14; background: #fce9e6; border-left: 3px solid currentColor; padding: .65rem .9rem; }
+    .error { margin-bottom: 1rem; color: #7a3b17; background: var(--warn-soft); border-left: 3px solid var(--warn); padding: .65rem .9rem; border-radius: .4rem; }
     .progress:empty { display: none; }
-    .progress { padding-bottom: .7rem; color: var(--muted); }
+    .progress { position: sticky; top: .5rem; z-index: 2; width: fit-content; margin: 0 0 .75rem; padding: .45rem .8rem; color: var(--ink); background: var(--accent-soft); border-radius: .6rem; }
     .form-group { margin-top: .8rem; }
-    .document { border: 1px solid var(--line); border-radius: .4rem; margin-top: .8rem; }
-    .document > summary { padding: .7rem .9rem; font-weight: 700; background: var(--canvas); border-radius: .35rem; }
+    .document { border: 1px solid var(--line); border-radius: .7rem; margin-top: .8rem; overflow: hidden; }
+    .document > summary { padding: .75rem 1rem; font-weight: 700; background: var(--canvas); display: flex; align-items: center; gap: .5rem; justify-content: space-between; }
     summary { cursor: pointer; overflow-wrap: anywhere; }
     .field-list { padding-inline: .9rem; }
-    .field { border-top: 1px solid var(--line); padding-block: .9rem; }
+    .field { border-top: 1px solid var(--line); border-left: 3px solid transparent; padding: .9rem .9rem .9rem 1rem; transition: border-color .2s ease; }
+    .field[data-status="provided"] { border-left-color: var(--accent); }
+    .field[data-status="unclear"], .field[data-status="conflicting"] { border-left-color: var(--warn); }
     .field:first-child { border-top: 0; }
     .field-top { display: flex; gap: .35rem .65rem; justify-content: space-between; align-items: start; flex-wrap: wrap; }
-    .badge { display: inline-block; max-width: 100%; padding: .1rem .45rem; border-radius: .25rem; color: var(--muted); background: var(--canvas); font-size: .82rem; font-weight: 650; }
-    .badge[data-status="provided"] { background: var(--accent-soft); color: var(--accent); }
-    .badge[data-status="conflicting"], .conflict { background: var(--warn-soft); color: var(--warn); }
-    .conflict { padding: .45rem .65rem; margin-top: .5rem; border-radius: .3rem; }
+    .badge { display: inline-flex; align-items: center; gap: .3rem; max-width: 100%; padding: .2rem .6rem; border-radius: 999px; color: var(--muted); background: var(--canvas); font-size: .82rem; font-weight: 650; }
+    .badge[data-status="provided"] { background: var(--accent-soft); color: var(--accent); animation: badge-pop .18s ease-out; }
+    .badge[data-status="conflicting"], .badge[data-status="unclear"] { background: var(--warn-soft); color: var(--warn); }
+    .badge[data-status="missing"] { background: var(--warn-soft); color: var(--warn); }
+    .conflict { background: var(--warn-soft); color: var(--warn); }
+    .conflict { padding: .55rem .75rem; margin-top: .5rem; border-radius: .5rem; }
     .citations { color: var(--muted); margin: .4rem 0; font-size: .9rem; }
     .citations ul { padding-left: 1.4rem; margin-block: .35rem; overflow-wrap: anywhere; }
     .metadata { margin: .65rem 0 0; }
     .preview { margin-top: .9rem; }
-    pre { margin: .65rem 0 0; padding: .75rem; border: 1px solid var(--line); border-radius: .35rem; background: var(--canvas); color: var(--ink); font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
+    pre { margin: .65rem 0 0; padding: .75rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--canvas); color: var(--ink); font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
     #lawyer-results, #permission, #email-preview { margin-top: 1rem; }
     #answer-label { overflow-wrap: anywhere; }
+    :is(#review-title, #follow-up-title, #support-title) { scroll-margin-top: 1rem; }
+    .draft-actions { border-block: 1px solid var(--line); padding-block: .85rem; }
+    .mobile-jump { display: none; }
+    @keyframes badge-pop { from { transform: scale(.85); opacity: .6; } to { transform: scale(1); opacity: 1; } }
+    #follow-up, #review, #support, .source-entry {
+      transition: opacity .25s ease, transform .25s ease, display .25s allow-discrete, overflow .25s;
+    }
+    #follow-up[hidden], #review[hidden], #support[hidden], .source-entry[hidden] {
+      opacity: 0; transform: translateY(6px);
+    }
+    @starting-style {
+      #follow-up:not([hidden]), #review:not([hidden]), #support:not([hidden]) { opacity: 0; transform: translateY(6px); }
+    }
+    @media (max-width: 1050px) {
+      .layout { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "steps steps" "intake draft" "support draft"; }
+      .aside { position: static; padding: 0; }
+      .aside h2 { display: none; }
+      .aside details { padding: .45rem 0 0; border: 0; }
+      .steps { flex-direction: row; gap: .25rem; flex-wrap: wrap; margin: 0; }
+      .steps li { font-size: .87rem; gap: .35rem; padding: .3rem .5rem; }
+      .step-dot { width: .65rem; height: .65rem; }
+    }
     @media (max-width: 760px) {
       .wrap { width: calc(100% - 1.5rem); }
-      .layout { grid-template-columns: minmax(0, 1fr); }
-      .aside { grid-area:1/1;position:static;padding:0 }
-      .stack {grid-area:2/1}
-      .aside h2,.aside details {display:none}
-      .steps {display:flex;gap:.7rem;flex-wrap:wrap;margin:0}
-      .steps li {font-size:.84rem;gap:.3rem;padding:0}
-      header {padding-block:.7rem}
+      .layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "steps" "intake" "draft" "support"; }
+      .draft-panel { position: static; max-height: none; overflow: visible; }
+      .masthead { padding-block: .8rem; }
+      .mobile-jump { display: inline-block; }
     }
   </style>
 </head>
 <body>
-  <header>
+  <header class="masthead">
     <div class="wrap">
       <div class="brand"><span class="mark" aria-hidden="true"></span>Hồ sơ an toàn</div>
+      <p class="help">AI Evidence Assistant · Demo TeaParty</p>
     </div>
   </header>
+  <p class="reassure wrap">Kể theo tốc độ của bạn — bạn có thể bỏ qua bất kỳ câu hỏi nào và dừng lại bất cứ lúc nào.</p>
   <main class="wrap">
     <div id="error" class="error" role="alert" tabindex="-1" hidden></div>
     <div id="progress" class="progress" role="status"></div>
     <div class="layout" id="workspace">
+      <nav class="aside" aria-label="Tiến độ hồ sơ">
+        <h2 id="aside-title">Hồ sơ của bạn</h2>
+        <ol class="steps" aria-label="Các bước chuẩn bị hồ sơ">
+          <li aria-current="step"><span class="step-dot" aria-hidden="true"></span>Nhập liệu</li>
+          <li><span class="step-dot" aria-hidden="true"></span>Rà soát</li>
+          <li><span class="step-dot" aria-hidden="true"></span>Liên hệ</li>
+        </ol>
+        <details><summary>Hướng dẫn nhập</summary><p class="help">Mỗi nguồn có thể là một ghi chú, chữ trích từ ảnh hoặc bản chép lời. Bạn có thể bỏ qua câu hỏi và tải bản nháp dù còn thiếu thông tin.</p></details>
+        <p id="mode" class="help" hidden></p>
+      </nav>
       <div class="stack">
         <section id="intake" class="panel" aria-labelledby="intake-title">
           <button type="button" id="toggle-intake" class="secondary" aria-controls="intake-body" hidden>Xem nội dung đã nhập</button>
-          <div id="intake-body"><h1 id="intake-title">Ghi lại sự việc</h1>
-          <p class="muted">Bạn có thể bắt đầu từ phần mình nhớ. Sau đó, bạn sẽ được đọc lại và chỉnh sửa bản nháp.</p>
-          <form id="intake-form">
-            <label for="narrative">Lời kể của bạn</label>
-            <textarea id="narrative" rows="5" maxlength="4000" required aria-describedby="narrative-help" placeholder="Bạn nhớ điều gì đã xảy ra?"></textarea>
-            <p id="narrative-help" class="help">Trong bản demo, hãy dùng lời kể giả lập đã bỏ thông tin nhận dạng.</p>
-            <div id="source-list"></div>
-            <button type="button" class="secondary" id="add-source">+ Thêm nguồn đối chiếu</button>
-            <div class="actions">
-              <button type="submit">Tạo bản nháp</button>
-              <button type="button" class="secondary" id="example">Dùng ca mẫu</button>
-            </div>
-          </form></div>
+          <div id="intake-body">
+            <h1 id="intake-title">Ghi lại sự việc</h1>
+            <p class="muted">Kể lại những gì bạn nhớ và thêm nguồn đối chiếu nếu có.</p>
+            <form id="intake-form">
+              <label for="narrative">Lời kể của bạn</label>
+              <textarea id="narrative" rows="5" maxlength="4000" required aria-describedby="narrative-help" placeholder="Bạn nhớ điều gì đã xảy ra?"></textarea>
+              <p id="narrative-help" class="help">Trong bản demo, hãy dùng lời kể giả lập đã bỏ thông tin nhận dạng.</p>
+              <div id="source-list"></div>
+              <button type="button" class="secondary" id="add-source">+ Thêm nguồn đối chiếu</button>
+              <div class="actions">
+                <button type="submit">Tạo bản nháp</button>
+                <button type="button" class="secondary" id="example">Dùng ca mẫu</button>
+              </div>
+            </form>
+          </div>
         </section>
         <ul id="intake-notices" class="note" aria-live="polite" hidden></ul>
         <section id="follow-up" class="panel" aria-labelledby="follow-up-title" hidden>
@@ -159,75 +217,76 @@
           </form>
           <div class="actions">
             <button type="button" class="secondary" id="review-now">Dừng bổ sung và rà soát</button>
+            <button type="button" class="secondary mobile-jump" id="draft-jump">Xem bản nháp</button>
           </div>
         </section>
+      </div>
+      <div class="draft-panel">
+        <div id="draft-empty" class="panel empty-draft">
+          <span class="mark" aria-hidden="true"></span>
+          <h2>Bản nháp hồ sơ</h2>
+          <p class="muted">Tạo bản nháp từ lời kể hoặc dùng ca mẫu. Bản nháp sẽ cập nhật sau mỗi câu trả lời bổ sung.</p>
+        </div>
         <section id="review" class="panel" aria-labelledby="review-title" hidden>
-          <h2 id="review-title" tabindex="-1">Rà soát bản nháp</h2>
+          <h2 id="review-title" tabindex="-1">Bản nháp hồ sơ</h2>
           <p id="draft-label" class="note"></p>
           <p class="help">Đối chiếu giá trị với nguồn, sửa nếu cần rồi đánh dấu từng trường bạn xác nhận.</p>
-          <div class="filterbar"><label for="field-filter">Hiển thị</label>
-            <select id="field-filter"><option value="all">Tất cả các trường</option><option value="conflicting">Có mâu thuẫn</option><option value="missing">Còn thiếu</option><option value="unclear">Chưa rõ</option></select>
-            <span id="filter-count" role="status" class="help"></span>
-          </div>
-          <div id="fields"></div>
-          <div class="actions">
+          <div class="actions draft-actions">
             <button type="button" id="download">Tải bản nháp JSON</button>
             <button type="button" class="secondary" id="open-help">Xem lựa chọn liên hệ</button>
             <button type="button" class="secondary" id="resume" hidden>Quay lại câu hỏi bổ sung</button>
+            <button type="button" class="secondary mobile-jump" id="question-jump" hidden>Về câu hỏi đang nhập</button>
           </div>
+          <div id="fields"></div>
           <details class="preview">
             <summary id="preview-summary">Xem văn bản trình bày</summary>
             <pre id="draft-preview"></pre>
           </details>
         </section>
-        <section id="support" class="panel" aria-labelledby="support-title" hidden>
-          <h2 id="support-title" tabindex="-1">Liên hệ hỗ trợ</h2>
-          <fieldset id="contact-choice" aria-describedby="support-note">
-            <legend>Bạn có muốn liên hệ luật sư không?</legend>
-            <label class="choice"><input type="radio" name="contact" value="yes"> Có, xem danh sách gợi ý</label>
-            <label class="choice"><input type="radio" name="contact" value="no"> Không, dừng tại bản nháp hồ sơ</label>
-          </fieldset>
-          <p id="support-note" class="help">Danh sách luật sư dùng dữ liệu giả lập. Email chỉ được tạo dưới dạng bản nháp để bạn xem và chép.</p>
-          <div id="contact-next" hidden>
-            <form id="lawyer-form" class="form-group">
-              <label for="need">Nhu cầu hỗ trợ (không bắt buộc)</label>
-              <input type="text" id="need" placeholder="Ví dụ: lao động" autocomplete="off">
-              <div class="actions"><button type="submit" class="secondary">Tìm luật sư giả lập</button></div>
-            </form>
-            <div id="lawyer-results" hidden>
-              <label for="lawyer">Luật sư nhận email nháp</label>
-              <select id="lawyer"></select>
-              <p id="lawyer-empty" class="help" hidden>Hiện chưa có luật sư giả lập phù hợp.</p>
-              <p id="lawyer-details" class="help metadata" hidden></p>
-            </div>
-            <form id="email-form" class="form-group" hidden>
-              <fieldset id="form-choice">
-                <legend>Bạn có muốn dùng thông tin từ biểu mẫu không?</legend>
-                <label class="choice"><input type="radio" name="use-form" value="yes" required> Có, để tôi chọn từng trường</label>
-                <label class="choice"><input type="radio" name="use-form" value="no"> Không, dừng trước bước soạn email</label>
-              </fieldset>
-              <fieldset id="permission" hidden>
-                <legend>Chọn các trường được đưa vào email</legend>
-                <div id="share-fields"></div>
-              </fieldset>
-              <button type="submit" id="compose" disabled>Soạn email nháp</button>
-            </form>
-            <div id="email-preview" hidden>
-              <label for="email-text">Email nháp để bạn kiểm tra và chép</label>
-              <textarea id="email-text" rows="10" readonly></textarea>
-              <div class="actions"><button type="button" id="copy" class="secondary">Chép email</button></div>
-            </div>
-          </div>
-        </section>
       </div>
-      <aside class="panel aside" aria-labelledby="aside-title">
-        <h2 id="aside-title">Hồ sơ của bạn</h2>
-        <ol class="steps" aria-label="Các bước chuẩn bị hồ sơ"><li aria-current="step">Nhập liệu</li><li>Rà soát</li><li>Liên hệ</li></ol>
-        <details><summary>Hướng dẫn nhập</summary><p class="help">Mỗi nguồn có thể là một ghi chú, chữ trích từ ảnh hoặc bản chép lời. Bạn có thể bỏ qua câu hỏi và tải bản nháp dù còn thiếu thông tin.</p></details>
-        <p id="mode" class="help" hidden></p>
-      </aside>
+      <section id="support" class="panel" aria-labelledby="support-title" hidden>
+        <h2 id="support-title" tabindex="-1">Liên hệ hỗ trợ</h2>
+        <button type="button" class="secondary mobile-jump" id="support-back">Về bản nháp</button>
+        <fieldset id="contact-choice" aria-describedby="support-note">
+          <legend>Bạn có muốn liên hệ luật sư không?</legend>
+          <label class="choice"><input type="radio" name="contact" value="yes"> Có, xem danh sách gợi ý</label>
+          <label class="choice"><input type="radio" name="contact" value="no"> Không, dừng tại bản nháp hồ sơ</label>
+        </fieldset>
+        <p id="support-note" class="help">Danh sách luật sư dùng dữ liệu giả lập. Email chỉ được tạo dưới dạng bản nháp để bạn xem và chép.</p>
+        <div id="contact-next" hidden>
+          <form id="lawyer-form" class="form-group">
+            <label for="need">Nhu cầu hỗ trợ (không bắt buộc)</label>
+            <input type="text" id="need" placeholder="Ví dụ: lao động" autocomplete="off">
+            <div class="actions"><button type="submit" class="secondary">Tìm luật sư giả lập</button></div>
+          </form>
+          <div id="lawyer-results" hidden>
+            <label for="lawyer">Luật sư nhận email nháp</label>
+            <select id="lawyer"></select>
+            <p id="lawyer-empty" class="help" hidden>Hiện chưa có luật sư giả lập phù hợp.</p>
+            <p id="lawyer-details" class="help metadata" hidden></p>
+          </div>
+          <form id="email-form" class="form-group" hidden>
+            <fieldset id="form-choice">
+              <legend>Bạn có muốn dùng thông tin từ biểu mẫu không?</legend>
+              <label class="choice"><input type="radio" name="use-form" value="yes" required> Có, để tôi chọn từng trường</label>
+              <label class="choice"><input type="radio" name="use-form" value="no"> Không, dừng trước bước soạn email</label>
+            </fieldset>
+            <fieldset id="permission" hidden>
+              <legend>Chọn các trường được đưa vào email</legend>
+              <div id="share-fields"></div>
+            </fieldset>
+            <button type="submit" id="compose" disabled>Soạn email nháp</button>
+          </form>
+          <div id="email-preview" hidden>
+            <label for="email-text">Email nháp để bạn kiểm tra và chép</label>
+            <textarea id="email-text" rows="10" readonly></textarea>
+            <div class="actions"><button type="button" id="copy" class="secondary">Chép email</button></div>
+          </div>
+        </div>
+      </section>
     </div>
   </main>
+  <script src="/assets/draft.js"></script>
   <script>
     'use strict';
 
@@ -240,6 +299,10 @@
     }
     const show = (id, visible = true) => { byId(id).hidden = !visible; };
     const radio = name => document.querySelector(`input[name="${name}"]:checked`)?.value;
+    function focusSection(heading, target = heading) {
+      heading.scrollIntoView({block: 'start'});
+      target.focus({preventScroll: true});
+    }
     const rootLabels = {noi_nhan: 'Nơi nhận', tu_cach: 'Tư cách người trình bày'};
     const documentLabels = {
       loai_tai_lieu: 'Loại tài liệu', mo_ta_noi_dung: 'Mô tả nội dung', 'nguoi_tao.field': 'Người tạo',
@@ -253,15 +316,15 @@
       'nguoi_cung_cap.cach_cung_cap': 'Cách cung cấp',
       'nguoi_cung_cap.nguon_cua_nguoi_cung_cap': 'Nguồn tài liệu của người cung cấp'
     };
-    const statuses = {provided: 'Có thông tin', missing: 'Còn thiếu', unclear: 'Chưa rõ', conflicting: 'Mâu thuẫn'};
     const sourceTypes = {user_narrative: 'Lời kể', user_answer: 'Người dùng bổ sung', file_metadata: 'Thông tin tệp', ocr: 'Nội dung trích từ ảnh', asr: 'Bản chép lời', system: 'Hệ thống'};
     const creatorTypes = {self: 'Tự ghi hoặc chụp', provided_by_other: 'Do người khác cung cấp', unknown: 'Chưa rõ'};
     const precisionTypes = {exact: 'Chính xác', from_metadata: 'Theo thông tin tệp', user_estimate: 'Người dùng ước lượng', unknown: 'Chưa rõ'};
     const editTypes = {none_reported: 'Chưa ghi nhận chỉnh sửa', trimmed: 'Cắt', compressed: 'Nén', format_converted: 'Đổi định dạng', re_screenshotted: 'Chụp lại màn hình', merged: 'Ghép', other: 'Khác', unknown: 'Chưa rõ'};
     const timeFields = new Set(['thoi_diem_tao', 'nguoi_cung_cap.thoi_diem_cung_cap']);
+    const updateDraftView = TeaPartyDraft.mount(byId('fields'));
     const state = {
       draft: null, questions: [], skipped: new Set(), history: new Map(), selected: new Set(),
-      lawyers: [], nextEdit: 0, reviewing: false, paused: false, supportOpen: false, busy: false, previewDirty: false
+      lawyers: [], nextEdit: 0, draftRevision: 0, paused: false, supportOpen: false, busy: false, previewDirty: false
     };
 
     function element(tag, className, value) {
@@ -353,7 +416,8 @@
     function renderQuestion(clearAnswer = true) {
       const question = currentQuestion();
       show('follow-up', Boolean(question));
-      show('resume', state.reviewing && state.questions.length > 0 && !question);
+      show('resume', state.paused && state.questions.length > 0);
+      show('question-jump', Boolean(question));
       if (!question) return;
       const left = state.questions.filter(item => !state.skipped.has(item.field_path)).length;
       byId('question-count').textContent = `Còn ${left} câu có thể bổ sung. Bạn có thể bỏ qua nếu chưa biết.`;
@@ -361,121 +425,27 @@
       if (clearAnswer) byId('answer').value = '';
     }
 
-    function citations(field, caption) {
-      const block = element('details', 'citations');
-      const sources = field.source_refs;
-      block.append(element('summary', '', `${caption} (${sources.length})`));
-      const list = element('ul');
-      for (const source of sources) {
-        const parts = [`[${source.source_id}] ${sourceTypes[source.source_type] || source.source_type}`];
-        if (source.locator) parts.push(source.locator);
-        if (source.quote) parts.push(`“${source.quote}”`);
-        list.append(element('li', '', parts.join(' · ')));
-      }
-      block.append(list);
-      return block;
+    function saveField(entry, value) {
+      const previousQuestion = currentQuestion()?.field_path;
+      const updated = {
+        value: value || null, status: value ? 'provided' : 'missing', user_confirmed: false,
+        source_refs: value ? [{source_type: 'user_answer', source_id: `U-edit-${++state.nextEdit}`}] : []
+      };
+      if (timeFields.has(entry.path.split('].').at(-1))) updated.precision = 'unknown';
+      remember(entry.path, entry.field);
+      entry.parent[entry.key] = updated;
+      updateQuestions(entry, updated);
+      state.previewDirty = true;
+      byId('preview-summary').parentElement.open = false;
+      invalidateShare(entry.path);
+      renderReview();
+      renderQuestion(previousQuestion !== currentQuestion()?.field_path);
     }
 
-    function renderField(entry) {
-      const field = entry.field || {value: null, status: 'missing', source_refs: [], user_confirmed: false};
-      const row = element('div', 'field');
-      const top = element('div', 'field-top');
-      const label = element('label', '', entry.label);
-      const input = element('textarea');
-      input.id = `field-${entry.path}`;
-      input.rows = Math.max(1, Math.min(4, (field.value || '').split('\n').length));
-      input.value = field.value ?? '';
-      label.htmlFor = input.id;
-      const status = resolved(field) || field.status !== 'provided' ? field.status : 'unclear';
-      const badge = element('span', 'badge', statuses[status]);
-      badge.dataset.status = status;
-      badge.id = `status-${entry.path}`;
-      input.setAttribute('aria-describedby', badge.id);
-      top.append(label, badge);
-      const readout = element('p', 'field-value', field.value || '');
-      const edit = element('button', 'edit-field', field.value ? 'Chỉnh sửa' : 'Bổ sung');
-      edit.type = 'button';
-      edit.setAttribute('aria-controls', input.id);
-      edit.setAttribute('aria-expanded', 'false');
-      input.hidden = true;
-      row.append(top, readout, input);
-      row.dataset.status = status;
-      if (field.conflict_note) row.append(element('p', 'conflict', field.conflict_note));
-      if (field.precision) row.append(element('p', 'help metadata', `Độ chính xác: ${precisionTypes[field.precision]}`));
-      if (field.source_refs.length) row.append(citations(field, 'Xem nguồn'));
-      const earlier = state.history.get(entry.path);
-      if (earlier?.length) {
-        const history = element('details', 'citations');
-        history.append(element('summary', '', 'Xem thông tin trước khi sửa'));
-        for (const previous of earlier) {
-          history.append(element('p', '', `${statuses[previous.status]} · ${previous.value || 'Chưa có giá trị'}`));
-          if (previous.conflict_note) history.append(element('p', 'conflict', previous.conflict_note));
-          if (previous.source_refs.length) history.append(citations(previous, 'Nguồn trước khi sửa'));
-        }
-        row.append(history);
-      }
-
-      const actions = element('div', 'actions');
-      const save = element('button', 'secondary', 'Lưu chỉnh sửa');
-      save.type = 'button';
-      const canClarify = !resolved(field) && !!field.value?.trim();
-      save.disabled = !canClarify;
-      if (canClarify) save.textContent = 'Dùng giá trị này';
-      const confirmLabel = element('label', 'choice');
-      const confirm = element('input');
-      confirm.type = 'checkbox';
-      confirm.checked = field.user_confirmed;
-      confirm.disabled = !resolved(field);
-      confirm.setAttribute('aria-label', `Xác nhận ${entry.title}`);
-      confirmLabel.append(confirm, document.createTextNode('Tôi xác nhận thông tin này'));
-      save.hidden = true;
-      confirmLabel.hidden = !resolved(field);
-      actions.append(edit, save, confirmLabel);
-      row.append(actions);
-      edit.onclick = () => {
-        const open = input.hidden;
-        input.hidden = !open;
-        save.hidden = !open;
-        readout.hidden = open;
-        edit.setAttribute('aria-expanded', String(open));
-        edit.textContent = open ? 'Hủy chỉnh sửa' : (field.value ? 'Chỉnh sửa' : 'Bổ sung');
-        input.value = field.value || '';
-        save.disabled = !canClarify;
-        confirm.disabled = open || !resolved(field);
-        if (open) input.focus();
-      };
-
-      input.addEventListener('input', () => {
-        const changed = input.value.trim() !== (field.value || '').trim();
-        save.textContent = !changed && canClarify ? 'Dùng giá trị này' : 'Lưu chỉnh sửa';
-        save.disabled = !changed && !canClarify;
-        confirm.disabled = !save.disabled || !resolved(field);
-      });
-      save.addEventListener('click', () => {
-        const value = input.value.trim();
-        const previousQuestion = currentQuestion()?.field_path;
-        const updated = {
-          value: value || null, status: value ? 'provided' : 'missing', user_confirmed: false,
-          source_refs: value ? [{source_type: 'user_answer', source_id: `U-edit-${++state.nextEdit}`}]: []
-        };
-        if (timeFields.has(entry.path.split('].').at(-1))) updated.precision = 'unknown';
-        remember(entry.path, entry.field);
-        entry.parent[entry.key] = updated;
-        updateQuestions(entry, updated);
-        state.previewDirty = true;
-        byId('preview-summary').parentElement.open = false;
-        invalidateShare(entry.path);
-        const replacement = renderField({...entry, field: updated});
-        row.replaceWith(replacement);
-        filterFields();
-        (replacement.hidden ? byId('field-filter') : replacement.querySelector('.edit-field')).focus();
-        renderQuestion(previousQuestion !== currentQuestion()?.field_path);
-      });
-      confirm.addEventListener('change', () => {
-        field.user_confirmed = confirm.checked;
-        invalidateShare(entry.path);
-      });
-      return row;
+    function confirmField(entry, confirmed) {
+      entry.field.user_confirmed = confirmed;
+      invalidateShare(entry.path);
+      renderReview();
     }
 
     function remember(path, field) {
@@ -494,56 +464,30 @@
       state.draft.questions_for_user = state.questions;
     }
 
-    function filterFields() {
-      const filter = byId('field-filter').value;
-      let count = 0;
-      for (const group of byId('fields').querySelectorAll('.document')) {
-        let matches = 0;
-        for (const row of group.querySelectorAll('.field')) {
-          row.hidden = filter !== 'all' && row.dataset.status !== filter;
-          if (!row.hidden) matches++;
-        }
-        group.hidden = matches === 0;
-        if (filter !== 'all' && matches) group.open = true;
-        count += matches;
-      }
-      byId('filter-count').textContent = count ? `${count} trường` : 'Không có trường nào trong nhóm này.';
-    }
-    byId('field-filter').addEventListener('change', filterFields);
-
     function renderReview() {
-      state.reviewing = true;
+      show('draft-empty', false);
       show('review');
       byId('draft-label').textContent = state.draft.draft_label;
-      const list = byId('fields');
-      list.replaceChildren();
-      const general = element('details', 'document');
-      general.append(element('summary', '', 'Thông tin chung'));
-      const generalFields = element('div', 'field-list');
-      generalFields.append(...rootFields().map(renderField));
-      general.append(generalFields);
-      list.append(general);
-      state.draft.tai_lieu.forEach((entry, index) => {
-        const documentPanel = element('details', 'document');
-        documentPanel.open = index === 0;
-        const name = entry.ten_tep ? ` · ${entry.ten_tep}` : '';
-        documentPanel.append(element('summary', '', `Tài liệu ${index + 1}${name}`));
-        const fields = element('div', 'field-list');
+      const documents = state.draft.tai_lieu.map((entry, index) => {
+        const title = entry.ten_tep ? `Tài liệu ${index + 1} · ${entry.ten_tep}` : `Tài liệu ${index + 1}`;
+        const metadata = [`Nguồn gốc tài liệu: ${creatorTypes[entry.nguoi_tao.kind]}`];
         const edits = entry.tinh_trang_chinh_sua.edits.map(edit => editTypes[edit]).join(', ');
-        fields.append(element('p', 'help metadata', `Nguồn gốc tài liệu: ${creatorTypes[entry.nguoi_tao.kind]}`));
-        if (edits) fields.append(element('p', 'help metadata', `Chỉnh sửa được ghi nhận: ${edits}`));
-        fields.append(...documentFields(entry, index).map(renderField));
-        if (!entry.nguoi_cung_cap) fields.append(element('p', 'help metadata', 'Thông tin người cung cấp áp dụng cho tài liệu do người khác cung cấp.'));
-        documentPanel.append(fields);
-        list.append(documentPanel);
+        if (edits) metadata.push(`Chỉnh sửa được ghi nhận: ${edits}`);
+        return {
+          id: entry.file_id, title, metadata, initiallyOpen: index === 0,
+          fields: documentFields(entry, index),
+          footer: !entry.nguoi_cung_cap && 'Thông tin người cung cấp áp dụng cho tài liệu do người khác cung cấp.'
+        };
       });
-      filterFields();
+      updateDraftView(state.draftRevision, {
+        groups: [{id: 'general', title: 'Thông tin chung', initiallyOpen: true, fields: rootFields()}, ...documents],
+        history: state.history, resolved, sourceTypes, precisionTypes, onSave: saveField, onConfirm: confirmField
+      });
     }
 
     function moveToReview() {
       activeStep(1);
       state.paused = true;
-      renderReview();
       renderQuestion();
       return byId('review-title');
     }
@@ -667,17 +611,18 @@
         if (!result.draft) throw new Error('Chưa nhận được biểu mẫu từ máy chủ.');
         collapseIntake(true);
         activeStep(1);
-        byId('field-filter').value = 'all';
+        state.draftRevision++;
+        byId('preview-summary').parentElement.open = false;
+        document.querySelector('.draft-panel').scrollTop = 0;
         for (const message of result.notices || []) notices.append(element('li', '', message));
         show('intake-notices', notices.childElementCount > 0);
         state.skipped.clear();
         state.history.clear();
         state.nextEdit = 0;
         state.paused = false;
-        state.reviewing = false;
-        show('review', false);
         resetSupport();
         applyDraft(result);
+        renderReview();
         renderQuestion();
         return currentQuestion() ? byId('follow-up-title') : moveToReview();
       });
@@ -699,7 +644,7 @@
             invalidateShare(path);
           }
         }
-        if (state.reviewing) renderReview();
+        renderReview();
         renderQuestion();
         return currentQuestion() ? byId('answer') : moveToReview();
       });
@@ -711,14 +656,16 @@
       (currentQuestion() ? byId('answer') : moveToReview()).focus();
     });
 
-    byId('review-now').addEventListener('click', () => moveToReview().focus());
+    byId('review-now').addEventListener('click', () => focusSection(moveToReview()));
+    byId('draft-jump').addEventListener('click', () => focusSection(byId('review-title')));
+    byId('question-jump').addEventListener('click', () => focusSection(byId('follow-up-title'), byId('answer')));
 
     byId('resume').addEventListener('click', () => {
       activeStep(1);
       state.skipped.clear();
       state.paused = false;
       renderQuestion();
-      byId('follow-up-title').focus();
+      focusSection(byId('follow-up-title'));
     });
 
     byId('preview-summary').addEventListener('click', event => {
@@ -747,10 +694,13 @@
 
     byId('open-help').addEventListener('click', () => {
       activeStep(2);
+      state.paused = true;
+      renderQuestion();
       state.supportOpen = true;
       show('support');
-      byId('support-title').focus();
+      focusSection(byId('support-title'));
     });
+    byId('support-back').addEventListener('click', () => focusSection(moveToReview()));
 
     byId('contact-choice').addEventListener('change', event => {
       const wantsContact = event.target.value === 'yes';
