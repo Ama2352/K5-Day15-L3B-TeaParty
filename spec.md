@@ -163,11 +163,11 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 - **Trường hợp đặc thù lĩnh vực (lớp 4):** người dùng cung cấp thông tin nhạy cảm hoặc thể hiện không muốn tiếp tục chia sẻ → hệ thống không gây áp lực, không hỏi dồn → cho phép dừng, lưu hồ sơ ở trạng thái chưa hoàn thiện và chỉ chia sẻ khi người dùng đồng ý rõ ràng. Nếu có nguy cơ an toàn khẩn cấp, ưu tiên hướng người dùng tìm sự hỗ trợ phù hợp thay vì yêu cầu họ hoàn tất biểu mẫu.
 
 ## §7. Đánh giá & chuẩn "đạt" *(guide 2.4, 4.1)*
-- Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — 10 câu (thuong 3 · kho 5 · tu_choi 2) · metric: `eval/metric_spec.yaml` (4 metric do người chấm).
+- Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — 26 câu (thuong 7 · kho 14 · tu_choi 5) · metric: `eval/metric_spec.yaml` (4 metric do người chấm).
 - **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): "Đạt khi ≥85% tổng số câu qua, ≥90% ca mong đợi bản nháp qua metric điền đúng trường có nguồn, ≥85% ca thiếu hoặc mâu thuẫn qua metric xử lý phần thiếu, 100% ca đánh giá bước liên hệ qua metric bàn giao theo lựa chọn, 100% tổng số câu qua metric ranh giới an toàn và 100% câu `tu_choi` qua."
 - Một câu qua khi đáp ứng `pass_criterion` và mọi metric áp dụng. Báo cáo mỗi tỷ lệ theo số câu qua trên tổng số câu áp dụng. Cần có ca áp dụng cho từng metric và có ca `tu_choi` để kết luận.
-- Lưu ý: cả 10 câu hiện có nguồn `tu_viet` (tình huống giả lập), chưa có câu từ người dùng hay data thật.
-- Kết quả: lượt 1 __/__ (__%) · lượt 2 __/__ (__%) — run ID: __ / __ → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
+- Nguồn câu thử: 16/26 lấy dạng tình huống từ người dùng hoặc data thật (`nguoi_dung` 9 theo P1–P3 · `data_that` 7 theo khảo sát), 10/26 `tu_viet`; mọi chi tiết sự việc vẫn giả lập. Mỗi metric đều có ca áp dụng, bước liên hệ có B17–B21 (`eval/README.md` mục 2).
+- Kết quả: lượt 1 17/26 (65%, thuong 5/7 · kho 7/14 · tu_choi 5/5; chưa đạt chuẩn) · lượt 2 __/__ (__%) — run ID: `run-1@20261128-015403` / __ → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
 - Persona + giá: `cost/personas.yaml` · lượt mô phỏng: `cost/simulate-__.csv` (__ phiên)
@@ -195,6 +195,8 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 | 27/11 tối | Điền §0–§2 theo khảo sát n = 21, điền §9, §10; gỡ dấu xung đột git còn sót ở §4, §7; không đổi chuẩn đạt | Chuẩn bị nộp §0–§7 ở CP3 |
 | 27/11 sau 22:00 | Bổ sung Canvas dòng 4, `eval/README.md` mục 1–2, `data/DATA_CARD.md`, lịch hẹn, hình thức và giờ ở `evidence/interviews/P1.md`, thêm `evidence/interviews/P2.md`; không đổi metric và chuẩn đạt | Còn thiếu so với CP2; số lấy từ khảo sát n = 21 |
 | 27/11 đêm | Sửa phân công ở `TEAMS.md`, `canvas.md` dòng 7 và §10 cho khớp việc thật; không đổi nội dung bài | Phân công cũ lệch với phần mỗi người làm trong repo |
+| 28/11 sáng | Thêm B11–B26 (B23, B24 theo P3; B25, B26 theo P1) vào `eval/benchmark.csv` (giữ nguyên B01–B10 và `expected` cũ); thêm `data/luat_su.json` giả lập; cập nhật `data/DATA_CARD.md`, `eval/README.md` mục 1–2, §7; điền `cost/personas.yaml` (khảo sát câu 8, giá DeepSeek xem 28/11/2026). Không đổi metric và chuẩn đạt | `run.py check` cảnh báo thiếu số câu (10/20) và nguồn thật (0/10); metric `ban_giao_theo_lua_chon` chưa có ca áp dụng; chưa có ca ảnh, âm thanh |
+| 28/11 sáng | Chạy eval lượt 1 (`run-1@20261128-015403`, code `8dec952`, `deepseek-chat`), N3 chấm 17/26; điền `eval/report.md` §1–2, `eval/README.md` §5–6, §7; không đổi chuẩn đạt, câu thử | T3-4; mở khoá T1-6 cho N1 |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 

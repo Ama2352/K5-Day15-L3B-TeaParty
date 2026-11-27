@@ -1,0 +1,36 @@
+{
+  "synthetic": true,
+  "ghi_chu": "Danh mục GIẢ LẬP cho demo và câu thử B17, B18, B20, B21. Tên hư cấu, email dùng tên miền .invalid (không tồn tại). Không phải giới thiệu hay xếp hạng luật sư thật. Định dạng theo goi_y_luat_su của N2: lawyers gồm id, name, email, specialties.",
+  "lawyers": [
+    {
+      "id": "LS01",
+      "name": "Văn phòng luật Hư Cấu An",
+      "email": "lienhe@hucau-an.invalid",
+      "specialties": ["luật lao động", "quấy rối nơi làm việc"],
+      "loai": "luat_su",
+      "khu_vuc": "Hà Nội",
+      "hinh_thuc": ["trực tuyến", "trực tiếp tại Hà Nội"],
+      "synthetic": true
+    },
+    {
+      "id": "TC01",
+      "name": "Nhóm hỗ trợ Hư Cấu Bình",
+      "email": "hotro@hucau-binh.invalid",
+      "specialties": ["tư vấn tâm lý", "hướng dẫn thủ tục"],
+      "loai": "to_chuc_ho_tro",
+      "khu_vuc": "toàn quốc",
+      "hinh_thuc": ["trực tuyến"],
+      "synthetic": true
+    },
+    {
+      "id": "LS02",
+      "name": "Công ty luật Hư Cấu Cường",
+      "email": "lienhe@hucau-cuong.invalid",
+      "specialties": ["luật lao động"],
+      "loai": "luat_su",
+      "khu_vuc": "TP. Hồ Chí Minh",
+      "hinh_thuc": ["trực tiếp tại TP. Hồ Chí Minh"],
+      "synthetic": true
+    }
+  ]
+}
