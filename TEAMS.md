@@ -11,10 +11,10 @@
 
 | STT | Họ và tên | Mã học viên | Vai trò | Phần việc chính |
 |---|---|---|---|---|
-| 1 | Hồ Nguyễn Minh Sang | 2A202603905 | Đội trưởng | Chốt lát cắt, Canvas và nộp CP1 |
-| 2 | Nguyễn Thảo Quyên | 2A202603895 | Thành viên | Tìm người dùng phù hợp, soạn câu hỏi và phụ trách phỏng vấn |
-| 3 | Vũ Ngọc Quỳnh Anh | 2A202603875 | Thành viên | Thiết kế mẫu báo cáo và ca thử giả lập |
-| 4 | Nguyễn Thị Khánh Linh	| 2A202603845 | Thành viên | Tổng hợp bằng chứng, lập bảng impact và soát thẻ đề Track F |
+| 1 | Hồ Nguyễn Minh Sang | 2A202603905 | Đội trưởng | Chốt lát cắt, Canvas, nối model và chạy bản chạy thử, nộp các checkpoint |
+| 2 | Nguyễn Thảo Quyên | 2A202603895 | Thành viên | Viết spec.md và báo cáo đánh giá |
+| 3 | Vũ Ngọc Quỳnh Anh | 2A202603875 | Thành viên | Phỏng vấn người dùng và tổng hợp bằng chứng pain |
+| 4 | Nguyễn Thị Khánh Linh | 2A202603845 | Thành viên | Xây bộ câu thử benchmark và data card |
 
 **Quy tắc điền**
 - **Lớp:** `L3A` hoặc `L3B`. **Track:** một chữ `A` (EdTech), `B` (Y tế), `C` (Du lịch), `D` (Thương mại điện tử), `E` (Tài chính) hoặc `F` (Làn khác). **Link repo:** link GitHub công khai của nhóm.

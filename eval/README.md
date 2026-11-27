@@ -5,14 +5,24 @@
 
 ## 1. Dataset → xử lý
 
-Dataset nào, xử lý gì: tóm 2–3 dòng từ `data/DATA_CARD.md`.
+- **Bộ câu thử** (`eval/benchmark.csv`): `synthetic`, nhóm tự dựng, dùng ký hiệu nhân vật (A, B) và mã nguồn ([LK1], [TN1]…); không có hồ sơ hay dữ liệu cá nhân thật.
+- **Ca demo** (`data/cp2_demo.json`): `synthetic`, 1 sự việc hư cấu 4 đoạn nguồn, dùng cho CLI và test API; không nằm trong điểm đánh giá.
+- Khảo sát và ghi chép P1, P2 chỉ dùng làm bằng chứng pain, không đưa vào model. Chi tiết: `data/DATA_CARD.md`.
 
 ## 2. Bộ câu thử dựng ra sao
 
-- `eval/benchmark.csv`: __ câu (thuong __ · kho __ · tu_choi __, trong đó __ câu tấn công)
-- Nguồn (`python run.py check` in sẵn): nguoi_dung __ · data_that __ · tu_viet __ · sinh_seed __ → từ người dùng / data thật __/__ (cần ≥1/3)
-- Độ phủ — lưới input 3–5 chiều (guide 2.4 bước 5): __
-- Câu `kho` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1: __ · lớp 2: __ · lớp 3: __ · lớp 4: __
+- `eval/benchmark.csv`: 10 câu (thuong 3 · kho 5 · tu_choi 2, trong đó 2 câu tấn công)
+- Nguồn (`python run.py check` in sẵn): nguoi_dung 0 · data_that 0 · tu_viet 10 · sinh_seed 0 → từ người dùng / data thật **0/10 (cần ≥1/3, chưa đạt)**
+- Độ phủ — lưới input 3 chiều:
+
+  | Chiều | Giá trị → câu |
+  |---|---|
+  | Nguồn đầu vào | chỉ lời kể: B01, B04, B06, B08, B09 · kèm tin nhắn chép: B02 · kèm lời tự sửa: B03 · kèm ghi chú: B05 · nhắc ảnh, ghi âm chưa gửi: B07 · tài liệu chèn chỉ thị: B10 |
+  | Tình trạng thông tin (câu hợp lệ) | đủ hoặc đã sửa rõ: B01–B03 · thiếu: B04, B06, B07 · mâu thuẫn: B05 · không chắc: B08 |
+  | Loại yêu cầu | soạn hoặc sửa bản nháp: B01–B08 · tấn công: B09 (đòi bịa bằng chứng), B10 (chèn lệnh) |
+
+  Chưa phủ: ảnh và âm thanh (kể cả OCR, chép lời), bước liên hệ luật sư. Metric `ban_giao_theo_lua_chon` **chưa có câu áp dụng**, nên theo `spec.md` §7 chưa thể kết luận đạt; cần thêm câu trước lượt chạy.
+- Câu `kho` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1: B05, B07 · lớp 2: B04, B06 · lớp 3: chưa có câu `kho` (B09, B10 là `tu_choi`) · lớp 4: B08
 
 ## 3. Metric và cách chấm
 
