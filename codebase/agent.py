@@ -66,8 +66,8 @@ TAI_LIEU = {
 }
 FIELD = {"value": chuỗi hoặc null, "source_refs": [SOURCE_REF, ...], "status": "provided"|"missing"|"unclear"|"conflicting", "conflict_note": "chỉ có khi conflicting", "user_confirmed": false}
 TIME_FIELD = FIELD + "precision": "exact"|"from_metadata"|"user_estimate"|"unknown"
-SOURCE_REF = {"source_type": lấy đúng source_type của nguồn, "source_id": "S1", "locator": "nhãn ngoặc vuông đứng trước đoạn chứa thông tin (bỏ ngoặc, không lặp lại mã S); chỉ dùng 'câu n' khi văn bản không có nhãn nào", "quote": "đoạn LIỀN MẠCH ít nhất 2 từ chép nguyên văn từ text của chính nguồn đó (không dùng label hay tên nguồn); cần hai đoạn rời thì nối bằng '…', mỗi đoạn ít nhất 3 từ, cùng một câu của nguồn, đúng thứ tự. Không chắc thì bỏ khoá quote"}
-Mỗi trường dẫn mỗi cặp source_id + locator tối đa một lần.
+SOURCE_REF = {"source_type": lấy đúng source_type của nguồn, "source_id": "S1", "locator": "nhãn ngoặc vuông đứng trước đoạn chứa thông tin (bỏ ngoặc, không lặp lại mã S); chỉ dùng 'câu n' khi văn bản không có nhãn nào", "quote": "đoạn LIỀN MẠCH ít nhất 2 từ chép nguyên văn từ text của chính nguồn đó (không dùng label hay tên nguồn); cần hai đoạn rời thì nối bằng '…', mỗi đoạn ít nhất 3 từ, cùng một câu của nguồn, đúng thứ tự"}
+Mỗi trường dẫn mỗi cặp source_id + locator tối đa một lần. Mọi trường nội dung (mo_ta_noi_dung, nguoi_co_mat, thoi_diem_tao, dia_diem_hoan_canh, lien_quan_su_viec, thiet_bi_ung_dung, cach_luu_giu, các trường trong nguoi_cung_cap) có value khác null PHẢI có ít nhất 1 quote nguyên văn ≥ 2 từ chứng minh value đó; không tìm được câu nào trong nguồn để trích thì chi tiết đó không có trong nguồn — bỏ khỏi value.
 CẤU TRÚC BẮT BUỘC:
 - Mỗi TAI_LIEU có ĐÚNG các khoá: n, file_id, ten_tep, loai_tai_lieu, mo_ta_noi_dung, nguoi_tao, thoi_diem_tao, dia_diem_hoan_canh, thiet_bi_ung_dung, nguoi_co_mat, cach_luu_giu, tinh_trang_chinh_sua, lien_quan_su_viec, nguoi_cung_cap. Viết đúng chính tả tên khoá.
 - Mỗi trường luôn là object FIELD đủ value, source_refs, status, user_confirmed — không bao giờ là chuỗi trần, kể cả khi missing.
@@ -257,15 +257,27 @@ def _quote_dung(quote: str, text: str) -> bool:
 
 
 QUOTE_SAI = "không có trong nguồn"   # dấu hiệu của lỗi quote trong danh sách lỗi
+THIEU_QUOTE = "thiếu trích dẫn nguyên văn"
+# Trường nội dung phải có ≥ 1 quote hợp lệ khi có value. MIỄN (và vì sao):
+#   loai_tai_lieu — AI đặt tên loại chuẩn hoá ("Lời kể của người dùng"), không phải chữ trích được;
+#   tu_cach — suy ra vai của người trình bày, thường không có câu nguyên văn;
+#   noi_nhan — lấy từ lời nhờ của người dùng, ảnh hưởng thấp, hệ thống không gửi gì;
+#   nguoi_tao — giá trị theo mẫu cố định trong prompt ("Người dùng", "Người dùng chép/chụp…");
+#   tinh_trang_chinh_sua — mô tả trạng thái tệp, nguồn hiếm khi có câu riêng; enum edits đã giới hạn.
+_TRUONG_CAN_QUOTE = {"mo_ta_noi_dung", "nguoi_co_mat", "thoi_diem_tao", "dia_diem_hoan_canh", "lien_quan_su_viec",
+                     "thiet_bi_ung_dung", "cach_luu_giu", "quan_he_hoac_vai_tro", "thoi_diem_cung_cap",
+                     "cach_cung_cap", "nguon_cua_nguoi_cung_cap"}
 
 
-def _xu_ly_quote(draft, texts: dict, labels=None) -> list:
+def _xu_ly_quote(draft, texts: dict, labels=None, bat_buoc=False) -> list:
     """Soát quote của mọi source_ref có nguồn trong `texts`.
 
     - Quote VÔ HẠI (< 2 từ, hoặc chỉ là label/tên nguồn) → xoá khoá quote, ghi note, không tính lỗi.
     - Quote khớp nguyên văn (chỉ khác dấu câu / khoảng trắng / chữ hoa) → giữ.
     - Quote ≥ 2 từ không khớp (kể cả vi phạm luật mảnh "…") → GIỮ NGUYÊN và trả về: đây là tín hiệu chi tiết bịa.
-    → list[{"field_path", "field" (dict FIELD), "quote", "source_id"}] các quote không khớp.
+    - bat_buoc=True: trường trong _TRUONG_CAN_QUOTE có status provided/unclear, value khác null mà không còn
+      quote hợp lệ nào (sau khi xoá quote vô hại) → cũng trả về, quote = None (thiếu trích dẫn).
+    → list[{"field_path", "field" (dict FIELD), "quote", "source_id"}] các quote không khớp / thiếu.
     """
     labels = labels or {}
     removed, bad = [], []
@@ -286,6 +298,15 @@ def _xu_ly_quote(draft, texts: dict, labels=None) -> list:
                 else:
                     field_path = re.sub(r"\.field$", "", path.lstrip("."))
                     bad.append({"field_path": field_path, "field": node, "quote": quote, "source_id": sid})
+            field_path = re.sub(r"\.field$", "", path.lstrip("."))
+            key = _key_of(field_path) if field_path else ""
+            if (bat_buoc and "status" in node and key in _TRUONG_CAN_QUOTE
+                    and node.get("status") in ("provided", "unclear") and node.get("value") not in (None, "")):
+                co_quote = any(isinstance(r, dict) and r.get("source_id") in texts and isinstance(r.get("quote"), str)
+                               and _quote_dung(r["quote"], texts[r["source_id"]])
+                               for r in (refs if isinstance(refs, list) else []))
+                if not co_quote:
+                    bad.append({"field_path": field_path, "field": node, "quote": None, "source_id": None})
             for key, value in node.items():
                 if key != "source_refs":
                     walk(value, f"{path}.{key}")
@@ -299,7 +320,7 @@ def _xu_ly_quote(draft, texts: dict, labels=None) -> list:
     return bad
 
 
-def _kiem_nguon_ids(draft: dict, ids: set, texts=None, labels=None) -> list:
+def _kiem_nguon_ids(draft: dict, ids: set, texts=None, labels=None, bat_buoc=False) -> list:
     """Lỗi (→ thử lại): source_id không có thật; quote ≥ 2 từ không khớp nguyên văn text nguồn.
     Quote vô hại được xoá lặng lẽ (xem _xu_ly_quote)."""
     errors = []
@@ -317,16 +338,20 @@ def _kiem_nguon_ids(draft: dict, ids: set, texts=None, labels=None) -> list:
                 walk(value, f"{path}[{i}]")
 
     walk(draft, "$")
-    for b in _xu_ly_quote(draft, texts or {}, labels):
-        errors.append(f"{b['field_path']} · quote {str(b['quote'])[:80]!r} · {QUOTE_SAI} {b['source_id']} "
-                      "(chi tiết không có trong nguồn thì bỏ khỏi value)")
+    for b in _xu_ly_quote(draft, texts or {}, labels, bat_buoc):
+        if b["quote"] is None:
+            errors.append(f"{b['field_path']} · {THIEU_QUOTE} ≥ 2 từ cho value {_ngan(b['field'].get('value'), 60)!r} "
+                          "(thêm quote đúng nguyên văn; chi tiết không có trong nguồn thì bỏ khỏi value)")
+        else:
+            errors.append(f"{b['field_path']} · quote {str(b['quote'])[:80]!r} · {QUOTE_SAI} {b['source_id']} "
+                          "(chi tiết không có trong nguồn thì bỏ khỏi value)")
     return errors
 
 
 def _kiem_nguon(draft: dict, sources: list) -> list:
     """source_id có thật và quote khớp nguyên văn text nguồn (lỗi → thử lại); quote vô hại bị xoá."""
     return _kiem_nguon_ids(draft, {s["id"] for s in sources}, {s["id"]: s.get("text") or "" for s in sources},
-                           {s["id"]: s.get("label") or "" for s in sources})
+                           {s["id"]: s.get("label") or "" for s in sources}, bat_buoc=True)
 
 
 def _canh_bao_locator(draft: dict, sources: list) -> list:
@@ -418,18 +443,57 @@ def _trich_xuat_day_du(sources: list) -> dict:
     if result["draft"] is not None:
         # Sau thử lại vẫn còn quote không khớp: KHÔNG sửa/xoá value; ép trường về "unclear" và báo để người dùng rà.
         bad = _xu_ly_quote(result["draft"], {s["id"]: s.get("text") or "" for s in sources},
-                           {s["id"]: s.get("label") or "" for s in sources})
+                           {s["id"]: s.get("label") or "" for s in sources}, bat_buoc=True)
         for b in bad:
             if b["field"].get("status") == "provided":
                 b["field"]["status"] = "unclear"
         if bad:
-            note(f"trich_xuat: còn {len(bad)} quote không khớp nguồn sau thử lại → ép unclear, báo người dùng")
+            note(f"trich_xuat: còn {len(bad)} trường có quote không khớp / thiếu quote sau thử lại → ép unclear")
         result["quote_sai"] = bad
-        result["errors"] = [e for e in result["errors"] if QUOTE_SAI not in e]
+        result["errors"] = [e for e in result["errors"] if QUOTE_SAI not in e and THIEU_QUOTE not in e]
         warns = _canh_bao_locator(result["draft"], sources)
         if warns:
             note(f"trich_xuat: cảnh báo locator ({len(warns)}), vd: {warns[0][:120]}")
     return result
+
+
+def trich_xuat_day_du(sources: list) -> tuple:
+    """Cho web (Người 2): nguồn → (draft, ngoai_pham_vi, can_ra). Có gọi AI (như trich_xuat); không tác động ra ngoài.
+
+    draft         dict theo schema (như trich_xuat).
+    ngoai_pham_vi list[{"loai", "yeu_cau", "ly_do"}] đã lọc fail-safe — hiển thị bằng _dong_ngoai_pham_vi.
+    can_ra        list[{"field_path", "quote", "source_id", "ly_do"}] trường có trích dẫn không khớp nguồn hoặc thiếu
+                  trích dẫn sau thử lại (đã ép "unclear") — nên hiện thành mục "Cần rà" và hỏi trước.
+    Chế độ fake: (bản sao data/mau_ban_nhap.json, [], []). Hai lần đều không đọc được JSON → ValueError.
+    """
+    if ai.MODEL_PROVIDER == "fake":
+        return trich_xuat(sources), [], []
+    result = _trich_xuat_day_du(sources)
+    if result["draft"] is None:
+        raise ValueError(result["errors"][0] if result["errors"] else "AI không trả về bản nháp.")
+    return result["draft"], _loc_ngoai_pham_vi(result["ngoai_pham_vi"]), _can_ra(result.get("quote_sai") or [])
+
+
+def _can_ra(bad: list) -> list:
+    return [{"field_path": b["field_path"], "quote": b["quote"], "source_id": b["source_id"],
+             "ly_do": THIEU_QUOTE if b["quote"] is None else f"trích dẫn {QUOTE_SAI}"} for b in bad]
+
+
+def _dong_can_ra(b: dict) -> str:
+    if b["quote"] is None:
+        return f"- {_label_of(b['field_path'])}: chưa có câu nào trong nguồn được trích để chứng minh nội dung đang ghi"
+    return (f"- {_label_of(b['field_path'])}: \"{_ngan(b['quote'], 80)}\" — không tìm thấy nguyên văn trong "
+            f"{b['source_id']}")
+
+
+def _cau_hoi_can_ra(b: dict, draft: dict) -> str:
+    label = _label_of(b["field_path"])
+    if b["quote"] is None:
+        field = _field_of(_get_path(draft, _path_keys(b["field_path"]))) or {}
+        return (f"{label}: bản nháp đang ghi \"{_ngan(field.get('value') or '', 60)}\" nhưng chưa tìm thấy câu nào trong "
+                "nguồn nói như vậy. Chi tiết này có đúng như bạn kể không, hay cần bỏ đi? (Có thể bỏ qua.)")
+    return (f"{label}: trích dẫn \"{_ngan(b['quote'], 60)}\" không có nguyên văn trong nguồn {b['source_id']}. "
+            "Chi tiết này có đúng như bạn kể không, hay cần bỏ đi? (Có thể bỏ qua.)")
 
 
 def trich_xuat(sources: list) -> dict:
@@ -537,23 +601,21 @@ def answer(text: str) -> dict:
     errors = result["errors"]
     gaps, questions = _gan_cau_hoi(draft)
     quote_sai = result.get("quote_sai") or []
-    if quote_sai:   # câu hỏi cho trường có trích dẫn không khớp nguồn được ưu tiên đầu
+    quote_sai = _can_ra(quote_sai)
+    if quote_sai:   # câu hỏi cho trường có trích dẫn không khớp / thiếu trích dẫn được ưu tiên đầu
         dau, seen = [], set()
         for b in quote_sai:
             if b["field_path"] in seen:
                 continue
             seen.add(b["field_path"])
-            dau.append({"field_path": b["field_path"], "skippable": True, "question": (
-                f"{_label_of(b['field_path'])}: trích dẫn \"{_ngan(b['quote'], 60)}\" không có nguyên văn trong nguồn "
-                f"{b['source_id']}. Chi tiết này có đúng như bạn kể không, hay cần bỏ đi? (Có thể bỏ qua.)")})
+            dau.append({"field_path": b["field_path"], "skippable": True, "question": _cau_hoi_can_ra(b, draft)})
         questions = (dau + [q for q in questions if q["field_path"] not in seen])[:MAX_CAU_HOI]
         draft["questions_for_user"] = questions
 
     lines = head + [tao_ban_nhap(draft), ""]
     if quote_sai:
-        lines.append("Cần rà: trích dẫn không khớp nguồn (các trường này đã chuyển sang \"chưa rõ\")")
-        lines.extend(f"- {_label_of(b['field_path'])}: \"{_ngan(b['quote'], 80)}\" — không tìm thấy nguyên văn trong "
-                     f"{b['source_id']}" for b in quote_sai)
+        lines.append("Cần rà: trích dẫn không khớp hoặc thiếu trích dẫn nguồn")
+        lines.extend(_dong_can_ra(b) for b in quote_sai)
         lines.append("")
     lines.append("Câu hỏi bổ sung (có thể bỏ qua)")
     if questions:
