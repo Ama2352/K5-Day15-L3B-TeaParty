@@ -60,7 +60,7 @@ def _fake_draft(sources: list) -> str:
 
     statement = sources[0]
     lines = [
-        "BẢN NHÁP PHẢN ÁNH NỘI BỘ — MÔ PHỎNG CP2",
+        "BẢN NHÁP PHẢN ÁNH — MÔ PHỎNG CP2",
         "",
         "1. Diễn biến theo lời kể",
         f'[S1] {json.dumps(statement["text"], ensure_ascii=False)}',
@@ -75,7 +75,7 @@ def _fake_draft(sources: list) -> str:
         "",
         "3. Thông tin cần rà",
         date_line,
-        "Rà lại nội dung và nguồn gốc trước khi quyết định có gửi HR hay không.",
+        "Rà lại nội dung và nguồn trước khi chọn có liên hệ luật sư và có dùng bản nháp hay không.",
     ])
     return "\n".join(lines)
 

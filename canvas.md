@@ -10,10 +10,10 @@
 | 2 | Người dùng chính (một vai cụ thể — không phải "học viên nói chung") | Nhân viên trưởng thành đang tự chuẩn bị hồ sơ phản ánh một sự việc quấy rối tình dục tại nơi làm. |
 | 3 | Pain một câu: ai — đang làm gì — vướng đâu — hậu quả | Nhân viên bị quấy rối tình dục tại nơi làm việc gặp khó khăn trong việc thu thập, hệ thống hóa bằng chứng và chuẩn bị hồ sơ phản ánh sự việc. |
 | 4 | Bằng chứng đầu — CP1: giả thuyết + nguồn sẽ kiểm · CP2: số đầu tiên + 1 trích dẫn | Giả thuyết là đối chiếu lời kể với tài liệu ở nhiều định dạng và xác định mục còn thiếu làm tăng thời gian rà hồ sơ. Dự kiến phỏng vấn ≥3 nhân viên đúng đối tượng, ngoài nhóm và tự nguyện, về quy trình họ đã làm trong tháng qua. Cần xác nhận khả năng tiếp cận người tham gia. Các nguồn công khai dự kiến kiểm tra được ghi trong thẻ đề. |
-| 5 | **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả) | Nhân viên cung cấp lời kể và bằng chứng đa phương thức (văn bản, hình ảnh, âm thanh) về một sự việc để AI xác định thông tin còn thiếu và soạn bản nháp phản ánh nội bộ có cấu trúc, với nguồn đối chiếu cho từng chi tiết để giữ đúng thông tin gốc. |
-| 6 | AI tự làm đến đâu + 1 dòng lý do: sai thì ai chịu gì | AI chỉ tạo bản nháp có nguồn đối chiếu và đánh dấu chỗ chưa rõ. Nhân viên rà, sửa và quyết định có chia sẻ hay không, vì lỗi nhận dạng hoặc nhầm mốc có thể làm sai lời kể. Người có chuyên môn phụ trách đánh giá pháp lý nếu cần. |
+| 5 | **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả) | Nhân viên kể về một sự việc và cung cấp văn bản, hình ảnh hoặc âm thanh để AI đối chiếu nguồn, điền form 11 trường và hỏi về thông tin còn thiếu hoặc mâu thuẫn, từ đó tạo bản nháp để nhân viên rà và cân nhắc dùng khi liên hệ luật sư. |
+| 6 | AI tự làm đến đâu + 1 dòng lý do: sai thì ai chịu gì | AI tạo bản nháp có nguồn đối chiếu và giữ các trường chưa rõ ở trạng thái cần xác nhận. Nhân viên rà, sửa và quyết định riêng việc có liên hệ luật sư được gợi ý và có dùng form hay không. Nếu họ chọn dùng form, app soạn email nháp từ phần được phép chia sẻ để họ duyệt. |
 | 7 | Phân công có tên | **Hồ Nguyễn Minh Sang** chốt lát cắt, Canvas và nộp CP1 · **Nguyễn Thảo Quyên** phụ trách tìm người dùng và phỏng vấn · **Vũ Ngọc Quỳnh Anh** phụ trách mẫu báo cáo và ca thử · **Nguyễn Thị Khánh Linh** phụ trách tổng hợp bằng chứng, impact và soát thẻ đề. |
-| — | *(CP2)* Đã đổi gì so với CP1 | |
+| — | *(CP2)* Đã đổi gì so với CP1 | Chốt form 11 trường để chuẩn bị trao đổi với luật sư, có hỏi bổ sung qua hội thoại. Cả form đủ và form còn thiếu đều có thể được người dùng rà và chọn dùng khi liên hệ. |
 
 Trước CP1, cả nhóm thống nhất lát cắt và cách thu bằng chứng. Mỗi người phụ trách ít nhất một câu hỏi phỏng vấn hoặc một câu hỏi để kiểm trên dữ liệu công khai về quy trình báo cáo. Thảo Quyên điều phối để tránh hỏi trùng.
 
@@ -31,7 +31,7 @@ Trước CP1, cả nhóm thống nhất lát cắt và cách thu bằng chứng.
 
 **Data.** Bằng chứng về vấn đề dự kiến lấy từ ghi chép phỏng vấn đã bỏ định danh. Demo và benchmark dùng lời kể, văn bản, hình ảnh và âm thanh giả lập do nhóm tạo. Ghi nguồn và cách dựng trong `data/DATA_CARD.md` ở CP2.
 
-**Lát cắt.** Nhân viên cung cấp lời kể và bằng chứng đa phương thức (văn bản, hình ảnh, âm thanh) về một sự việc để AI xác định thông tin còn thiếu và soạn bản nháp phản ánh nội bộ có cấu trúc để nhân viên cân nhắc gửi HR, với nguồn đối chiếu cho từng chi tiết để giữ đúng thông tin gốc.
+**Lát cắt.** Nhân viên kể về một sự việc và cung cấp văn bản, hình ảnh hoặc âm thanh để AI đối chiếu nguồn, điền form 11 trường và hỏi về thông tin còn thiếu hoặc mâu thuẫn, từ đó tạo bản nháp để nhân viên rà và cân nhắc dùng khi liên hệ luật sư.
 
 **Công cụ của agent.** Dự kiến chuẩn hóa nguồn qua văn bản, OCR ảnh và bản chép lời có mốc thời gian, rồi kiểm tham chiếu trong bản nháp. Đầu vào là tài liệu do người dùng cung cấp. Đầu ra là nội dung trích được kèm mã nguồn, đoạn văn, vùng ảnh hoặc mốc âm thanh để đối chiếu. Luồng thử nghiệm không tự gửi hồ sơ.
 

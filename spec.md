@@ -42,8 +42,10 @@ Data BTC cấp đã dùng: không có.
     A["Lời kể và các đoạn nguồn mẫu"] --> B["prepare_sources: kiểm định dạng và gắn mã nguồn"]
     B --> C["AI giả: đối chiếu ngày khai báo và soạn bản nháp"]
     C --> D["Bản nháp có nguồn và mục cần xác nhận"]
-    D --> E["Nhân viên rà và quyết định có chia sẻ với HR"]
+    D --> E["Nhân viên rà bản nháp và nguồn đối chiếu"]
   ```
+
+  Trong luồng sản phẩm, nhân viên vẫn được rà form khi dừng bổ sung dù còn trường trống. Sau đó, họ chọn có liên hệ luật sư được gợi ý và có dùng form hay không. Nếu họ chọn dùng form, app chuẩn bị email nháp để họ duyệt. Bản chạy thử CP2 dừng ở bản nháp có nguồn và mục cần xác nhận.
 - **Hình dạng:** [ ] workflow cố định · [ ] một agent · [ ] nhiều agent — 2 dòng lý do, và vì sao **không** chọn hình dạng phức tạp hơn:
 - **AI dựa vào đâu** — mỗi công cụ (khớp `codebase/tools.py`):
 

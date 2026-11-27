@@ -25,6 +25,7 @@ class DemoWebTest(unittest.TestCase):
         self.assertIn("[S1] Lời kể", output)
         self.assertIn("Thử TeaParty", output)
         self.assertIn("Ngày xảy ra: chưa cung cấp", output)
+        self.assertIn("chọn có liên hệ luật sư và có dùng bản nháp hay không", output)
 
     def test_conflicting_dates_are_reported_with_their_sources(self):
         sample = Path(__file__).resolve().parents[1] / "data" / "cp2_demo.json"
