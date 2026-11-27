@@ -159,7 +159,8 @@
           {
             "source_type": "user_narrative",
             "source_id": "S1",
-            "locator": "câu 1"
+            "locator": "câu 1",
+            "quote": "tin nhắn có nội dung không mong muốn"
           }
         ],
         "status": "provided",
