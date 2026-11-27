@@ -184,7 +184,7 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
   - Người dùng bị lộ dữ liệu hoặc bị người khác xem máy: bản chạy thử chỉ nhận dữ liệu giả lập; dùng thật cần thẩm định bảo mật và pháp lý trước.
 
 ## §10. Phân công & changelog
-- Phân công (theo `canvas.md` dòng 7): Hồ Nguyễn Minh Sang chốt lát cắt, Canvas, nộp CP1 · Nguyễn Thảo Quyên tìm người dùng, phỏng vấn · Vũ Ngọc Quỳnh Anh mẫu báo cáo, ca thử · Nguyễn Thị Khánh Linh tổng hợp bằng chứng, impact, soát thẻ đề.
+- Phân công (theo `canvas.md` dòng 7): Hồ Nguyễn Minh Sang chốt lát cắt, Canvas, nối model, chạy bản chạy thử, nộp checkpoint · Nguyễn Thảo Quyên spec.md, báo cáo đánh giá · Vũ Ngọc Quỳnh Anh phỏng vấn, tổng hợp bằng chứng · Nguyễn Thị Khánh Linh benchmark, data card.
 - Dùng AI vào việc gì: Claude Code hỗ trợ soạn nháp Canvas CP1, câu hỏi phỏng vấn và các mục spec; thành viên phải rà trước khi nộp. Việc dùng AI của các phần khác: mỗi người tự bổ sung vào `docs/ai-usage.md`.
 - Nhật ký thay đổi — **mọi thay đổi sau CP2 19:30 Thứ Sáu 27/11 phải có dòng ở đây**:
 
@@ -193,6 +193,7 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 | Thời điểm | Đổi gì | Vì sao (trỏ về câu thử / lỗi / bằng chứng nào) |
 |---|---|---|
 | 27/11 tối | Điền §0–§2 theo khảo sát n = 21, điền §9, §10; gỡ dấu xung đột git còn sót ở §4, §7; không đổi chuẩn đạt | Chuẩn bị nộp §0–§7 ở CP3 |
+| 27/11 đêm | Sửa phân công ở `TEAMS.md`, `canvas.md` dòng 7 và §10 cho khớp việc thật; không đổi nội dung bài | Phân công cũ lệch với phần mỗi người làm trong repo |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 

@@ -12,10 +12,10 @@
 | 4 | Bằng chứng đầu — CP1: giả thuyết + nguồn sẽ kiểm · CP2: số đầu tiên + 1 trích dẫn | Giả thuyết là đối chiếu lời kể với tài liệu ở nhiều định dạng và xác định mục còn thiếu làm tăng thời gian rà hồ sơ. Dự kiến phỏng vấn ≥3 nhân viên đúng đối tượng, ngoài nhóm và tự nguyện, về quy trình họ đã làm trong tháng qua. Cần xác nhận khả năng tiếp cận người tham gia. Các nguồn công khai dự kiến kiểm tra được ghi trong thẻ đề. |
 | 5 | **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả) | Nhân viên kể về một sự việc và cung cấp văn bản, hình ảnh hoặc âm thanh để AI đối chiếu nguồn, điền form 11 trường và hỏi về thông tin còn thiếu hoặc mâu thuẫn, từ đó tạo bản nháp để nhân viên rà và cân nhắc dùng khi liên hệ luật sư. |
 | 6 | AI tự làm đến đâu + 1 dòng lý do: sai thì ai chịu gì | AI tạo bản nháp có nguồn đối chiếu và giữ các trường chưa rõ ở trạng thái cần xác nhận. Nhân viên rà, sửa và quyết định riêng việc có liên hệ luật sư được gợi ý và có dùng form hay không. Nếu họ chọn dùng form, app soạn email nháp từ phần được phép chia sẻ để họ duyệt. |
-| 7 | Phân công có tên | **Hồ Nguyễn Minh Sang** chốt lát cắt, Canvas và nộp CP1 · **Nguyễn Thảo Quyên** phụ trách tìm người dùng và phỏng vấn · **Vũ Ngọc Quỳnh Anh** phụ trách mẫu báo cáo và ca thử · **Nguyễn Thị Khánh Linh** phụ trách tổng hợp bằng chứng, impact và soát thẻ đề. |
+| 7 | Phân công có tên | **Hồ Nguyễn Minh Sang** chốt lát cắt, Canvas, nối model, chạy bản chạy thử và nộp các checkpoint · **Nguyễn Thảo Quyên** phụ trách spec.md và báo cáo đánh giá · **Vũ Ngọc Quỳnh Anh** phụ trách phỏng vấn người dùng và tổng hợp bằng chứng pain · **Nguyễn Thị Khánh Linh** phụ trách bộ câu thử benchmark và data card. |
 | — | *(CP2)* Đã đổi gì so với CP1 | Chốt form 11 trường để chuẩn bị trao đổi với luật sư, có hỏi bổ sung qua hội thoại. Cả form đủ và form còn thiếu đều có thể được người dùng rà và chọn dùng khi liên hệ. |
 
-Trước CP1, cả nhóm thống nhất lát cắt và cách thu bằng chứng. Mỗi người phụ trách ít nhất một câu hỏi phỏng vấn hoặc một câu hỏi để kiểm trên dữ liệu công khai về quy trình báo cáo. Thảo Quyên điều phối để tránh hỏi trùng.
+Trước CP1, cả nhóm thống nhất lát cắt và cách thu bằng chứng. Mỗi người phụ trách ít nhất một câu hỏi phỏng vấn hoặc một câu hỏi để kiểm trên dữ liệu công khai về quy trình báo cáo. Quỳnh Anh điều phối để tránh hỏi trùng.
 
 ## Track F · AI Evidence Assistant
 
