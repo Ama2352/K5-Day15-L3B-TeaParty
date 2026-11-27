@@ -216,8 +216,8 @@ def _unresolved_reply(path, previous, ref, status="unclear"):
 
 
 def _apply_model_reply(draft, path, text, previous, ref, confirm):
-    answer = {"field_path": path, "text": text, "source_ref": ref}
-    updated = _run_agent("dien_lai", deepcopy(draft), answer)
+    answers = [{"field_path": path, "answer": text}]
+    updated = _run_agent("dien_lai", deepcopy(draft), answers)
     _validate_draft(updated, 502)
     original_ids = [document["file_id"] for document in draft["tai_lieu"]]
     updated_ids = [document["file_id"] for document in updated["tai_lieu"]]

@@ -54,6 +54,13 @@ class FollowUpTest(unittest.TestCase):
         self.assertEqual(updated["noi_nhan"]["status"], "missing")
         self.assertIsNone(updated["noi_nhan"]["value"])
 
+    def test_live_route_passes_the_answer_to_n1(self):
+        # Exercise the real N1 parser and merge, using its offline model path.
+        with patch("web.MODEL_PROVIDER", "openai"), patch("ai.MODEL_PROVIDER", "fake"):
+            updated = self.submit("noi_nhan", "Nơi tiếp nhận A")
+        self.assertEqual(updated["noi_nhan"]["value"], "Nơi tiếp nhận A")
+        self.assertEqual(updated["noi_nhan"]["source_refs"][0]["source_type"], "user_answer")
+
     def test_email_rejects_an_unknown_path_mixed_with_an_approved_one(self):
         path = "tai_lieu[0].mo_ta_noi_dung"
         self.draft["tai_lieu"][0]["mo_ta_noi_dung"]["user_confirmed"] = True
