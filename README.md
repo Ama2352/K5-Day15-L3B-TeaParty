@@ -110,7 +110,7 @@ npm --prefix codebase run build
 
 GitHub Actions kiểm tra các thay đổi liên quan đến runtime, dữ liệu, bộ thử và pipeline trên PR vào `main` hoặc khi push lên `main`. Trình kiểm tra bài nộp in cảnh báo trong log. Smoke test CLI và test API dùng `MODEL_PROVIDER=fake`.
 
-Service `teaparty-demo` lấy code từ GitHub `main`, dùng thư mục gốc repo làm **Root Directory**. File [railway.toml](railway.toml) cấu hình Railpack, các đường dẫn kích hoạt deploy, lệnh chạy Uvicorn trên `$PORT` và health check `/health`. Cấu hình tạo project và liên kết nguồn nằm trong [.railway/railway.ts](.railway/railway.ts).
+Service `teaparty-demo` lấy code từ GitHub `main`, dùng thư mục gốc repo làm **Root Directory**. [railpack.json](railpack.json) khai báo lệnh chạy Uvicorn trên `$PORT` để Railpack lập kế hoạch build. [railway.toml](railway.toml) chọn builder, các đường dẫn kích hoạt deploy và health check `/health`. Cấu hình tạo project và liên kết nguồn nằm trong [.railway/railway.ts](.railway/railway.ts).
 
 Khi đưa demo lên Railway, bật **Wait for CI** và tạo domain trong **Public Networking**. Đặt `MODEL_PROVIDER=fake` cho demo mô phỏng. Để dùng DeepSeek, đặt `MODEL_PROVIDER=openai`, `MODEL_NAME=deepseek-flash` và `API_KEY` trong **Variables** của service. Mở `/` để dùng giao diện và `/health` để kiểm tra tiến trình.
 
