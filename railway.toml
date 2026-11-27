@@ -1,0 +1,7 @@
+[build]
+builder = "RAILPACK"
+watchPatterns = ["codebase/**", "data/**", "requirements.txt", "railpack.json", "railway.toml"]
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 30

@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#172d49">
+  <title>Hồ sơ an toàn</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #0f2e2b;
+      --muted: #4b6b66;
+      --surface: #fff;
+      --canvas: #f8fafc;
+      --line: #dbe5e3;
+      --accent: #0f766e;
+      --accent-soft: #ecfdf5;
+      --warn: #9a5b1f;
+      --warn-soft: #fff4e6;
+      --radius: .9rem;
+      --shadow: 0 1px 2px rgba(15,46,43,.06), 0 8px 24px -12px rgba(15,46,43,.16);
+      font: 16px/1.6 "Segoe UI", system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; background: var(--canvas); color: var(--ink); }
+    .wrap { width: min(1480px, calc(100% - 3rem)); margin-inline: auto; }
+    .masthead { background: linear-gradient(135deg, #0b3b36, var(--ink)); color: #fff; padding: 1.1rem 0; }
+    .masthead .wrap { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
+    .brand { display: flex; align-items: center; gap: .75rem; font-size: 1.16rem; font-weight: 700; }
+    .mark { display: grid; place-items: center; width: 2.4rem; height: 2.4rem; border-radius: .7rem; background: var(--accent-soft); color: var(--accent); font-size: 1.2rem; }
+    .mark::before { content: "\1F6E1"; line-height: 1; }
+    .masthead .help { color: #cfe9e3; margin: 0; }
+    .reassure { margin: .9rem auto 0; padding: .6rem 1rem; color: var(--accent); background: var(--accent-soft); border-radius: .7rem; font-size: .92rem; text-align: center; }
+    h1, h2 { font-weight: 720; line-height: 1.2; letter-spacing: -.025em; }
+    h1 { font-size: clamp(1.9rem, 3vw, 2.65rem); margin: 0 0 .6rem; }
+    h2 { font-size: clamp(1.35rem, 2.2vw, 1.75rem); margin: 0 0 .65rem; }
+    h3, p { margin: 0 0 .65rem; }
+    p:last-child { margin-bottom: 0; }
+    main { padding: clamp(1.25rem, 3vw, 2.5rem) 0 3rem; }
+    .layout {
+      display: grid;
+      grid-template-columns: 11.5rem minmax(0, 1.08fr) minmax(0, 1fr);
+      grid-template-areas: "steps intake draft" "steps support draft";
+      gap: 1.1rem clamp(1rem, 2vw, 1.75rem);
+      align-items: start;
+    }
+    .stack { grid-area: intake; display: grid; gap: 1.1rem; min-width: 0; }
+    .panel { padding: clamp(1rem, 2.4vw, 1.9rem); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); min-width: 0; }
+    .aside { grid-area: steps; position: sticky; top: 1rem; min-width: 0; padding: .7rem 0; }
+    .draft-panel { grid-area: draft; position: sticky; top: 1rem; max-height: calc(100dvh - 2rem); min-width: 0; overflow: auto; scrollbar-gutter: stable; }
+    #support { grid-area: support; }
+    #intake, #follow-up { border-top: 3px solid var(--accent); }
+    #intake:has(#intake-body[hidden]) { padding-block: .7rem; border-top-width: 1px; }
+    .draft-panel .panel { padding: clamp(1rem, 2vw, 1.55rem); }
+    .draft-panel .empty-draft { background: var(--accent-soft); border: 1px dashed var(--accent); box-shadow: none; }
+    .empty-draft .mark { margin-bottom: 1.1rem; }
+    .steps { list-style: none; padding: 0; margin: 1rem 0 1.3rem; display: flex; flex-direction: column; gap: .2rem; }
+    .steps li { display: flex; align-items: center; gap: .65rem; padding: .5rem .55rem; color: var(--muted); border-radius: .6rem; transition: color .2s ease, background .2s ease; }
+    .step-dot { width: .85rem; height: .85rem; border-radius: 50%; border: 2px solid var(--line); background: #fff; flex: 0 0 auto; transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+    .steps [aria-current=step] { color: var(--accent); background: var(--accent-soft); font-weight: 700; }
+    .steps [aria-current=step] .step-dot { background: var(--accent); border-color: var(--accent); transform: scale(1.15); }
+    .aside details { border-top: 1px solid var(--line); padding-top: .8rem; }
+    .aside details p, #mode { margin-top: .65rem; }
+    #intake-form { margin-top: 1.5rem; }
+    #narrative { line-height: 1.65; padding: .85rem; min-height: 10rem; }
+    .source-entry { margin: .9rem 0; padding: 1.1rem; border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: .7rem; background: var(--canvas); }
+    .source-entry legend { color: var(--accent); margin-bottom: .4rem; }
+    .source-entry select,.source-entry textarea {margin:.3rem 0 .7rem}
+    .filterbar { display: flex; align-items: center; flex-wrap: wrap; gap: .45rem .65rem; margin-top: 1.15rem; }
+    .filterbar label { margin: 0; font-size: .9rem; }
+    .filterbar select {width:auto;max-width:100%}
+    .field-list .field {padding-block:1.1rem}
+    .field textarea {margin-block:.35rem}
+    .field-value {white-space:pre-wrap;overflow-wrap:anywhere;margin:.3rem 0}
+    .edit-field {background:transparent;color:var(--accent);border:0;padding:.3rem 0;text-decoration:underline;text-underline-offset:3px}
+    #toggle-intake:not([hidden]) + div:not([hidden]) {margin-top:1rem}
+    #narrative-help {margin:.55rem 0 1rem}
+    #intake-form > .actions {border-top:1px solid var(--line);margin-top:1.3rem;padding-top:1.2rem}
+    #example { border-color: transparent; background: transparent; }
+    #example:hover { background: var(--accent-soft); }
+    .document[open] > summary {border-bottom:1px solid var(--line)}
+    .aside h2 { font-size: 1rem; letter-spacing: 0; }
+    .muted, .help { color: var(--muted); }
+    .help { font-size: .9rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: .65rem; align-items: center; margin-top: .9rem; }
+    :is(button, textarea, select, input) { font: inherit; }
+    :is(button, summary, a, textarea, select, input, [tabindex]):focus-visible { outline: 3px solid #1271ae; outline-offset: 3px; }
+    button { font-weight: 650; min-height: 2.75rem; padding: .55rem 1.1rem; border: 1px solid var(--accent); border-radius: 999px; background: var(--accent); color: #fff; cursor: pointer; transition: transform .12s ease, filter .12s ease, box-shadow .12s ease; }
+    button:hover { filter: brightness(.94); transform: translateY(-1px); box-shadow: 0 4px 10px -4px rgba(15,118,110,.45); }
+    button:active { transform: translateY(0); }
+    .secondary { background: #fff; color: var(--accent); border-color: var(--line); }
+    .secondary:hover { background: var(--accent-soft); filter: none; }
+    button:disabled { border-color: var(--line); background: #e7eef0; color: #4a636e; cursor: default; transform: none; box-shadow: none; }
+    textarea, select, input[type="text"] { display: block; width: 100%; padding: .6rem .75rem; border: 1px solid var(--line); border-radius: .6rem; background: #fff; color: var(--ink); transition: border-color .12s ease, box-shadow .12s ease; }
+    textarea:focus-visible, select:focus-visible, input:focus-visible { border-color: var(--accent); }
+    textarea { resize: vertical; }
+    label, legend { font-weight: 650; }
+    label[for] { display: block; margin-bottom: .3rem; }
+    fieldset { border: 0; padding: 0; margin: 0 0 1rem; min-width: 0; }
+    fieldset legend { padding: 0; margin-bottom: .3rem; }
+    .choice { display: flex; align-items: flex-start; min-height: 2.25rem; gap: .6rem; font-weight: 400; padding: .5rem .65rem; border: 1px solid var(--line); border-radius: .6rem; overflow-wrap: anywhere; transition: border-color .15s ease, background .15s ease; }
+    .choice:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+    .choice input { accent-color: var(--accent); width: 1rem; height: 1rem; margin: .35rem 0 0; flex: 0 0 auto; }
+    :is(.note, .error, .conflict) { overflow-wrap: anywhere; }
+    .note { padding: .75rem 1rem; border-radius: .6rem; background: var(--accent-soft); color: var(--ink); }
+    #intake-notices { margin: 0; padding-left: 2rem; }
+    .error { margin-bottom: 1rem; color: #7a3b17; background: var(--warn-soft); border-left: 3px solid var(--warn); padding: .65rem .9rem; border-radius: .4rem; }
+    .progress:empty { display: none; }
+    .progress { position: sticky; top: .5rem; z-index: 2; width: fit-content; margin: 0 0 .75rem; padding: .45rem .8rem; color: var(--ink); background: var(--accent-soft); border-radius: .6rem; }
+    .form-group { margin-top: .8rem; }
+    .document { border: 1px solid var(--line); border-radius: .7rem; margin-top: .8rem; overflow: hidden; }
+    .document > summary { padding: .75rem 1rem; font-weight: 700; background: var(--canvas); display: flex; align-items: center; gap: .5rem; justify-content: space-between; }
+    summary { cursor: pointer; overflow-wrap: anywhere; }
+    .field-list { padding-inline: .9rem; }
+    .field { border-top: 1px solid var(--line); border-left: 3px solid transparent; padding: .9rem .9rem .9rem 1rem; transition: border-color .2s ease; }
+    .field[data-status="provided"] { border-left-color: var(--accent); }
+    .field[data-status="unclear"], .field[data-status="conflicting"] { border-left-color: var(--warn); }
+    .field:first-child { border-top: 0; }
+    .field-top { display: flex; gap: .35rem .65rem; justify-content: space-between; align-items: start; flex-wrap: wrap; }
+    .badge { display: inline-flex; align-items: center; gap: .3rem; max-width: 100%; padding: .2rem .6rem; border-radius: 999px; color: var(--muted); background: var(--canvas); font-size: .82rem; font-weight: 650; }
+    .badge[data-status="provided"] { background: var(--accent-soft); color: var(--accent); animation: badge-pop .18s ease-out; }
+    .badge[data-status="conflicting"], .badge[data-status="unclear"] { background: var(--warn-soft); color: var(--warn); }
+    .badge[data-status="missing"] { background: var(--warn-soft); color: var(--warn); }
+    .conflict { background: var(--warn-soft); color: var(--warn); }
+    .conflict { padding: .55rem .75rem; margin-top: .5rem; border-radius: .5rem; }
+    .citations { color: var(--muted); margin: .4rem 0; font-size: .9rem; }
+    .citations ul { padding-left: 1.4rem; margin-block: .35rem; overflow-wrap: anywhere; }
+    .metadata { margin: .65rem 0 0; }
+    .preview { margin-top: .9rem; }
+    pre { margin: .65rem 0 0; padding: .75rem; border: 1px solid var(--line); border-radius: .5rem; background: var(--canvas); color: var(--ink); font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
+    #lawyer-results, #permission, #email-preview { margin-top: 1rem; }
+    #answer-label { overflow-wrap: anywhere; }
+    :is(#review-title, #follow-up-title, #support-title) { scroll-margin-top: 1rem; }
+    .draft-actions { border-block: 1px solid var(--line); padding-block: .85rem; }
+    .mobile-jump { display: none; }
+    @keyframes badge-pop { from { transform: scale(.85); opacity: .6; } to { transform: scale(1); opacity: 1; } }
+    #follow-up, #review, #support, .source-entry {
+      transition: opacity .25s ease, transform .25s ease, display .25s allow-discrete, overflow .25s;
+    }
+    #follow-up[hidden], #review[hidden], #support[hidden], .source-entry[hidden] {
+      opacity: 0; transform: translateY(6px);
+    }
+    @starting-style {
+      #follow-up:not([hidden]), #review:not([hidden]), #support:not([hidden]) { opacity: 0; transform: translateY(6px); }
+    }
+    @media (max-width: 1050px) {
+      .layout { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-areas: "steps steps" "intake draft" "support draft"; }
+      .aside { position: static; padding: 0; }
+      .aside h2 { display: none; }
+      .aside details { padding: .45rem 0 0; border: 0; }
+      .steps { flex-direction: row; gap: .25rem; flex-wrap: wrap; margin: 0; }
+      .steps li { font-size: .87rem; gap: .35rem; padding: .3rem .5rem; }
+      .step-dot { width: .65rem; height: .65rem; }
+    }
+    @media (max-width: 760px) {
+      .wrap { width: calc(100% - 1.5rem); }
+      .layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "steps" "intake" "draft" "support"; }
+      .draft-panel { position: static; max-height: none; overflow: visible; }
+      .masthead { padding-block: .8rem; }
+      .mobile-jump { display: inline-block; }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap">
+      <div class="brand"><span class="mark" aria-hidden="true"></span>Hồ sơ an toàn</div>
+      <p class="help">AI Evidence Assistant · Demo TeaParty</p>
+    </div>
+  </header>
+  <p class="reassure wrap">Kể theo tốc độ của bạn — bạn có thể bỏ qua bất kỳ câu hỏi nào và dừng lại bất cứ lúc nào.</p>
+  <main class="wrap">
+    <div id="error" class="error" role="alert" tabindex="-1" hidden></div>
+    <div id="progress" class="progress" role="status"></div>
+    <div class="layout" id="workspace">
+      <nav class="aside" aria-label="Tiến độ hồ sơ">
+        <h2 id="aside-title">Hồ sơ của bạn</h2>
+        <ol class="steps" aria-label="Các bước chuẩn bị hồ sơ">
+          <li aria-current="step"><span class="step-dot" aria-hidden="true"></span>Nhập liệu</li>
+          <li><span class="step-dot" aria-hidden="true"></span>Rà soát</li>
+          <li><span class="step-dot" aria-hidden="true"></span>Liên hệ</li>
+        </ol>
+        <details><summary>Hướng dẫn nhập</summary><p class="help">Mỗi nguồn có thể là một ghi chú, chữ trích từ ảnh hoặc bản chép lời. Bạn có thể bỏ qua câu hỏi và tải bản nháp dù còn thiếu thông tin.</p></details>
+        <p id="mode" class="help" hidden></p>
+      </nav>
+      <div class="stack">
+        <section id="intake" class="panel" aria-labelledby="intake-title">
+          <button type="button" id="toggle-intake" class="secondary" aria-controls="intake-body" hidden>Xem nội dung đã nhập</button>
+          <div id="intake-body">
+            <h1 id="intake-title">Ghi lại sự việc</h1>
+            <p class="muted">Kể lại những gì bạn nhớ và thêm nguồn đối chiếu nếu có.</p>
+            <form id="intake-form">
+              <label for="narrative">Lời kể của bạn</label>
+              <textarea id="narrative" rows="5" maxlength="4000" required aria-describedby="narrative-help" placeholder="Bạn nhớ điều gì đã xảy ra?"></textarea>
+              <p id="narrative-help" class="help">Trong bản demo, hãy dùng lời kể giả lập đã bỏ thông tin nhận dạng.</p>
+              <div id="source-list"></div>
+              <button type="button" class="secondary" id="add-source">+ Thêm nguồn đối chiếu</button>
+              <div class="actions">
+                <button type="submit">Tạo bản nháp</button>
+                <button type="button" class="secondary" id="example">Dùng ca mẫu</button>
+              </div>
+            </form>
+          </div>
+        </section>
+        <ul id="intake-notices" class="note" aria-live="polite" hidden></ul>
+        <section id="follow-up" class="panel" aria-labelledby="follow-up-title" hidden>
+          <h2 id="follow-up-title" tabindex="-1">Bổ sung thông tin</h2>
+          <p id="question-count" class="help"></p>
+          <form id="answer-form">
+            <label id="answer-label" for="answer"></label>
+            <textarea id="answer" rows="3" required></textarea>
+            <div class="actions">
+              <button type="submit">Lưu câu trả lời</button>
+              <button type="button" class="secondary" id="skip">Bỏ qua câu này</button>
+            </div>
+          </form>
+          <div class="actions">
+            <button type="button" class="secondary" id="review-now">Dừng bổ sung và rà soát</button>
+            <button type="button" class="secondary mobile-jump" id="draft-jump">Xem bản nháp</button>
+          </div>
+        </section>
+      </div>
+      <div class="draft-panel">
+        <div id="draft-empty" class="panel empty-draft">
+          <span class="mark" aria-hidden="true"></span>
+          <h2>Bản nháp hồ sơ</h2>
+          <p class="muted">Tạo bản nháp từ lời kể hoặc dùng ca mẫu. Bản nháp sẽ cập nhật sau mỗi câu trả lời bổ sung.</p>
+        </div>
+        <section id="review" class="panel" aria-labelledby="review-title" hidden>
+          <h2 id="review-title" tabindex="-1">Bản nháp hồ sơ</h2>
+          <p id="draft-label" class="note"></p>
+          <p class="help">Đối chiếu giá trị với nguồn, sửa nếu cần rồi đánh dấu từng trường bạn xác nhận.</p>
+          <div class="actions draft-actions">
+            <button type="button" id="download">Tải bản nháp JSON</button>
+            <button type="button" class="secondary" id="open-help">Xem lựa chọn liên hệ</button>
+            <button type="button" class="secondary" id="resume" hidden>Quay lại câu hỏi bổ sung</button>
+            <button type="button" class="secondary mobile-jump" id="question-jump" hidden>Về câu hỏi đang nhập</button>
+          </div>
+          <div id="fields"></div>
+          <details class="preview">
+            <summary id="preview-summary">Xem văn bản trình bày</summary>
+            <pre id="draft-preview"></pre>
+          </details>
+        </section>
+      </div>
+      <section id="support" class="panel" aria-labelledby="support-title" hidden>
+        <h2 id="support-title" tabindex="-1">Liên hệ hỗ trợ</h2>
+        <button type="button" class="secondary mobile-jump" id="support-back">Về bản nháp</button>
+        <fieldset id="contact-choice" aria-describedby="support-note">
+          <legend>Bạn có muốn liên hệ luật sư không?</legend>
+          <label class="choice"><input type="radio" name="contact" value="yes"> Có, xem danh sách gợi ý</label>
+          <label class="choice"><input type="radio" name="contact" value="no"> Không, dừng tại bản nháp hồ sơ</label>
+        </fieldset>
+        <p id="support-note" class="help">Danh sách luật sư dùng dữ liệu giả lập. Email chỉ được tạo dưới dạng bản nháp để bạn xem và chép.</p>
+        <div id="contact-next" hidden>
+          <form id="lawyer-form" class="form-group">
+            <label for="need">Nhu cầu hỗ trợ (không bắt buộc)</label>
+            <input type="text" id="need" placeholder="Ví dụ: lao động" autocomplete="off">
+            <div class="actions"><button type="submit" class="secondary">Tìm luật sư giả lập</button></div>
+          </form>
+          <div id="lawyer-results" hidden>
+            <label for="lawyer">Luật sư nhận email nháp</label>
+            <select id="lawyer"></select>
+            <p id="lawyer-empty" class="help" hidden>Hiện chưa có luật sư giả lập phù hợp.</p>
+            <p id="lawyer-details" class="help metadata" hidden></p>
+          </div>
+          <form id="email-form" class="form-group" hidden>
+            <fieldset id="form-choice">
+              <legend>Bạn có muốn dùng thông tin từ biểu mẫu không?</legend>
+              <label class="choice"><input type="radio" name="use-form" value="yes" required> Có, để tôi chọn từng trường</label>
+              <label class="choice"><input type="radio" name="use-form" value="no"> Không, dừng trước bước soạn email</label>
+            </fieldset>
+            <fieldset id="permission" hidden>
+              <legend>Chọn các trường được đưa vào email</legend>
+              <div id="share-fields"></div>
+            </fieldset>
+            <button type="submit" id="compose" disabled>Soạn email nháp</button>
+          </form>
+          <div id="email-preview" hidden>
+            <label for="email-text">Email nháp để bạn kiểm tra và chép</label>
+            <textarea id="email-text" rows="10" readonly></textarea>
+            <div class="actions"><button type="button" id="copy" class="secondary">Chép email</button></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="/assets/draft.js"></script>
+  <script>
+    'use strict';
+
+    const byId = id => document.getElementById(id);
+    function activeStep(index) {
+      document.querySelectorAll('.steps li').forEach((item, n) => {
+        if (n === index) item.setAttribute('aria-current', 'step');
+        else item.removeAttribute('aria-current');
+      });
+    }
+    const show = (id, visible = true) => { byId(id).hidden = !visible; };
+    const radio = name => document.querySelector(`input[name="${name}"]:checked`)?.value;
+    function focusSection(heading, target = heading) {
+      heading.scrollIntoView({block: 'start'});
+      target.focus({preventScroll: true});
+    }
+    const rootLabels = {noi_nhan: 'Nơi nhận', tu_cach: 'Tư cách người trình bày'};
+    const documentLabels = {
+      loai_tai_lieu: 'Loại tài liệu', mo_ta_noi_dung: 'Mô tả nội dung', 'nguoi_tao.field': 'Người tạo',
+      thoi_diem_tao: 'Thời điểm tạo', dia_diem_hoan_canh: 'Địa điểm và hoàn cảnh',
+      thiet_bi_ung_dung: 'Thiết bị và ứng dụng', nguoi_co_mat: 'Người có mặt', cach_luu_giu: 'Cách lưu giữ',
+      'tinh_trang_chinh_sua.field': 'Tình trạng chỉnh sửa', lien_quan_su_viec: 'Liên quan đến sự việc'
+    };
+    const providerLabels = {
+      'nguoi_cung_cap.quan_he_hoac_vai_tro': 'Quan hệ hoặc vai trò của người cung cấp',
+      'nguoi_cung_cap.thoi_diem_cung_cap': 'Thời điểm cung cấp',
+      'nguoi_cung_cap.cach_cung_cap': 'Cách cung cấp',
+      'nguoi_cung_cap.nguon_cua_nguoi_cung_cap': 'Nguồn tài liệu của người cung cấp'
+    };
+    const sourceTypes = {user_narrative: 'Lời kể', user_answer: 'Người dùng bổ sung', file_metadata: 'Thông tin tệp', ocr: 'Nội dung trích từ ảnh', asr: 'Bản chép lời', system: 'Hệ thống'};
+    const creatorTypes = {self: 'Tự ghi hoặc chụp', provided_by_other: 'Do người khác cung cấp', unknown: 'Chưa rõ'};
+    const precisionTypes = {exact: 'Chính xác', from_metadata: 'Theo thông tin tệp', user_estimate: 'Người dùng ước lượng', unknown: 'Chưa rõ'};
+    const editTypes = {none_reported: 'Chưa ghi nhận chỉnh sửa', trimmed: 'Cắt', compressed: 'Nén', format_converted: 'Đổi định dạng', re_screenshotted: 'Chụp lại màn hình', merged: 'Ghép', other: 'Khác', unknown: 'Chưa rõ'};
+    const timeFields = new Set(['thoi_diem_tao', 'nguoi_cung_cap.thoi_diem_cung_cap']);
+    const updateDraftView = TeaPartyDraft.mount(byId('fields'));
+    const state = {
+      draft: null, questions: [], skipped: new Set(), history: new Map(), selected: new Set(),
+      lawyers: [], nextEdit: 0, draftRevision: 0, paused: false, supportOpen: false, busy: false, previewDirty: false
+    };
+
+    function element(tag, className, value) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (value !== undefined) node.textContent = value;
+      return node;
+    }
+
+    async function request(path, body) {
+      const response = await fetch(path, {
+        method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        const detail = typeof data.error === 'string' ? data.error : data.detail;
+        throw new Error(typeof detail === 'string' ? detail : `Máy chủ báo lỗi (${response.status}).`);
+      }
+      return data;
+    }
+
+    async function perform(message, work) {
+      if (state.busy) return;
+      const active = document.activeElement;
+      let focusTarget;
+      state.busy = true;
+      byId('workspace').inert = true;
+      show('error', false);
+      byId('progress').textContent = message;
+      try {
+        focusTarget = await work();
+      } catch (error) {
+        byId('error').textContent = `Không thể hoàn tất. ${error.message || ''} Bạn có thể thử lại.`;
+        show('error');
+        focusTarget = byId('error');
+      } finally {
+        state.busy = false;
+        byId('workspace').inert = false;
+        byId('progress').textContent = '';
+        const target = focusTarget || active;
+        if (target.isConnected) target.focus();
+      }
+    }
+
+    function makeField(parent, key, path, label, title) {
+      return {parent, key, path, label, title, field: parent[key]};
+    }
+
+    function rootFields() {
+      return Object.entries(rootLabels).map(([key, label]) => makeField(state.draft, key, key, label, label));
+    }
+
+    function documentFields(document, index) {
+      const labels = {...documentLabels};
+      if (document.nguoi_cung_cap || document.nguoi_tao.kind === 'provided_by_other') {
+        document.nguoi_cung_cap ??= {};
+        Object.assign(labels, providerLabels);
+      }
+      return Object.entries(labels).map(([key, label]) => {
+        const parts = key.split('.');
+        const parent = parts.length === 2 ? document[parts[0]] : document;
+        return makeField(parent, parts.at(-1), `tai_lieu[${index}].${key}`, label, `Tài liệu ${index + 1} · ${label}`);
+      });
+    }
+
+    function allFields() {
+      return [...rootFields(), ...state.draft.tai_lieu.flatMap(documentFields)];
+    }
+
+    function resolved(field) {
+      return field?.status === 'provided' && !!field.value?.trim()
+        && field.source_refs.some(source => source.source_id.trim());
+    }
+
+    function currentQuestion() {
+      return state.paused ? undefined : state.questions.find(question => !state.skipped.has(question.field_path));
+    }
+
+    function applyDraft(result) {
+      state.draft = result.draft;
+      state.questions = result.questions || result.draft.questions_for_user;
+      state.draft.questions_for_user = state.questions;
+      state.previewDirty = false;
+      byId('draft-preview').textContent = result.output || '';
+      byId('mode').textContent = result.mode === 'fake' ? 'Đang dùng chế độ trích xuất mô phỏng.' : 'Đang dùng chế độ trích xuất AI.';
+      show('mode', Boolean(result.mode));
+    }
+
+    function renderQuestion(clearAnswer = true) {
+      const question = currentQuestion();
+      show('follow-up', Boolean(question));
+      show('resume', state.paused && state.questions.length > 0);
+      show('question-jump', Boolean(question));
+      if (!question) return;
+      const left = state.questions.filter(item => !state.skipped.has(item.field_path)).length;
+      byId('question-count').textContent = `Còn ${left} câu có thể bổ sung. Bạn có thể bỏ qua nếu chưa biết.`;
+      byId('answer-label').textContent = question.question;
+      if (clearAnswer) byId('answer').value = '';
+    }
+
+    function saveField(entry, value) {
+      const previousQuestion = currentQuestion()?.field_path;
+      const updated = {
+        value: value || null, status: value ? 'provided' : 'missing', user_confirmed: false,
+        source_refs: value ? [{source_type: 'user_answer', source_id: `U-edit-${++state.nextEdit}`}] : []
+      };
+      if (timeFields.has(entry.path.split('].').at(-1))) updated.precision = 'unknown';
+      remember(entry.path, entry.field);
+      entry.parent[entry.key] = updated;
+      updateQuestions(entry, updated);
+      state.previewDirty = true;
+      byId('preview-summary').parentElement.open = false;
+      invalidateShare(entry.path);
+      renderReview();
+      renderQuestion(previousQuestion !== currentQuestion()?.field_path);
+    }
+
+    function confirmField(entry, confirmed) {
+      entry.field.user_confirmed = confirmed;
+      invalidateShare(entry.path);
+      renderReview();
+    }
+
+    function remember(path, field) {
+      if (!field) return;
+      const earlier = state.history.get(path) || [];
+      earlier.push(structuredClone(field));
+      state.history.set(path, earlier);
+    }
+
+    function updateQuestions(entry, updated) {
+      state.questions = state.questions.filter(item => item.field_path !== entry.path);
+      state.skipped.delete(entry.path);
+      if (!resolved(updated)) {
+        state.questions.push({field_path: entry.path, question: `Bạn có thể bổ sung thông tin cho mục ${entry.title} không?`, skippable: true});
+      }
+      state.draft.questions_for_user = state.questions;
+    }
+
+    function renderReview() {
+      show('draft-empty', false);
+      show('review');
+      byId('draft-label').textContent = state.draft.draft_label;
+      const documents = state.draft.tai_lieu.map((entry, index) => {
+        const title = entry.ten_tep ? `Tài liệu ${index + 1} · ${entry.ten_tep}` : `Tài liệu ${index + 1}`;
+        const metadata = [`Nguồn gốc tài liệu: ${creatorTypes[entry.nguoi_tao.kind]}`];
+        const edits = entry.tinh_trang_chinh_sua.edits.map(edit => editTypes[edit]).join(', ');
+        if (edits) metadata.push(`Chỉnh sửa được ghi nhận: ${edits}`);
+        return {
+          id: entry.file_id, title, metadata, initiallyOpen: index === 0,
+          fields: documentFields(entry, index),
+          footer: !entry.nguoi_cung_cap && 'Thông tin người cung cấp áp dụng cho tài liệu do người khác cung cấp.'
+        };
+      });
+      updateDraftView(state.draftRevision, {
+        groups: [{id: 'general', title: 'Thông tin chung', initiallyOpen: true, fields: rootFields()}, ...documents],
+        history: state.history, resolved, sourceTypes, precisionTypes, onSave: saveField, onConfirm: confirmField
+      });
+    }
+
+    function moveToReview() {
+      activeStep(1);
+      state.paused = true;
+      renderQuestion();
+      return byId('review-title');
+    }
+
+    function clearEmail() {
+      byId('email-text').value = '';
+      show('email-preview', false);
+    }
+
+    function invalidateShare(path) {
+      state.selected.delete(path);
+      clearEmail();
+      if (state.supportOpen && radio('use-form') === 'yes') renderShareFields();
+    }
+
+    function resetSupport() {
+      show('support', false);
+      show('contact-next', false);
+      show('lawyer-results', false);
+      show('lawyer-details', false);
+      show('email-form', false);
+      show('permission', false);
+      byId('lawyer').replaceChildren();
+      byId('lawyer-form').reset();
+      byId('email-form').reset();
+      for (const choice of byId('contact-choice').querySelectorAll('input')) choice.checked = false;
+      clearEmail();
+      state.selected.clear();
+      state.lawyers = [];
+      state.supportOpen = false;
+    }
+
+    function updateCompose() {
+      const useForm = radio('use-form');
+      byId('compose').disabled = radio('contact') !== 'yes' || !byId('lawyer').value
+        || useForm !== 'yes' || !state.selected.size;
+    }
+
+    function renderShareFields() {
+      const list = byId('share-fields');
+      list.replaceChildren();
+      const eligible = allFields().filter(({field}) => field?.user_confirmed && resolved(field));
+      const paths = new Set(eligible.map(({path}) => path));
+      state.selected = new Set([...state.selected].filter(path => paths.has(path)));
+      if (!eligible.length) list.append(element('p', 'help', 'Hãy xác nhận trường bạn muốn chia sẻ trong phần rà soát bản nháp.'));
+      for (const {path, title, field} of eligible) {
+        const label = element('label', 'choice');
+        const input = element('input');
+        input.type = 'checkbox';
+        input.checked = state.selected.has(path);
+        label.append(input, document.createTextNode(`${title}: ${field.value}`));
+        list.append(label);
+        input.addEventListener('change', () => {
+          if (input.checked) state.selected.add(path);
+          else state.selected.delete(path);
+          clearEmail();
+          updateCompose();
+        });
+      }
+      updateCompose();
+    }
+
+    let sourceNumber = 0;
+    byId('add-source').addEventListener('click', () => {
+      const number = ++sourceNumber;
+      const group = element('fieldset', 'source-entry');
+      group.append(element('legend', '', `Nguồn đối chiếu ${number}`));
+      const kind = element('select');
+      kind.id = `source-kind-${number}`;
+      for (const [type, label] of Object.entries({text:'Ghi chú hoặc văn bản',image:'Chữ trích từ ảnh',audio:'Bản chép lời âm thanh'})) {
+        kind.add(new Option(label, type));
+      }
+      const kindLabel = element('label', '', 'Loại nguồn');
+      kindLabel.htmlFor = kind.id;
+      const content = element('textarea');
+      content.required = true;
+      content.rows = 3;
+      content.id = `source-text-${number}`;
+      const contentLabel = element('label', '', 'Nội dung trích nguyên văn');
+      contentLabel.htmlFor = content.id;
+      const remove = element('button', 'secondary', 'Bỏ nguồn này');
+      remove.type = 'button';
+      remove.onclick = () => { group.remove(); byId('add-source').focus(); };
+      group.append(kindLabel, kind, contentLabel, content, remove);
+      byId('source-list').append(group);
+      kind.focus();
+    });
+    const intakeBody = byId('intake-body');
+    function collapseIntake(collapsed) {
+      intakeBody.hidden = collapsed;
+      const toggle = byId('toggle-intake');
+      toggle.hidden = false;
+      toggle.setAttribute('aria-expanded', String(!collapsed));
+      toggle.textContent = collapsed ? 'Xem nội dung đã nhập' : 'Thu gọn nội dung đã nhập';
+    }
+    byId('toggle-intake').onclick = () => collapseIntake(!intakeBody.hidden);
+    byId('example').addEventListener('click', () => {
+      if ((byId('narrative').value.trim() || byId('source-list').childElementCount) &&
+          !window.confirm('Thay nội dung đang nhập bằng ca mẫu?')) return;
+      byId('source-list').replaceChildren();
+      byId('narrative').value = 'demo';
+      byId('intake-form').requestSubmit();
+    });
+
+    byId('intake-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const statement = byId('narrative').value.trim();
+      if (!statement) return;
+      if (state.draft && !window.confirm('Tạo lại bản nháp từ nội dung đang nhập? Các chỉnh sửa trong bản nháp hiện tại sẽ được thay thế.')) return;
+      perform('Đang tạo bản nháp…', async () => {
+        const sources = [...byId('source-list').children].map(group => ({
+          kind: group.querySelector('select').value, text: group.querySelector('textarea').value.trim()
+        }));
+        if (sources.some(source => !source.text)) throw new Error('Hãy điền nội dung hoặc bỏ nguồn đang trống.');
+        const text = sources.length ? JSON.stringify({statement, sources}) : statement;
+        if ([...text].length > 4000) throw new Error('Đầu vào vượt giới hạn 4.000 ký tự. Hãy rút ngắn lời kể hoặc đoạn trích.');
+        const notices = byId('intake-notices');
+        notices.replaceChildren();
+        show('intake-notices', false);
+        const result = await request('/ask', {text, structured: true});
+        if (!result.draft) throw new Error('Chưa nhận được biểu mẫu từ máy chủ.');
+        collapseIntake(true);
+        activeStep(1);
+        state.draftRevision++;
+        byId('preview-summary').parentElement.open = false;
+        document.querySelector('.draft-panel').scrollTop = 0;
+        for (const message of result.notices || []) notices.append(element('li', '', message));
+        show('intake-notices', notices.childElementCount > 0);
+        state.skipped.clear();
+        state.history.clear();
+        state.nextEdit = 0;
+        state.paused = false;
+        resetSupport();
+        applyDraft(result);
+        renderReview();
+        renderQuestion();
+        return currentQuestion() ? byId('follow-up-title') : moveToReview();
+      });
+    });
+
+    byId('answer-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const question = currentQuestion();
+      const text = byId('answer').value.trim();
+      if (!question || !text) return;
+      perform('Đang cập nhật câu trả lời…', async () => {
+        const {field_path} = question;
+        const preceding = new Map(allFields().map(entry => [entry.path, entry.field]));
+        const result = await request('/follow-up', {draft: state.draft, field_path, text});
+        applyDraft(result);
+        for (const {path, field} of allFields()) {
+          if (JSON.stringify(preceding.get(path)) !== JSON.stringify(field)) {
+            remember(path, preceding.get(path));
+            invalidateShare(path);
+          }
+        }
+        renderReview();
+        renderQuestion();
+        return currentQuestion() ? byId('answer') : moveToReview();
+      });
+    });
+
+    byId('skip').addEventListener('click', () => {
+      state.skipped.add(currentQuestion().field_path);
+      renderQuestion();
+      (currentQuestion() ? byId('answer') : moveToReview()).focus();
+    });
+
+    byId('review-now').addEventListener('click', () => focusSection(moveToReview()));
+    byId('draft-jump').addEventListener('click', () => focusSection(byId('review-title')));
+    byId('question-jump').addEventListener('click', () => focusSection(byId('follow-up-title'), byId('answer')));
+
+    byId('resume').addEventListener('click', () => {
+      activeStep(1);
+      state.skipped.clear();
+      state.paused = false;
+      renderQuestion();
+      focusSection(byId('follow-up-title'));
+    });
+
+    byId('preview-summary').addEventListener('click', event => {
+      if (!state.previewDirty || event.currentTarget.parentElement.open) return;
+      event.preventDefault();
+      perform('Đang cập nhật văn bản trình bày…', async () => {
+        const {questions, output} = await request('/review', {draft: state.draft});
+        state.questions = questions;
+        state.draft.questions_for_user = questions;
+        state.previewDirty = false;
+        byId('draft-preview').textContent = output;
+        renderQuestion(false);
+        byId('preview-summary').parentElement.open = true;
+      });
+    });
+
+    byId('download').addEventListener('click', () => {
+      const file = new Blob([JSON.stringify(state.draft, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(file);
+      const link = element('a');
+      link.href = url;
+      link.download = 'ho-so-an-toan.json';
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+
+    byId('open-help').addEventListener('click', () => {
+      activeStep(2);
+      state.paused = true;
+      renderQuestion();
+      state.supportOpen = true;
+      show('support');
+      focusSection(byId('support-title'));
+    });
+    byId('support-back').addEventListener('click', () => focusSection(moveToReview()));
+
+    byId('contact-choice').addEventListener('change', event => {
+      const wantsContact = event.target.value === 'yes';
+      show('contact-next', wantsContact);
+      clearEmail();
+      if (!wantsContact) {
+        byId('email-form').reset();
+        show('permission', false);
+        state.selected.clear();
+        updateCompose();
+      }
+    });
+
+    byId('lawyer-form').addEventListener('submit', event => {
+      event.preventDefault();
+      if (radio('contact') !== 'yes') return;
+      perform('Đang tra danh sách giả lập…', async () => {
+        const {lawyers} = await request('/lawyers', {nhu_cau: byId('need').value.trim()});
+        state.lawyers = lawyers;
+        const select = byId('lawyer');
+        const placeholder = element('option', '', 'Chọn luật sư');
+        placeholder.value = '';
+        select.replaceChildren(placeholder);
+        for (const lawyer of lawyers) {
+          const option = element('option', '', lawyer.name);
+          option.value = lawyer.id;
+          select.append(option);
+        }
+        show('lawyer-results');
+        show('lawyer-details', false);
+        show('lawyer-empty', lawyers.length === 0);
+        select.disabled = lawyers.length === 0;
+        show('email-form', false);
+        byId('email-form').reset();
+        show('permission', false);
+        state.selected.clear();
+        clearEmail();
+        updateCompose();
+        return lawyers.length ? select : byId('need');
+      });
+    });
+
+    byId('lawyer').addEventListener('change', () => {
+      const lawyer = state.lawyers.find(item => item.id === byId('lawyer').value);
+      const details = [lawyer?.email, lawyer?.specialties?.join(', ')].filter(Boolean);
+      byId('lawyer-details').textContent = details.join(' · ');
+      show('lawyer-details', details.length > 0);
+      show('email-form', Boolean(lawyer));
+      byId('email-form').reset();
+      show('permission', false);
+      state.selected.clear();
+      clearEmail();
+      updateCompose();
+    });
+
+    byId('form-choice').addEventListener('change', event => {
+      const useForm = event.target.value === 'yes';
+      show('permission', useForm);
+      state.selected.clear();
+      clearEmail();
+      if (useForm) renderShareFields();
+      updateCompose();
+    });
+
+    byId('email-form').addEventListener('submit', event => {
+      event.preventDefault();
+      if (byId('compose').disabled) return;
+      perform('Đang soạn email nháp…', async () => {
+        const {email} = await request('/email-draft', {
+          draft: state.draft, lawyer_id: byId('lawyer').value,
+          allowed_paths: [...state.selected], contact: true, use_form: true
+        });
+        byId('email-text').value = email;
+        show('email-preview');
+        return byId('email-text');
+      });
+    });
+
+    byId('copy').addEventListener('click', async () => {
+      const email = byId('email-text');
+      try {
+        await navigator.clipboard.writeText(email.value);
+        byId('progress').textContent = 'Đã chép email nháp.';
+      } catch {
+        email.focus();
+        email.select();
+        byId('progress').textContent = 'Đã chọn nội dung email. Bạn có thể dùng lệnh sao chép của thiết bị.';
+      }
+    });
+  </script>
+</body>
+</html>

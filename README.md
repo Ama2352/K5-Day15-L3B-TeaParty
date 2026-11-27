@@ -101,11 +101,18 @@ python -m uvicorn --app-dir codebase web:app --host 127.0.0.1 --port 8000
 
 Mở `http://127.0.0.1:8000/docs` để thử `POST /ask` với `{"text":"..."}`. Endpoint `GET /health` kiểm tra tiến trình web và không gọi model. Bản demo hiện dùng AI giả theo cấu hình mặc định của khung.
 
+Mở `http://127.0.0.1:8000/` và chọn **Dùng ca mẫu** để thử giao diện. FastAPI phục vụ bundle React có sẵn trong repo. Khi sửa [mã nguồn phần rà soát](codebase/draft.jsx), cập nhật bundle bằng hai lệnh sau từ thư mục gốc. Trên Windows PowerShell, có thể dùng `npm.cmd` thay cho `npm`.
+
+```sh
+npm --prefix codebase ci
+npm --prefix codebase run build
+```
+
 GitHub Actions kiểm tra các thay đổi liên quan đến runtime, dữ liệu, bộ thử và pipeline trên PR vào `main` hoặc khi push lên `main`. Trình kiểm tra bài nộp in cảnh báo trong log. Smoke test CLI và test API dùng `MODEL_PROVIDER=fake`.
 
-Để kết nối Railway lần đầu, dùng project dành riêng cho TeaParty. Sau khi workflow có trên `main` và tài khoản Railway có quyền truy cập repo, chạy `railway login`, `railway link`, `railway config plan` rồi `railway config apply`. Cấu hình trong `.railway/railway.ts` nối GitHub `main`, chạy Uvicorn trên `$PORT` và kiểm tra `/health`.
+Service `teaparty-demo` lấy code từ GitHub `main`, dùng thư mục gốc repo làm **Root Directory**. [railpack.json](railpack.json) khai báo lệnh chạy Uvicorn trên `$PORT` để Railpack lập kế hoạch build. [railway.toml](railway.toml) chọn builder, các đường dẫn kích hoạt deploy và health check `/health`. Cấu hình tạo project và liên kết nguồn nằm trong [.railway/railway.ts](.railway/railway.ts).
 
-Trong service `teaparty-demo`, bật **Wait for CI** và đặt **Watch Paths** theo các đường dẫn `/codebase/**`, `/data/**`, `/requirements.txt`. Tạo Railway domain trong **Public Networking** nếu nhóm cần URL demo. Khi đã triển khai model thật, đặt biến model và API key trong Railway Variables.
+Khi đưa demo lên Railway, bật **Wait for CI** và tạo domain trong **Public Networking**. Đặt `MODEL_PROVIDER=fake` cho demo mô phỏng. Để dùng DeepSeek, đặt `MODEL_PROVIDER=openai`, `MODEL_NAME=deepseek-flash` và `API_KEY` trong **Variables** của service. Mở `/` để dùng giao diện và `/health` để kiểm tra tiến trình.
 
 ## Bản chạy thử — viết ở đâu
 
