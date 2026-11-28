@@ -131,7 +131,7 @@ Hội thoại nhiều lượt (người dùng trả lời câu hỏi rồi đi�
 | T3-2 | Điền `eval/README.md` mục 1–4 (đang trống từ CP2) | `eval/README.md` | — | Đủ 4 mục | CP3 |
 | T3-3 | Điền `cost/personas.yaml` bằng số có nguồn (hoặc ghi *(tự ước tính)*), giá DeepSeek có link + ngày xem, ≥ 2 mức model | `cost/personas.yaml` | — | Không còn dòng "(ví dụ)" | CP3 |
 | T3-4 | Khi T1-3 đã lên `main`: `python run.py eval` → chấm cột `pass` theo `metric_spec.yaml` → `python run.py score` → điền lượt 1 vào §7 và `eval/report.md` | `eval/*`, `spec.md` | T1-3, T3-1 | Có `eval/run-1.csv` với model thật, có số lượt 1 | CP3 |
-| T3-5 | `python run.py simulate --try` | `cost/` | T1-1, T3-3 | Có `cost/simulate-try.csv` | CP3 |
+| T3-5 | `python run.py simulate --try` | `cost/` | T1-1, T3-3 | Đã chạy, có run ID trong `cost/cost-estimate.md` (`cost/simulate-try*` không commit theo `.gitignore` của khung) | CP3 |
 | T3-6 | Tạo `data/luat_su.json` **giả lập** (tên hư cấu, ghi rõ `synthetic`) và thêm mục vào `DATA_CARD.md` | `data/` | — | N2 đọc được | CP4 |
 | T3-7 | Dán nội dung §4 từ N1, N2; viết §8, §9 (dữ liệu nhạy cảm: chỉ gửi dữ liệu giả lập lên API), §10 changelog | `spec.md` | T1-7 | §0–§10 không còn `__` trừ chỗ chưa có số thật | CP4 |
 | T3-8 | Lượt 2 sau T1-6 → `report.md` so sánh lượt 1 với lượt 2; `simulate` đủ 50 phiên → `cost-estimate.md` | `eval/`, `cost/` | T1-6 | Có `run-2.csv`, `simulate-N.csv` | CP4 |
