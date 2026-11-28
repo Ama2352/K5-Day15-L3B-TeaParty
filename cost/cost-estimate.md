@@ -19,6 +19,8 @@
 
 ## 2. Kết quả mô phỏng
 
+Lượt thử trước đó (T3-5): `python run.py simulate --try` → `simulate-try@20261128-032804`, 10 phiên, token đo từ API `deepseek-chat`. Theo `.gitignore` của khung, lượt `--try` không được tính nên `cost/simulate-try*` và `traces/simulate-try.jsonl` không đưa vào repo.
+
 Lượt mô phỏng: `cost/simulate-1.csv` · run ID `simulate-1@20261128-032943` · 50 phiên · seed 42 · 0/50 phiên lỗi
 
 | Persona | Số phiên mô phỏng | Lượt hỏi / phiên | Token vào / phiên | Token ra / phiên | Gọi model / phiên | Gọi công cụ / phiên |
