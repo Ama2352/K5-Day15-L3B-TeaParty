@@ -35,6 +35,8 @@ Vai trò dưới đây là đề xuất CP2. Điền tên khi cả nhóm chốt.
 
 ## Bàn giao backend và giao diện
 
+- **Reflection Người 2:** [Bản của Hồ Nguyễn Minh Sang](../reflection/ho-nguyen-minh-sang.md) đã đối chiếu T2-1 đến T2-8 với các commit, ghi cách dùng Codex và bài học từ B12 theo mẫu BTC.
+
 - **Người 2 · Hồ Nguyễn Minh Sang:** chuyển luật xếp câu bổ sung vào `cau_hoi_bo_sung` để CLI và web cùng dùng. Ưu tiên mâu thuẫn, chỗ chưa rõ, rồi trường thiếu, tối đa 8 câu. Đã thêm ca kiểm thứ tự, gộp mâu thuẫn và hỏi đúng đoạn không nghe rõ. Xem [công cụ](../codebase/tools.py) và [test](../codebase/test_tools.py).
 
 Giao diện trên nhánh `n2-backend` hiển thị câu hỏi và bản nháp cạnh nhau trên desktop. Trên điện thoại, nút chuyển giữa hai phần giữ nội dung đang gõ. [Giao diện](../codebase/static/index.html) dùng [React cho phần rà soát](../codebase/draft.jsx). FastAPI phục vụ bundle đi kèm repo. Đã thử trên Chrome từ ca mẫu đến hỏi bổ sung, chỉnh sửa, tải JSON và soạn email với danh mục giả lập. Xem [cách chạy và build](../README.md#demo-web-và-railway). Bước tiếp theo của Người 2 là xác minh bản triển khai Railway.

@@ -1,0 +1,22 @@
+# Reflection — Hồ Nguyễn Minh Sang
+
+## 1. Vai trò + phần mình làm
+
+- Mình là đội trưởng TeaParty và là Người 2 phụ trách backend, giao diện và triển khai. Ở CP1 mình chốt phạm vi và Canvas. Sang CP2 mình dựng lệnh `demo` với dữ liệu giả lập để nhóm thử luồng có hai nguồn ghi ngày khác nhau. [Phân công](../TEAMS.md) · [Canvas `f29e5a3`](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/commit/f29e5a3) · [Demo CP2 `d9897d7`](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/commit/d9897d7)
+- **T2-1 đến T2-5:** Mình viết công cụ kiểm schema, tìm trường thiếu hoặc mâu thuẫn, soạn câu hỏi có thể bỏ qua và trình bày bản nháp có dẫn nguồn. Mình thêm test kiểm phần này bằng hồ sơ mẫu và các trường hợp sai schema. [TASKS.md](../docs/TASKS.md#người-2--backend--giao-diện) · [Backend CP3 `b5ef8fa`](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/commit/b5ef8fa) · [Test công cụ](../codebase/test_tools.py)
+- **T2-6:** Mình nối FastAPI với phần trích xuất và `dien_lai` của Người 1, thống nhất đầu vào bổ sung theo `field_path` và `answer`. Mình đưa phần rà soát sang React để người dùng có thể xem nguồn, sửa và xác nhận từng trường rồi tải JSON. [Tích hợp N1 `84ce680`](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/commit/84ce680) · [Giao diện React `065afbb`](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/commit/065afbb)
+- **T2-7:** Mình tách hai quyết định trên web: có muốn liên hệ luật sư và có muốn dùng hồ sơ đã soạn khi liên hệ. Danh mục dùng dữ liệu giả lập. Email hiện ở dạng nháp và chỉ chứa các trường người dùng đã xác nhận và chọn chia sẻ. [Luồng đồng ý `b5ef8fa`](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/commit/b5ef8fa) · [API web](../codebase/web.py)
+- **T2-8:** Mình cấu hình GitHub Actions và Railway, thêm `/health` để kiểm tra tiến trình. Khi Railpack báo thiếu lệnh khởi động, mình khai báo lệnh Uvicorn dùng cổng `$PORT` trong `railpack.json`. [CI `2200782`](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/commit/2200782) · [Deploy `50bf69a`](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/commit/50bf69a) · [Sửa khởi động `32656af`](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/commit/32656af)
+- Sau khi nối các phần của nhóm, mình chuyển luật xếp câu hỏi vào `cau_hoi_bo_sung` để CLI và web áp dụng cùng thứ tự: mâu thuẫn, chỗ chưa rõ, rồi trường thiếu. Hàm gộp câu trùng và giới hạn tám câu mỗi lượt. [PR #28 · `547cb43`](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/pull/28)
+
+## 2. AI hỗ trợ mình thế nào
+
+- Mình dùng Codex để đối chiếu nhánh backend với luồng của Người 1, rà nơi CLI và web tạo câu hỏi, rồi chuyển phần xử lý dùng chung sang `tools.py`. [PR #28](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/pull/28)
+- Bản chuyển đầu tiên giữ nguyên thứ tự xử lý cũ. Khi rà lại, mình thấy nhánh tìm cách gọi người chạy trước nhánh nhận diện đoạn nghe không rõ. Với chữ “mặc” trong ngoặc kép, thứ tự đó vẫn có thể sinh câu hỏi sai. Mình chỉnh để dấu `[không nghe rõ]` trong nội dung ghi âm được xử lý trước. [Logic câu hỏi](../codebase/tools.py)
+- Mình dùng ca có nhiều trường thiếu, hai mâu thuẫn trùng và một đoạn ghi âm không rõ để kiểm cả nội dung lẫn thứ tự câu hỏi. Test hồi quy bắt lỗi trước khi sửa. Sau khi sửa, 36/36 test qua ở chế độ giả và CLI với web sinh cùng danh sách câu hỏi trên ca mẫu. [Test công cụ](../codebase/test_tools.py) · [Kết quả kiểm trong PR](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/pull/28)
+
+## 3. Một câu thử trượt của nhóm và bài học của mình
+
+- **B12, lượt 2:** Bản chép lời giả lập có dấu `[không nghe rõ]`. Bản nháp đã đánh dấu đoạn đó là chưa rõ nhưng câu hỏi lại là “mặc là ai?”. Ca trượt vì người dùng chưa được hỏi về phần âm thanh bị thiếu. [Phiếu chấm lượt 2](../eval/run-2.csv) · [Phân tích lỗi](../eval/report.md)
+- Ở lượt 3, B12 qua vì hệ thống hỏi đúng về đoạn không nghe rõ và cho phép bỏ qua. Lượt này chạy trước PR #28. Phần mình làm sau đó đưa cách hỏi vào công cụ chung và bổ sung test để kiểm hành vi đó ở những lần sửa tiếp theo. [Phiếu chấm lượt 3](../eval/run-3.csv) · [PR #28](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/pull/28)
+- Bài học của mình là phải kiểm cả trạng thái của trường và hành động hệ thống mời người dùng làm tiếp. Với một bản ghi âm bị mất chữ, câu hỏi nên chỉ đúng đoạn cần làm rõ và cho phép người dùng để trống. Ca hồi quy giữ cả chữ “mặc” trong ngoặc kép lẫn dấu `[không nghe rõ]` để kiểm đúng tình huống dễ hỏi nhầm. [Ca hồi quy](../codebase/test_tools.py)
