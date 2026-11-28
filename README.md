@@ -130,14 +130,14 @@ Khi đưa demo lên Railway, bật **Wait for CI** và tạo domain trong **Publ
 
 | Thành phần | Thật / Giả | Ghi chú |
 |---|---|---|
-| Lời gọi AI ở quyết định trung tâm | **Thật** (bắt buộc từ CP3) | Model: ____ |
+| Lời gọi AI ở quyết định trung tâm | **Thật** (bắt buộc từ CP3) | Model: DeepSeek `deepseek-chat` (định dạng OpenAI, chế độ JSON); chỉ `trich_xuat` gọi AI |
 |  |  |  |
 
 ## Dùng AI vào việc gì
 
 2–3 dòng (bắt buộc): nhóm dùng công cụ AI nào để làm gì, người kiểm lại phần nào. Chi tiết: [docs/ai-usage.md](docs/ai-usage.md). Coding agent đọc [AGENTS.md](AGENTS.md).
 
-____
+Nhóm dùng Claude Code để viết và sửa code (`agent.py`, `tools.py`, web), soạn prompt trích xuất và viết test. Người dùng đọc lại code, chạy test trước khi merge và chấm cột `pass` bằng tay. Chỉ dữ liệu giả lập được gửi lên API.
 
 ## File mẫu — điền ở bước nào
 
