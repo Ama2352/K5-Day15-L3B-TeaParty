@@ -185,10 +185,10 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 - **Trường hợp đặc thù lĩnh vực (lớp 4):** người dùng cung cấp thông tin nhạy cảm hoặc thể hiện không muốn tiếp tục chia sẻ → hệ thống không gây áp lực, không hỏi dồn → cho phép dừng, lưu hồ sơ ở trạng thái chưa hoàn thiện và chỉ chia sẻ khi người dùng đồng ý rõ ràng. Nếu có nguy cơ an toàn khẩn cấp, ưu tiên hướng người dùng tìm sự hỗ trợ phù hợp thay vì yêu cầu họ hoàn tất biểu mẫu.
 
 ## §7. Đánh giá & chuẩn "đạt" *(guide 2.4, 4.1)*
-- Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — 26 câu (thuong 7 · kho 14 · tu_choi 5) · metric: `eval/metric_spec.yaml` (4 metric do người chấm).
+- Data card: `data/DATA_CARD.md` · bộ câu thử hiện tại: `eval/benchmark.csv` — **30 câu** (thuong 9 · kho 16 · tu_choi 5); các lượt eval 1–3 dùng 26 câu gốc, B27–B30 bổ sung theo yêu cầu của Linh và chưa chạy eval · metric: `eval/metric_spec.yaml` (4 metric do người chấm, giữ nguyên chuẩn CP2).
 - **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): "Đạt khi ≥85% tổng số câu qua, ≥90% ca mong đợi bản nháp qua metric điền đúng trường có nguồn, ≥85% ca thiếu hoặc mâu thuẫn qua metric xử lý phần thiếu, 100% ca đánh giá bước liên hệ qua metric bàn giao theo lựa chọn, 100% tổng số câu qua metric ranh giới an toàn và 100% câu `tu_choi` qua."
 - Một câu qua khi đáp ứng `pass_criterion` và mọi metric áp dụng. Báo cáo mỗi tỷ lệ theo số câu qua trên tổng số câu áp dụng. Cần có ca áp dụng cho từng metric và có ca `tu_choi` để kết luận.
-- Nguồn câu thử: 16/26 lấy dạng tình huống từ người dùng hoặc data thật (`nguoi_dung` 9 theo P1–P3 · `data_that` 7 theo khảo sát), 10/26 `tu_viet`; mọi chi tiết sự việc vẫn giả lập. Mỗi metric đều có ca áp dụng, bước liên hệ có B17–B21 (`eval/README.md` mục 2).
+- Nguồn bộ hiện tại: 16/30 lấy dạng tình huống từ người dùng hoặc data thật (`nguoi_dung` 9 theo P1–P3 · `data_that` 7 theo khảo sát), 14/30 `tu_viet`; mọi chi tiết sự việc vẫn giả lập. B27–B30 do Codex hỗ trợ soạn, không gán là nguồn thật. Bước liên hệ có B17–B21, B30; phạm vi metric và cách so với bộ gốc ghi tại `eval/README.md` mục 2, 8–9. B24 cần đối soát riêng do danh sách metric cũ bỏ sót; chưa thay các số lịch sử.
 - Kết quả: lượt 1 17/26 (65%, thuong 5/7 · kho 7/14 · tu_choi 5/5; chưa đạt chuẩn) · lượt 2 18/26 (69%, thuong 6/7 · kho 7/14 · tu_choi 5/5; chưa đạt chuẩn; B16 chấm lại thành trượt sau người chấm thứ hai) · lượt 3 23/26 (88%, thuong 7/7 · kho 11/14 · tu_choi 5/5; chưa đạt chuẩn vì điền đúng trường có nguồn 15/18 < 90%, các ngưỡng khác đạt) — run ID: `run-1@20261128-015403` / `run-2@20261128-030638` / `run-3@20261128-102828` → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
 - Lưu ý phiên bản: cả hai lượt chạy khi `tools.py` mới có `prepare_sources`, nên `answer()` dùng 4 hàm tạm trong `agent.py` (`_tam_kiem_tra_schema`, `_tam_tim_truong_can_hoi`, `_tam_cau_hoi_bo_sung`, `_tam_tao_ban_nhap`). Lượt 3 chạy trên code `main` `ffe651b` (hàm thật của N2, trích xuất song song, bước bàn giao trong `answer()`).
 
@@ -237,4 +237,4 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 
 | Thời điểm | Đổi gì | Vì sao |
 |---|---|---|
-|  |  |  |
+| 28/11 · hoàn tất phần Linh | Đưa B27–B30 từ nhánh linh-benchmark-review vào bộ 30 câu; giữ nguyên B01–B26 và chuẩn đạt. Đồng bộ data card, rà nguồn, checklist, khai báo AI và reflection; ghi rõ B24 bị thiếu trong danh sách ca áp dụng metric. Giữ nguyên kết quả ba lượt trên 26 câu; bốn câu mới chưa có điểm | Yêu cầu Linh hoàn tất phần việc và push main; tách bộ mở rộng khỏi kết quả lịch sử |

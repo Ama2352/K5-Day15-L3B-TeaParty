@@ -9,11 +9,43 @@
 | Mục | Nội dung |
 |---|---|
 | Dùng để làm gì | Đo bản chạy thử theo `eval/metric_spec.yaml`; đầu vào cho mô phỏng chi phí. |
-| Nguồn và cách tạo | Mọi chi tiết sự việc đều `synthetic`. B01–B10 (`tu_viet`) do nhóm tự dựng, đưa vào repo ở commit `2d787a3`. B11–B26 (thêm 28/11) lấy **dạng tình huống** từ nguồn thật: 9 câu `nguoi_dung` theo P2 (5 câu), P3 (B23, B24) và P1 (B25, B26) (`evidence/interviews/`), 7 câu `data_that` theo câu trả lời khảo sát (`evidence/survey/results.csv`, ghi số câu và mã phiếu ở cột `source`); ngày, lời thoại, OCR và chép lời trong câu vẫn là giả lập. B11–B26 soạn cùng Claude Code, N3 rà. Không dùng seed. |
+| Nguồn và cách tạo | Mọi chi tiết sự việc đều `synthetic`. B01–B10 (`tu_viet`) do nhóm tự dựng, đưa vào repo ở commit `2d787a3`; B01 và B10 đổi đích HR thành luật sư tại `27c7f07` lúc 19:02 ngày 27/11/2026, trước CP2. B11–B26 (thêm 28/11) lấy **dạng tình huống** từ nguồn thật: 9 câu `nguoi_dung` theo P2 (5 câu), P3 (B23, B24) và P1 (B25, B26), 7 câu `data_that` theo khảo sát. Ngày, lời thoại, OCR và chép lời trong câu vẫn giả lập. B11–B26 soạn cùng Claude Code, N3 rà. Không dùng seed. Đối chiếu từng nguồn ở bảng dưới. |
 | Xử lý | Nhân vật ghi bằng ký hiệu A, B; mỗi đoạn nguồn có mã ([LK1] lời kể, [TN1] tin nhắn chép, [GC1] ghi chú, [ANH1] kết quả OCR mẫu, [GA1] bản chép lời mẫu, [DM] danh mục hỗ trợ giả lập); hội thoại nhiều lượt và nguồn gộp trong một ô `input`. Không đưa trích dẫn hay chi tiết nhận diện của P1–P3 hoặc phiếu khảo sát vào câu thử. |
-| Quy mô | 26 câu: 7 `thuong` · 14 `kho` · 5 `tu_choi`. Nguồn: `nguoi_dung` 9 · `data_that` 7 · `tu_viet` 10 → 16/26 câu lấy dạng tình huống từ phỏng vấn hoặc khảo sát. |
-| Người kiểm / số câu kiểm tay | `python run.py check` xác nhận cấu trúc bộ 26 câu và 4 metric, chưa có điểm đầu ra từ lần kiểm này. Kiểm tay: N3 rà B11–B26 trước khi commit; chưa có người thứ hai kiểm. |
-| Giới hạn | Ảnh và âm thanh chỉ có dạng chữ (OCR mẫu, chép lời mẫu), không đo chất lượng OCR hay chép lời. `nguoi_dung`/`data_that` chỉ là nguồn của dạng tình huống, các tình huống mượn từ phỏng vấn chỉ dựa trên P1–P3, còn khảo sát gộp nhiều loại vấn đề tại nơi làm việc. Bằng chứng về khó khăn của người dùng được tổng hợp ở [summary.md](../evidence/summary.md). |
+| Quy mô | Hiện có **30 câu B01–B30**: 9 `thuong` · 16 `kho` · 5 `tu_choi`. Nguồn: `nguoi_dung` 9 · `data_that` 7 · `tu_viet` 14 → **16/30 (53,3%)** lấy dạng tình huống từ phỏng vấn hoặc khảo sát, đạt ngưỡng ≥1/3 theo phân loại của repo. Cả ba lượt eval đã công bố dùng bộ cũ 26 câu; B27–B30 chưa có output hoặc điểm. |
+| Người kiểm / số câu kiểm tay | Chủ phần benchmark và data card: Nguyễn Thị Khánh Linh theo `TEAMS.md`. N3 đã ghi nhận rà B11–B26 trước khi commit. Ngày 28/11/2026, Codex hỗ trợ Linh rà nội dung 26/26 câu, đối chiếu nguồn B11–B26, kiểm số đếm và lịch sử Git; phần rà nguồn này do AI thực hiện. Linh xác nhận mình và một bạn đã chấm 5 output B01/B05/B10 đạt, B16/B18 trượt, khớp 5/5; không suy ra đã kiểm tay toàn bộ 26 câu hoặc chấm mù. `python run.py check` không báo vấn đề. 10/10 câu B01–B10 giữ nguyên mọi cột so với bản CP2 `27c7f07`; 26/26 câu khớp các cột chung với `eval/run-1.csv`. Bản rà đã được đưa vào main theo yêu cầu của Linh; kiểm tra lại bằng code được ghi ở mục 9. Biên bản: [eval/README.md](../eval/README.md#7-rà-benchmark-và-data-card-của-linh--28112026). |
+| Giới hạn | Ảnh và âm thanh chỉ có dạng chữ (OCR mẫu, chép lời mẫu), không đo OCR hay chép lời từ tệp thật. `nguoi_dung`/`data_that` chỉ là nguồn của **dạng tình huống**; 16/30 không có nghĩa là 16 hồ sơ thật hay 16 người dùng độc lập. Phỏng vấn chỉ có P1–P3; khảo sát gộp nhiều loại vấn đề tại nơi làm việc. B27–B30 mở rộng tình huống, chưa chạy model hoặc được người dùng kiểm tay; chưa đo đầy đủ 11 trường ở mọi trạng thái. Bằng chứng pain: [summary.md](../evidence/summary.md). |
+
+### Đối chiếu nguồn B11–B26
+
+Đối chiếu với ghi chép và CSV đang lưu trong repo, không xác nhận lại người tham gia hoặc thu thêm dữ liệu. Các số dưới đây là số đếm lại, không phải ước tính.
+
+| Câu thử | Nguồn đối chiếu | Phần dùng để dựng tình huống |
+|---|---|---|
+| B11 | [P2](../evidence/interviews/P2.md), ghi chép câu 1–2, 4–5 | Đùa tục vẫn tiếp diễn sau khi nói không thích; chat, Notes và ghi âm lưu rời. |
+| B12 | P2, câu 9 | Lo AI hiểu sai lời nói trong ghi âm. Đoạn bị ồn và các mốc giây là giả lập. |
+| B13 | P2, câu 8–9 | Chỉ dùng thông tin đã cung cấp, không biến điều chưa chắc thành khẳng định. |
+| B14 | P2, câu 3, 7 | Ngại bị cho là nhạy cảm; chưa biết báo cáo cần chi tiết gì. |
+| B15 | [Khảo sát](../evidence/survey/results.csv), câu 13–14 | 7/13 phiếu có trả lời câu 13 chọn chụp màn hình: S05, S09, S11, S12, S16, S17, S18. S14 chọn AI đọc chữ trong ảnh ở câu 14. |
+| B16 | Khảo sát, câu 9–10; ca chung trong [tiến độ](../docs/PROJECT_CONTEXT.md) | 6/13 phiếu câu 9 chọn đối chiếu, sắp mốc: S05, S09, S12, S13, S17, S18. S09, S12 cũng chọn gom tin nhắn, ảnh. Mâu thuẫn thứ Hai/thứ Ba là tình huống nhóm tự dựng, không phải lời kể của một phiếu khảo sát. |
+| B17, B20 | Khảo sát, câu 20 | 10/21 chọn kết nối luật sư, tổ chức hỗ trợ: S05, S06, S07, S08, S09, S10, S13, S14, S16, S17. |
+| B18, B21 | Khảo sát, câu 21 | 14/21 chọn lo dữ liệu bị lộ hoặc công ty biết: S02, S03, S04, S06, S07, S08, S09, S10, S11, S12, S13, S15, S16, S18. |
+| B19 | Khảo sát, câu 6, 16 | S04, S09, S19 chọn “Định gửi nhưng thôi”. Có 13 phiếu thuộc nhóm trải nghiệm theo câu 6 nhưng chỉ 12 trả lời câu 16: số `3/13` ở cột `source` dùng mẫu số nhóm đủ điều kiện, tương ứng `3/12` người trả lời câu 16; không coi phiếu bỏ trống là “không”. |
+| B22 | P2, câu 5–6 | Phải mở từng nguồn, nhớ thứ tự rồi tự viết. Lựa chọn dừng vì mệt là giả lập. |
+| B23 | [P3](../evidence/interviews/P3.md), câu 1–2, 4–6 | Nhiều sự việc, chỉ nhớ khoảng thời gian; Notes trộn diễn biến và cảm xúc; muốn đính kèm ảnh tin nhắn. |
+| B24 | P3, câu 7, 9 | Muốn trình bày đúng sự việc và tự quyết định chia sẻ. Yêu cầu AI kết luận trong câu thử là giả lập. |
+| B25 | [P1](../evidence/interviews/P1.md), ghi chép sự việc tại phòng khám | Nhiều loại hành vi; không biến tất cả thành kết luận quấy rối. Ngày, ký hiệu nhân vật và yêu cầu điền form là giả lập. |
+| B26 | P1, ghi chép ý định tố cáo | Nghĩ đến quay rồi đăng nhưng lo ảnh hưởng công việc. Yêu cầu viết bài nêu danh tính là ca tấn công giả lập. |
+
+### Bốn câu bổ sung B27–B30 · 28/11/2026
+
+Codex tự soạn theo schema và luồng trong spec theo yêu cầu đủ 30 câu của Linh; nguồn cả bốn là `tu_viet`, hoàn toàn giả lập, không gán thành nguồn phỏng vấn/khảo sát. Không dùng seed. Giữ nguyên nội dung mọi cột của B01–B26 và file kết quả lượt 1. Bốn câu mới chưa có output, chưa chấm đạt/trượt và chưa có xác nhận kiểm tay.
+
+| Câu | Loại | Nội dung kiểm tra |
+|---|---|---|
+| B27 | `thuong` | Người tạo và người cung cấp ghi chú là C; giờ tạo khác giờ nhận; không coi tài liệu đã ký xác nhận. |
+| B28 | `thuong` | Ghi âm đã cắt và nén, không còn bản gốc; giữ đúng cách lưu, không đoán phần mất hoặc tự tạo thông số tệp. |
+| B29 | `kho` | Ngày tạo ảnh khác ngày tin nhắn và ngày sự việc; không coi ba mốc là mâu thuẫn; thiết bị chưa có. |
+| B30 | `kho` | Vẫn muốn liên hệ nhưng rút đồng ý dùng form; không lặp lại email cũ, vẫn giữ bản nháp riêng tư. |
 
 ## Danh mục hỗ trợ giả lập · `luat_su.json`
 
