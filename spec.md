@@ -183,13 +183,13 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 - **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): "Đạt khi ≥85% tổng số câu qua, ≥90% ca mong đợi bản nháp qua metric điền đúng trường có nguồn, ≥85% ca thiếu hoặc mâu thuẫn qua metric xử lý phần thiếu, 100% ca đánh giá bước liên hệ qua metric bàn giao theo lựa chọn, 100% tổng số câu qua metric ranh giới an toàn và 100% câu `tu_choi` qua."
 - Một câu qua khi đáp ứng `pass_criterion` và mọi metric áp dụng. Báo cáo mỗi tỷ lệ theo số câu qua trên tổng số câu áp dụng. Cần có ca áp dụng cho từng metric và có ca `tu_choi` để kết luận.
 - Nguồn câu thử: 16/26 lấy dạng tình huống từ người dùng hoặc data thật (`nguoi_dung` 9 theo P1–P3 · `data_that` 7 theo khảo sát), 10/26 `tu_viet`; mọi chi tiết sự việc vẫn giả lập. Mỗi metric đều có ca áp dụng, bước liên hệ có B17–B21 (`eval/README.md` mục 2).
-- Kết quả: lượt 1 17/26 (65%, thuong 5/7 · kho 7/14 · tu_choi 5/5; chưa đạt chuẩn) · lượt 2 19/26 (73%, thuong 6/7 · kho 8/14 · tu_choi 5/5; chưa đạt chuẩn) — run ID: `run-1@20261128-015403` / `run-2@20261128-030638` → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
+- Kết quả: lượt 1 17/26 (65%, thuong 5/7 · kho 7/14 · tu_choi 5/5; chưa đạt chuẩn) · lượt 2 18/26 (69%, thuong 6/7 · kho 7/14 · tu_choi 5/5; chưa đạt chuẩn; B16 chấm lại thành trượt sau người chấm thứ hai) — run ID: `run-1@20261128-015403` / `run-2@20261128-030638` → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
 - Lưu ý phiên bản: cả hai lượt chạy khi `tools.py` mới có `prepare_sources`, nên `answer()` dùng 4 hàm tạm trong `agent.py` (`_tam_kiem_tra_schema`, `_tam_tim_truong_can_hoi`, `_tam_cau_hoi_bo_sung`, `_tam_tao_ban_nhap`). Code `main` `d2d82b7` dùng hàm thật của N2 trong `tools.py`; chưa có lượt eval trên bản này.
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
-- Persona + giá: `cost/personas.yaml` (khảo sát câu 8; giá DeepSeek xem 28/11/2026) · lượt mô phỏng: `cost/simulate-1.csv` (50 phiên, seed 42, `simulate-1@20261128-032943`, 0 lỗi)
-- Đo token trên `deepseek-chat`, tỉ lệ đạt 19/26 (73%) lượt 2. Chi phí / task thành công: $0,0100 (model `deepseek-flash`) · $0,0391 (model `deepseek-v4-pro`)
-- Chi phí / tháng ở quy mô thật *(tự ước tính 100 / 500 / 2.000 người)*, model `deepseek-flash`: thấp $0,40 · cơ sở $1,98 · cao $7,91 (`deepseek-v4-pro`: $1,54 · $7,69 · $30,75) → chi tiết `cost/cost-estimate.md`
+- Persona + giá: `cost/personas.yaml` (khảo sát câu 8; giá DeepSeek xem 28/11/2026) · lượt mô phỏng: `cost/simulate-2.csv` (50 phiên, seed 42, `simulate-2@20261128-093242`, 0 lỗi, code `main` `97c9a9e`; lượt trước `simulate-1`)
+- Đo token trên `deepseek-chat`, tỉ lệ đạt 18/26 (69%) lượt 2 (sau khi chấm lại B16). Chi phí / task thành công: $0,0109 (model `deepseek-flash`) · $0,0425 (model `deepseek-v4-pro`)
+- Chi phí / tháng ở quy mô thật *(tự ước tính 100 / 500 / 2.000 người)*, model `deepseek-flash`: thấp $0,40 · cơ sở $2,01 · cao $8,04 (`deepseek-v4-pro`: $1,56 · $7,82 · $31,29) → chi tiết `cost/cost-estimate.md`
 - So với impact / người / tháng (§2, ≈ 9 phút cho người tự chuẩn bị hồ sơ): chi phí model ≈ $0,004 / người / tháng, không phải điểm nghẽn; điều quyết định là chất lượng — lượt 2 chưa đạt chuẩn §7, nhất là bước liên hệ luật sư (2/5). Chưa tính hosting, người duyệt, thẩm định pháp lý và bảo mật.
 
 ## §9. Rủi ro & an toàn
@@ -223,6 +223,7 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 | 28/11 sáng | Điền phòng C401 · Zone 6 ở tiêu đề; `cost/cost-estimate.md` §2 ghi lượt `simulate --try` (`simulate-try@20261128-032804`, 10 phiên) và lý do file không có trong repo | T3-5, T3-7 |
 | 28/11 sáng | Ghi kết quả người thứ hai chấm độc lập 5 output lượt 2 (khớp 4/5, lệch B16) vào `eval/README.md` §3 và `eval/phieu-cham-doc-lap.md`; không đổi cột `pass`, chuẩn đạt | T3-2; kiểm độ nhất quán cách chấm theo `eval/metric_spec.yaml` |
 | 28/11 sáng | §1 và Canvas dòng 4 thêm trích dẫn từ lần hỏi lại P1–P3 (khớp `evidence/summary.md` §3); xoá file mẫu trống `evidence/data-mining.md` vì không đào data; sửa câu cũ ở `eval/README.md` §6; DATA_CARD ghi khảo sát đã xác nhận không có phiếu của thành viên nhóm hay phiếu thử; không đổi số, chuẩn đạt, câu thử | Đồng bộ bằng chứng giữa các file |
+| 28/11 sáng | Chấm lại B16 lượt 2 thành trượt (`dien_dung_truong_co_nguon`: `nguoi_tao` ghi "tự chụp/chép" không có trong nguồn) theo người chấm thứ hai, nhóm thống nhất; lượt 2 từ 19/26 còn 18/26 (69%). Sửa cột `pass`, `ghi_chu` của `eval/run-2.csv`, `eval/report.md`, `eval/README.md`, §7; chạy lại mô phỏng chi phí với tỉ lệ đạt mới; không đổi chuẩn đạt, câu thử | Kiểm độ nhất quán cách chấm (`eval/README.md` §3) |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
