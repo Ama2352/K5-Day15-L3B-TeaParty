@@ -163,6 +163,29 @@ class DraftToolsTest(unittest.TestCase):
         draft["questions_for_user"] = questions
         self.assertEqual(tools.kiem_tra_schema(draft), [])
 
+    def test_prioritizes_and_limits_followup_questions(self):
+        gaps = [
+            {"field_path": f"tai_lieu[{index}].cach_luu_giu", "status": "missing"}
+            for index in range(8)
+        ]
+        gaps += [
+            {"field_path": "noi_nhan", "status": "missing"},
+            {"field_path": "tai_lieu[8].mo_ta_noi_dung", "status": "missing"},
+            {"field_path": "tai_lieu[8].thoi_diem_tao", "status": "missing"},
+            {"field_path": "tai_lieu[9].mo_ta_noi_dung", "status": "unclear", "value": 'Sau chữ "mặc": [không nghe rõ]'},
+            {"field_path": "tai_lieu[0].thoi_diem_tao", "status": "conflicting", "conflict_note": "Hai ngày khác nhau"},
+            {"field_path": "tai_lieu[1].thoi_diem_tao", "status": "conflicting", "conflict_note": "Hai ngày khác nhau"},
+        ]
+
+        questions = tools.cau_hoi_bo_sung(gaps)
+        self.assertEqual(
+            [question["field_path"] for question in questions],
+            ["tai_lieu[0].thoi_diem_tao", "tai_lieu[9].mo_ta_noi_dung", "tai_lieu[8].mo_ta_noi_dung", "noi_nhan"]
+            + [f"tai_lieu[{index}].cach_luu_giu" for index in range(4)],
+        )
+        self.assertIn("không nghe hoặc không đọc rõ", questions[1]["question"])
+        self.assertIn("có thể cung cấp tài liệu", questions[2]["question"])
+
     def test_renders_the_label_missing_fields_citations_and_conflicting_values(self):
         draft = sample_draft()
         output = tools.tao_ban_nhap(draft)

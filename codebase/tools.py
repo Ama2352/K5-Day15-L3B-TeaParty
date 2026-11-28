@@ -243,38 +243,142 @@ def tim_truong_can_hoi(draft: dict) -> list[dict]:
             gap = {"field_path": field_path, "status": status}
             if status == "conflicting":
                 gap.update(source_refs=field["source_refs"], conflict_note=field["conflict_note"])
+            if status == "unclear" and _citations(field["source_refs"]):
+                gap["value"] = field["value"]
+                gap["quote"] = next(
+                    (ref["quote"] for ref in field["source_refs"] if ref.get("quote", "").strip()),
+                    "",
+                )
             gaps.append(gap)
     return gaps
 
 
+MAX_CAU_HOI = 8
+# Thứ tự hỏi trong nhóm "missing": trường quan trọng cho văn bản trước, trường kỹ thuật sau.
+_MISSING_ORDER = ["noi_nhan", "thoi_diem_tao", "dia_diem_hoan_canh", "nguoi_co_mat", "nguoi_tao", "tu_cach",
+                  "loai_tai_lieu", "mo_ta_noi_dung", "lien_quan_su_viec", "quan_he_hoac_vai_tro",
+                  "thoi_diem_cung_cap", "cach_cung_cap", "nguon_cua_nguoi_cung_cap",
+                  "thiet_bi_ung_dung", "cach_luu_giu", "tinh_trang_chinh_sua"]
+
+_DAU_TRONG = r"(?:không|chưa)\s+(?:nghe|đọc|nhìn)\s+(?:rõ|được)|bị\s+(?:ồn|mờ|nhòe|nhoè|cắt)|mờ|ồn|nhòe|nhoè"
+_DAU_KHONG_RO = re.compile(
+    rf"[\[(]\s*(?:{_DAU_TRONG})[^\])]*[\])]"
+    r"|\b(?:đoạn|chữ|dòng|phần)\b[^.!?\n]*?(?:(?<!không\s)\bbị\s+(?:ồn|mờ|nhòe|nhoè)|\bkhông\s+nghe\s+rõ|\bkhông\s+đọc\s+được)",
+    re.IGNORECASE)
+
+
+def _ngan(text, limit=90) -> str:
+    text = " ".join(str(text).split())
+    return text if len(text) <= limit else text[:limit - 1].rstrip() + "…"
+
+
+# Câu hỏi cho trường "unclear" theo loại trường: hỏi đúng điều còn thiếu thay vì "có muốn làm rõ không".
+_HOI_CHUA_RO = {
+    "thoi_diem_tao": "Bạn có nhớ thời điểm cụ thể hơn không (ngày, giờ)?",
+    "thoi_diem_cung_cap": "Bạn có nhớ thời điểm cụ thể hơn không (ngày, giờ)?",
+    "dia_diem_hoan_canh": "Bạn có thể nói rõ hơn nơi chốn hoặc hoàn cảnh không?",
+    "nguoi_co_mat": "Bạn có thể cho biết rõ hơn ai có mặt không?",
+    "nguoi_tao": "Ai đã lập, chụp, chép hoặc ghi tài liệu này?",
+    "thiet_bi_ung_dung": "Tài liệu được tạo bằng thiết bị hoặc ứng dụng nào?",
+    "cach_luu_giu": "Tài liệu đang được lưu ở đâu, bằng cách nào?",
+    "tinh_trang_chinh_sua": "Tài liệu đã bị cắt, chụp lại, đổi định dạng hay chỉnh sửa gì chưa?",
+}
+_CACH_GOI_MO_HO = re.compile(r"[\"“]([^\"”]{1,30})[\"”]")
+# Ký hiệu định danh người: một chữ in hoa A–Z (không dấu; Ă, Đ… KHÔNG tính) kèm số tuỳ chọn, có thể có tới 2 từ
+# chỉ vai trong danh sách đóng đứng trước — "A", "B2", "đồng nghiệp A", "anh quản lý C". Danh sách "A, B", "A và B" cũng là
+# ký hiệu; "A hoặc B" (chưa rõ người nào) thì KHÔNG.
+_TU_CHI_VAI = ["đồng nghiệp", "anh", "chị", "em", "ông", "bà", "cô", "chú", "bác", "bạn", "sếp", "quản lý",
+               "trưởng phòng", "trưởng nhóm", "phó phòng", "giám đốc", "nhân viên", "khách hàng", "bảo vệ",
+               "giáo viên", "học sinh", "sinh viên", "người quản lý"]
+_VAI = "|".join(sorted((re.escape(t) for t in _TU_CHI_VAI), key=len, reverse=True))
+_MOT_KY_HIEU = re.compile(rf"(?i:(?:{_VAI})\s+){{0,2}}[A-Z]\d*")
+_TRUONG_NGUOI = ("nguoi_co_mat", "mo_ta_noi_dung", "nguoi_tao")
+
+
+def _la_ky_hieu(text: str) -> bool:
+    """Chuỗi chỉ gồm ký hiệu định danh người (hoặc danh sách nối bằng dấu phẩy / "và")."""
+    text = unicodedata.normalize("NFC", " ".join(str(text).split()))
+    items = [x for x in re.split(r"\s*,\s*|\s+và\s+", text)]
+    return bool(items) and all(x and _MOT_KY_HIEU.fullmatch(x) for x in items)
+
+
+def _cau_hoi_chua_ro(label: str, key: str, gap: dict) -> str:
+    """Nêu cụ thể điều chưa rõ: cách gọi trong ngoặc kép (vd một đại từ) → hỏi đó là ai; còn lại hỏi theo trường."""
+    value = gap.get("value") or ""
+    ghi = f" bản nháp đang ghi \"{_ngan(value)}\"." if value else (
+        f" nguồn ghi \"{_ngan(gap['quote'], 60)}\"." if gap.get("quote") else "")
+    if key == "mo_ta_noi_dung" and _DAU_KHONG_RO.search(unicodedata.normalize("NFC", value)):
+        return (f"{label}: nguồn có đoạn được đánh dấu là không nghe hoặc không đọc rõ. Bạn có nhớ nội dung "
+                "đoạn đó không? Nếu không chắc, cứ để trống — bản nháp sẽ giữ nguyên dấu \"không rõ\".")
+    goi = [g for g in _CACH_GOI_MO_HO.findall(value) if not _la_ky_hieu(g)]
+    if goi and key in _TRUONG_NGUOI:
+        return f"{label}:{ghi} \"{goi[0]}\" là ai? Nếu bạn muốn, hãy ghi rõ (có thể dùng ký hiệu như A, B)."
+    if value and gap.get("quote"):
+        ghi += f" Nguồn: \"{_ngan(gap['quote'], 60)}\"."
+    mac_dinh = ("Ai là người được nhắc tới, hoặc chi tiết nào bạn chưa chắc, cần ghi rõ hơn?"
+                if key == "mo_ta_noi_dung" else "Bạn có thể nói rõ hơn phần này không?")
+    return f"{label} còn chưa rõ:{ghi} " + _HOI_CHUA_RO.get(key, mac_dinh)
+
+
 @tool
 def cau_hoi_bo_sung(gaps: list) -> list[dict]:
-    """Soạn câu hỏi bổ sung. Input là danh sách trường cần làm rõ, output là câu hỏi có thể bỏ qua.
+    """Soạn tối đa tám câu bổ sung có thể bỏ qua từ danh sách trường cần làm rõ.
 
-    Chỉ xử lý trong bộ nhớ, không có tác động ra ngoài.
+    Ưu tiên mâu thuẫn, chỗ chưa rõ, rồi trường thiếu. Chỉ xử lý trong bộ nhớ.
     """
-    questions = {}
+    documents_without_content = {
+        gap["field_path"].partition("].")[0]
+        for gap in gaps
+        if gap["status"] == "missing" and gap["field_path"].endswith("].mo_ta_noi_dung")
+    }
+    conflicts, unclear, missing = [], [], []
+    seen_paths, seen_notes = set(), set()
     for gap in gaps:
         field_path = gap["field_path"]
-        if field_path in questions:
+        if field_path in seen_paths:
             continue
+        seen_paths.add(field_path)
         document_path, in_document, field_key = field_path.partition("].")
-        label = _FIELD_LABELS[field_key if in_document else field_path].lower()
+        field_key = field_key if in_document else field_path
+        key = field_key.removesuffix(".field").rsplit(".", 1)[-1]
+        label = _FIELD_LABELS[field_key]
         if in_document:
             document_number = int(document_path.removeprefix("tai_lieu[")) + 1
-            label = f"{label} của tài liệu {document_number}"
+            label = f"{label} (tài liệu {document_number})"
 
-        action = "bổ sung" if gap["status"] == "missing" else "làm rõ"
-        question = f"Bạn có thể {action} thông tin về {label} không?"
-        if gap["status"] == "conflicting":
-            sources = _citations(gap.get("source_refs", ()))
+        status = gap["status"]
+        if status == "conflicting":
             note = gap.get("conflict_note", "")
-            if sources:
-                question = f"Cần đối chiếu {sources}. {question}"
-            if note:
-                question = f"{question} ({note})"
-        questions[field_path] = {"field_path": field_path, "question": question, "skippable": True}
-    return list(questions.values())
+            if note and note in seen_notes:
+                continue
+            seen_notes.add(note)
+            sources = _citations(gap.get("source_refs", ()))
+            detail = " · ".join(part for part in (sources, note) if part)
+            question = (
+                f"{label}: các nguồn đang ghi khác nhau ({detail or 'xem nguồn'}). "
+                "Bạn có thể xác nhận thông tin đúng không?"
+            )
+            conflicts.append((field_path, question))
+        elif document_path in documents_without_content:
+            if key == "mo_ta_noi_dung":
+                question = (
+                    f"Tài liệu {document_number} mới được nhắc tới, chưa có nội dung. "
+                    "Bạn có thể cung cấp tài liệu này (nội dung, thời điểm tạo, cách lưu giữ) không?"
+                )
+                missing.append((-1, field_path, question))
+        elif status == "unclear":
+            unclear.append((field_path, _cau_hoi_chua_ro(label, key, gap)))
+        else:
+            priority = _MISSING_ORDER.index(key) if key in _MISSING_ORDER else len(_MISSING_ORDER)
+            question = f"{label} chưa có thông tin. Nếu bạn biết và muốn ghi vào, bạn có thể bổ sung."
+            missing.append((priority, field_path, question))
+
+    missing.sort(key=lambda item: item[0])
+    ordered = conflicts + unclear + [(path, question) for _, path, question in missing]
+    return [
+        {"field_path": path, "question": question + " (Có thể bỏ qua.)", "skippable": True}
+        for path, question in ordered[:MAX_CAU_HOI]
+    ]
 
 
 def _render_field(field_path, field):
