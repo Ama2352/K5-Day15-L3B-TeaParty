@@ -20,7 +20,12 @@ Data BTC cấp đã dùng: không có.
 - Việc họ cố làm xong: thu thập và hệ thống hóa nguồn đã có để soạn bản phản ánh một sự việc.
 - Cách làm hiện tại: tự ghi lại, gom tài liệu và viết bằng công cụ phổ thông (§0). Trong 6 người tự trải qua, cả 6 phải sửa hoặc viết lại ít nhất một lần.
 - Pain: nhân viên bị quấy rối tình dục tại nơi làm việc gặp khó khăn trong việc thu thập, hệ thống hóa bằng chứng và chuẩn bị hồ sơ phản ánh sự việc.
-- Bằng chứng: khảo sát n = 21, trong đó 6/21 tự chuẩn bị bản phản ánh trong 12 tháng, **2/21** tự gặp vấn đề mang tính tình dục. Việc mất công nhất: ghi lại sự việc 5/13 (tự trải qua 3/6); đối chiếu, tìm phần thiếu 4/13 (1/6). **Kết luận:** chưa đủ bằng chứng cho đúng người dùng của lát cắt; [giả thuyết](evidence/hypothesis.md) (đặt cho phỏng vấn) chưa kiểm được. Chi tiết: `evidence/summary.md`.
+- Bằng chứng: khảo sát n = 21, trong đó 6/21 tự chuẩn bị bản phản ánh trong 12 tháng, **2/21** tự gặp vấn đề mang tính tình dục. Việc mất công nhất: ghi lại sự việc 5/13 (tự trải qua 3/6); đối chiếu, tìm phần thiếu 4/13 (1/6). Phỏng vấn có **3 người ngoài nhóm**, tự nguyện tham gia và đều đã thực hiện bước chuẩn bị. Đã đạt ngưỡng phỏng vấn. [Giả thuyết](evidence/hypothesis.md) vẫn chưa kiểm được vì thiếu số lần chuẩn bị trong tháng và bước người tham gia tự nêu là mất thời gian nhất. Chi tiết: `evidence/summary.md`.
+
+- **Trích dẫn nguyên văn từ phỏng vấn**
+  - “... chị tính ghi lại ông đó rồi mà không dám tại lương ổng trả cao, giờ chưa chắc kiếm được việc như thế... danh tiếng bác sĩ này lớn ... khó tìm được việc khác” — [P1](evidence/interviews/P1.md)
+  - “Em từng định viết mail cho HR nhưng ngồi một lúc không biết viết như thế nào. Không biết nên kể hết từ đầu hay chỉ kể những lần nghiêm trọng nhất.” — [P2](evidence/interviews/P2.md)
+  - “Mỗi thứ nằm một chỗ, có những chi tiết mình nhớ nhưng không chắc về thời điểm.” — [P3](evidence/interviews/P3.md)
 
 ## §2. Impact & quyết định chọn *(guide 1.3)*
 
