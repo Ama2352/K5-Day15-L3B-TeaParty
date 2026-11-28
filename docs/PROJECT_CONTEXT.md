@@ -37,7 +37,7 @@ Vai trò dưới đây là đề xuất CP2. Điền tên khi cả nhóm chốt.
 
 ## Bàn giao backend và giao diện
 
-- **Reflection Người 2:** [Bản của Hồ Nguyễn Minh Sang](../reflection/ho-nguyen-minh-sang.md) đã đối chiếu T2-1 đến T2-8 với các commit, ghi cách dùng Codex và bài học từ B12 theo mẫu BTC.
+- **Reflection Người 2:** [Bản của Hồ Nguyễn Minh Sang](../reflection/ho-nguyen-minh-sang.md) đã đối chiếu T2-1 đến T2-8 với các commit, ghi cách dùng Codex và bài học từ B12 theo mẫu BTC. [Khai báo AI](ai-usage.md) đã ghi phần Codex hỗ trợ logic hỏi bổ sung và cách Sang kiểm lại trong PR #28.
 
 - **Người 2 · Hồ Nguyễn Minh Sang:** chuyển luật xếp câu bổ sung vào `cau_hoi_bo_sung` để CLI và web cùng dùng. Ưu tiên mâu thuẫn, chỗ chưa rõ, rồi trường thiếu, tối đa 8 câu. Đã thêm ca kiểm thứ tự, gộp mâu thuẫn và hỏi đúng đoạn không nghe rõ. Xem [công cụ](../codebase/tools.py) và [test](../codebase/test_tools.py).
 
