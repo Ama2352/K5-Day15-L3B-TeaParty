@@ -1,4 +1,4 @@
-# AI SPEC — AI Evidence Assistant · Nhóm TeaParty · Phòng [XXX] · Zone [X]
+# AI SPEC — AI Evidence Assistant · Nhóm TeaParty · Phòng C401 · Zone 6
 
 > Mốc nộp: §7 chốt chuẩn "đạt" tại **CP2 19:30 Thứ Sáu 27/11** · §0–§7 nộp **CP3 10:00 Thứ Bảy 28/11** · đủ §0–§10 **CP4 14:30 Thứ Bảy 28/11** · §10 changelog ghi tiếp đến **23:59 Thứ Bảy 28/11**.
 > Đầu mỗi mục ghi bước guide (`02-guide.md` trong repo đề) chỉ cách điền. Mỗi mục ngắn, có số và nguồn; chi tiết để ở file được trỏ tới. Xoá dòng hướng dẫn trong ngoặc vuông khi điền xong.
@@ -216,6 +216,7 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 | 28/11 sáng | §4 ghi đủ điều kiện tạo email nháp (đồng ý liên hệ, đồng ý dùng form, chỉ trường đã xác nhận và được chọn); §6 bỏ "tải tài liệu/hình ảnh" vì web chỉ nhận chữ; §7 ghi lượt 1, 2 chạy trên hàm tạm trong `agent.py`; không đổi chuẩn đạt, câu thử, kết quả | Đối chiếu `codebase/web.py` `/email-draft`, `static/index.html` và `tools.py` tại `f9cc0d6`, `8dec952` |
 | 28/11 sáng | Ghi câu trả lời hỏi lại P2, P3 (tin nhắn 08:37) về lần chuẩn bị gần nhất, thời gian và số lần trong tháng vào `evidence/interviews/P2.md`, `P3.md`, `evidence/summary.md`, `data/DATA_CARD.md`; không đổi số §2 | Bảng phỏng vấn trong tổng hợp bằng chứng còn "Không rõ" ở hai cột số lần và thời gian |
 | 28/11 sáng | Ghi câu trả lời hỏi lại P1 (tin nhắn 08:45) về lần gần nhất, thời gian, số lần trong tháng; thêm 4 trích dẫn nguyên văn từ lần hỏi lại P1–P3 vào `evidence/summary.md` §3 (7 trích dẫn phỏng vấn), tách 2 ví dụ báo chí thành bối cảnh không tính; cập nhật `data/DATA_CARD.md`; không đổi số §2 | Báo chí không thuộc ba nguồn được tính; R1 cần mốc 1 tháng qua cho cả ba người phỏng vấn |
+| 28/11 sáng | Điền phòng C401 · Zone 6 ở tiêu đề; `cost/cost-estimate.md` §2 ghi lượt `simulate --try` (`simulate-try@20261128-032804`, 10 phiên) và lý do file không có trong repo | T3-5, T3-7 |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
