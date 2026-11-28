@@ -67,7 +67,14 @@ Hai ví dụ báo chí bổ sung bối cảnh về việc ngần ngại phản �
 
 ## 5. Kết luận
 
-Bằng chứng hiện có chưa đủ để kiểm [giả thuyết](hypothesis.md) theo tiêu chí đã đặt. Đã đạt ngưỡng phỏng vấn với ba người ngoài nhóm, tự nguyện tham gia và đã thực hiện bước chuẩn bị. P2, P3 đã nêu số lần và thời gian lần chuẩn bị gần nhất (hỏi lại 08:37 ngày 28/11/2026), P1 cũng có số này khi hỏi lại 08:45. Cả ba đều dừng trước khi xong. Để kiểm giả thuyết, cần hỏi thêm bước người tham gia tự nêu là mất thời gian nhất.
+**Giả thuyết được ủng hộ một phần, phải đổi.** [Giả thuyết](hypothesis.md) cho rằng người dùng mất công nhất ở bước đối chiếu lời kể với các nguồn rời rạc và xác định phần còn thiếu.
+
+- **2/3 người tự nhắc tới nguồn rời và mốc chưa chắc** khi được hỏi chỗ khó. P2 (câu 6) phải mở từng nguồn và nhớ lại thứ tự sự việc. P3 (câu 4 và lần hỏi lại) nêu nguồn rải rác, mốc thời gian chưa chắc và phải lục chat nhóm để tìm ngày. P1 không nhắc: P1 dừng vì bận và chưa biết ghi lại để làm gì.
+- **Chỗ cả P2 và P3 dừng lại là chọn và sắp xếp sự việc nào để kể**, không chỉ là đối chiếu. P2 phân vân kể từ đầu hay chỉ kể những lần nghiêm trọng. P3 chưa xếp được các sự việc chỉ nhớ khoảng thời gian. Cả ba đều dừng trước khi xong.
+- **Khảo sát cùng chiều:** việc mất công nhất là ghi lại sự việc (5/13), tiếp theo là đối chiếu, sắp mốc, tìm phần thiếu (4/13).
+- **Giới hạn:** câu đã hỏi là "chỗ nào khó nhất", không phải "bước nào mất thời gian nhất" như tiêu chí đặt trước. Kết luận dựa trên chỗ vướng người tham gia tự nêu.
+
+Giả thuyết đổi thành: người dùng vướng ở việc sắp xếp sự việc từ nhiều nguồn rời, chọn chi tiết cần kể và xử lý mốc thời gian chưa chắc, nên thường dừng trước khi viết xong.
 
 ## Lịch hẹn (dùng cho CP2 — chỉ ghi vai và giờ, không tên)
 
