@@ -217,6 +217,7 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 | 28/11 sáng | Ghi câu trả lời hỏi lại P2, P3 (tin nhắn 08:37) về lần chuẩn bị gần nhất, thời gian và số lần trong tháng vào `evidence/interviews/P2.md`, `P3.md`, `evidence/summary.md`, `data/DATA_CARD.md`; không đổi số §2 | Bảng phỏng vấn trong tổng hợp bằng chứng còn "Không rõ" ở hai cột số lần và thời gian |
 | 28/11 sáng | Ghi câu trả lời hỏi lại P1 (tin nhắn 08:45) về lần gần nhất, thời gian, số lần trong tháng; thêm 4 trích dẫn nguyên văn từ lần hỏi lại P1–P3 vào `evidence/summary.md` §3 (7 trích dẫn phỏng vấn), tách 2 ví dụ báo chí thành bối cảnh không tính; cập nhật `data/DATA_CARD.md`; không đổi số §2 | Báo chí không thuộc ba nguồn được tính; R1 cần mốc 1 tháng qua cho cả ba người phỏng vấn |
 | 28/11 sáng | Điền phòng C401 · Zone 6 ở tiêu đề; `cost/cost-estimate.md` §2 ghi lượt `simulate --try` (`simulate-try@20261128-032804`, 10 phiên) và lý do file không có trong repo | T3-5, T3-7 |
+| 28/11 sáng | Ghi kết quả người thứ hai chấm độc lập 5 output lượt 2 (khớp 4/5, lệch B16) vào `eval/README.md` §3 và `eval/phieu-cham-doc-lap.md`; không đổi cột `pass`, chuẩn đạt | T3-2; kiểm độ nhất quán cách chấm theo `eval/metric_spec.yaml` |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
