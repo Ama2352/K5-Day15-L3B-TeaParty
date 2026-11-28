@@ -92,6 +92,8 @@ Nhóm dùng stack khác (Node, Streamlit, notebook…): sửa hàm `run_app()` t
 
 ## Demo web và Railway
 
+[Video demo CP3 · 30 giây](https://drive.google.com/file/d/1rgCkuIVCnbE0lrzgJ7RvHadm4EXtcM4Y/view?usp=sharing)
+
 Chạy từ thư mục gốc repo với Python 3.13.
 
 ```sh
