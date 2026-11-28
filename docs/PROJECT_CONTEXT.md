@@ -2,7 +2,11 @@
 
 Đọc trang này khi bắt đầu một phiên làm việc. Cập nhật đúng dòng phụ trách khi trạng thái, người phụ trách, quyết định hoặc điểm vướng thay đổi. Đưa cập nhật lên repo cùng công việc liên quan để mọi thành viên thấy được sau khi đồng bộ.
 
-## Mốc hiện tại · CP2
+## Mốc hiện tại · CP3
+
+- `main` trên GitHub ở `c566288` sau [PR #24](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/pull/24) và [PR #25](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/pull/25). [Kết quả chấm độc lập](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/blob/c566288/eval/README.md) khớp 4/5. Nhóm chấm lại B16, lượt 2 còn 18/26. [Báo cáo chi phí](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/blob/c566288/cost/cost-estimate.md) đã ghi mô phỏng lại 50 phiên theo điểm lượt 2 đã cập nhật. Hai PR cập nhật hồ sơ và README.
+
+- Rà theo checklist BTC ngày 28/11: [tổng hợp bằng chứng dùng cho form CP3](https://github.com/Ama2352/K5-Day15-L3B-TeaParty/blob/c56628825f0431291b343b1795c45175b2a93c6a/evidence/summary.md) có 3 người ngoài nhóm kể trải nghiệm trong tháng qua và 7 trích dẫn nguyên văn đã ẩn danh. Spec §0–§7, benchmark 26 câu và eval lượt 1 bằng DeepSeek 17/26 đã có trên `main`. Phòng C401, Zone 6 và lượt thử chi phí 10 phiên `simulate-try@20261128-032804` đã được ghi trong hồ sơ. Link video CP3 do nhóm cung cấp đã được thêm vào [README](../README.md#demo-web-và-railway). Còn cần xác nhận quyền xem khi mở ẩn danh và việc đội trưởng đã nộp form trước 10:00.
 
 - AI Evidence Assistant, Track F. Scope mới dùng lời kể, văn bản, hình ảnh và âm thanh để điền form 11 trường, hỏi bổ sung và giữ nguồn đối chiếu. Khi người dùng dừng bổ sung, họ vẫn có thể rà form, chọn có liên hệ luật sư được đề xuất hay không và có dùng form để soạn email nháp hay không.
 - Nhóm đã có Canvas CP1 và thẻ đề Track F trong repo. Trạng thái nộp form CP1 chưa được xác nhận tại đây.
