@@ -94,6 +94,8 @@ Nhóm dùng stack khác (Node, Streamlit, notebook…): sửa hàm `run_app()` t
 
 [Video demo CP3 · 30 giây](https://drive.google.com/file/d/1rgCkuIVCnbE0lrzgJ7RvHadm4EXtcM4Y/view?usp=sharing)
 
+[Video demo dự phòng CP4](https://drive.google.com/file/d/1lHnv9jdP6VQplZPHeHuXnvyDGJ12u7fL/view?usp=sharing)
+
 Chạy từ thư mục gốc repo với Python 3.13.
 
 ```sh
@@ -171,5 +173,5 @@ Nhóm dùng Claude Code để viết và sửa code (`agent.py`, `tools.py`, web
 | 4 | Bản chạy thử làm trọn lát cắt | `codebase/` · lệnh ở mục "Lệnh" |
 | 5 | Định nghĩa "tốt" + bộ câu thử | `data/DATA_CARD.md` · `eval/` |
 | 6 | Mô phỏng chi phí khi dùng thật | `cost/` |
-| 7 | Slide + demo + video dự phòng | `demo-slides.pdf` ở thư mục gốc · link video: ____ |
+| 7 | Slide + demo + video dự phòng | `demo-slides.pdf` ở thư mục gốc · [video demo dự phòng CP4](#demo-web-và-railway) |
 | + | *Bonus:* người dùng thử | `validation/log.md` |
