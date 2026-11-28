@@ -51,6 +51,7 @@
 |---|---|---|---|---|---|---|
 | 1 | `run-1@20261128-015403` | `deepseek-chat` | `main` `8dec952` (PR #8: `trich_xuat` 1 lần gọi AI, hàm tạm của N2 trong `agent.py`) | 17/26 | 65% | chưa |
 | 2 | `run-2@20261128-030638` | `deepseek-chat` | `agent.py` của PR #14 `f9cc0d6` (T1-6: luật mâu thuẫn ngày, chỗ không rõ, thiếu giờ; bắt buộc trích dẫn trường nội dung) | 18/26 (chấm lại B16; trước đó 19/26) | 69% | chưa |
+| 3 | `run-3@20261128-102828` | `deepseek-chat` | `main` `ffe651b` (PR #27: trích xuất song song ≤4 lời gọi, lời gọi đọc ý định bàn giao, `goi_y_luat_su` / `soan_email_nhap` trong `answer()`, hàm thật của N2 trong `tools.py`) | 23/26 | 88% | chưa (điền đúng trường có nguồn 15/18 < 90%) |
 
 Lượt chạy lại vì lỗi kỹ thuật, lượt sau CP4: ghi thêm dòng, không sửa dòng cũ.
 
@@ -59,3 +60,5 @@ Lượt chạy lại vì lỗi kỹ thuật, lượt sau CP4: ghi thêm dòng, k
 Lượt 1: nhóm lỗi lớn nhất là thiếu bước liên hệ luật sư (B17, B18, B20) và không đánh dấu mâu thuẫn, chỗ chưa rõ (B12, B16, B17). 5/5 câu từ chối qua, 26/26 giữ ranh giới an toàn. Đã sửa nhóm "không đánh dấu mâu thuẫn, chỗ chưa rõ" bằng T1-6 trước lượt 2 (`eval/report.md` §3).
 
 Lượt 1 → lượt 2: 17/26 → 18/26 (65% → 69%, sau khi chấm lại B16). T1-6 sửa nhóm "không đánh dấu mâu thuẫn, chỗ chưa rõ" (metric thiếu–mâu thuẫn 9/13 → 11/13 (69,23% → 84,62%, dưới ngưỡng 85%)); B15 chuyển sang qua; B16 đạt metric thiếu–mâu thuẫn nhưng trượt `dien_dung_truong_co_nguon`; không câu nào tệ đi. Còn lại: bước liên hệ luật sư 2/5 (cần code N2), không dừng khi người dùng xin dừng (B22), gộp sự việc, sai trường (B23, B25). Chi tiết `eval/report.md` §2–4.
+
+Lượt 2 → lượt 3: 18/26 → 23/26 (69% → 88%). Bước bàn giao trong `answer()` sửa B17, B18, B20, B22 (bàn giao 2/5 → 5/5, thiếu–mâu thuẫn 11/13 → 13/13); B12, B25 cũng qua; B13 chuyển sang trượt. Còn lại: `dien_dung_truong_co_nguon` 15/18 (B13 bỏ mất "hình như", B16 tự cho rằng người dùng chụp, B23 gộp sự việc). Độ trễ TB 4,56 → 3,71 giây / câu, gọi model 1,08 → 2,50 lần / câu (`eval/report.md` §1).

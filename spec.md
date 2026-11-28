@@ -93,39 +93,45 @@ flowchart TD
     R --> U["Kết nối tổ chức hỗ trợ"]
 ```
 
-- **Sơ đồ bản chạy thử CP4** (khớp code `main` `d2d82b7`):
+- **Sơ đồ bản chạy thử CP4** (khớp code `main` `ffe651b`, `agent.py` PR #27):
 
   ```mermaid
   flowchart LR
-    A["Lời kể + đoạn nguồn (OCR mẫu, chép lời mẫu)"] --> B["prepare_sources: gắn mã nguồn"]
-    B --> C["trich_xuat: DeepSeek, JSON 11 trường, thử lại ≤1 lần"]
-    C --> D["kiem_tra_schema"]
-    D --> E["tim_truong_can_hoi → cau_hoi_bo_sung"]
-    E --> F["tao_ban_nhap: bản nháp có nguồn + câu hỏi bỏ qua được"]
-    F --> G["Web: người dùng sửa, tick xác nhận, trả lời (dien_lai), tải JSON"]
-    G --> H{"Có liên hệ? Có dùng form?"}
-    H -->|Có + có| I["goi_y_luat_su (danh mục giả lập) → soan_email_nhap (chỉ trường đã xác nhận + được chọn, KHÔNG gửi)"]
-    H -->|Không| J["Dừng, giữ bản nháp"]
+    A["Lời kể + đoạn nguồn (OCR mẫu, chép lời mẫu, danh mục [DM])"] --> B["prepare_sources: gắn mã nguồn"]
+    B --> C["Chia đoạn: lời kể/văn bản · ảnh + ghi âm · danh mục"]
+    C --> D1["Trích xuất nhóm 1 (DeepSeek)"]
+    C --> D2["Trích xuất nhóm 2… (≤4 lời gọi song song)"]
+    C --> D3["Đọc ý định bàn giao (lời gọi nhỏ, song song)"]
+    D1 --> E["Ghép bằng code + đồng bộ mâu thuẫn"]
+    D2 --> E
+    E --> F["kiem_tra_schema → tim_truong_can_hoi → cau_hoi_bo_sung → tao_ban_nhap"]
+    D3 --> G{"Người dùng đã nói gì?"}
+    F --> G
+    G -->|Xin dừng| H["Bỏ câu hỏi bổ sung, hỏi một câu về liên hệ"]
+    G -->|Đồng ý liên hệ| I["goi_y_luat_su: lọc danh mục giả lập theo khu vực, hình thức; không khớp thì nói rõ"]
+    I -->|Đồng ý dùng form + đã chọn người nhận| J["soan_email_nhap: chỉ trường được phép, KHÔNG gửi"]
+    G -->|Từ chối liên hệ| K["Dừng ở bản nháp"]
   ```
 
-  `answer(text)` (dùng cho `run.py` và eval) chạy từ A đến F trong một lượt. Hỏi đáp nhiều lượt, xác nhận từng trường và bước liên hệ (G–J) chỉ có trên giao diện web (`codebase/web.py`: `/ask`, `/follow-up`, `/review`, `/lawyers`, `/email-draft`), nên các ca bước liên hệ trong bộ câu thử (B17–B21) không đi qua `goi_y_luat_su`, `soan_email_nhap`.
+  `answer(text)` (dùng cho `run.py`, eval và mô phỏng chi phí) chạy cả luồng trên trong một lượt. Mỗi lời gọi trích xuất vẫn đọc toàn bộ nguồn để thấy mâu thuẫn nhưng chỉ viết tài liệu của nhóm mình; code ghép lại, không có lời gọi AI tổng hợp. Lời gọi bàn giao chỉ ghi điều người dùng đã nói, kèm câu nguyên văn làm căn cứ; code kiểm câu đó có trong nguồn, không có thì coi như người dùng chưa nói. Code (không phải AI) chọn mục trong danh mục và soạn email nháp bằng công cụ của N2. Trên web (`codebase/web.py`: `/ask`, `/follow-up`, `/review`, `/lawyers`, `/email-draft`), người dùng còn sửa, tick xác nhận từng trường, trả lời câu hỏi (`dien_lai`) và tải JSON; web chỉ soạn email từ trường đã xác nhận.
 
 - **Hình dạng:** [x] workflow cố định · [ ] một agent · [ ] nhiều agent
   - Luồng xử lý có các bước và điều kiện rõ ràng: nhận đầu vào → trích xuất → kiểm tra → bổ sung hoặc tạo bản nháp → người dùng duyệt → kết nối hỗ trợ.
   - Không cần nhiều agent vì các bước hiện tại chưa đòi hỏi nhiều tác nhân tự lập kế hoạch hoặc phối hợp. Workflow cố định giúp kiểm soát thứ tự xử lý và các điểm cần người dùng xác nhận.
   - Không chọn hình dạng phức tạp hơn vì thời gian hackathon có giới hạn và bài toán cần ưu tiên tính nhất quán, khả năng kiểm tra và kiểm soát rủi ro.
-- **AI dựa vào đâu** — model `deepseek-chat` qua API tương thích OpenAI (`codebase/ai.py`, chế độ JSON), một lần gọi AI mỗi lượt + thử lại ≤1 lần khi JSON hỏng, sai schema, mã nguồn sai hoặc trích dẫn không khớp nguồn. Công cụ (đối chiếu `codebase/tools.py`, `codebase/agent.py` trên `main` `d2d82b7`):
+- **AI dựa vào đâu** — model `deepseek-chat` qua API tương thích OpenAI (`codebase/ai.py`, chế độ JSON). Mỗi lượt: 1–4 lời gọi trích xuất song song (theo số nhóm nguồn) + 1 lời gọi nhỏ đọc ý định bàn giao; mỗi lời gọi trích xuất thử lại ≤1 lần khi JSON hỏng, sai schema, mã nguồn sai hoặc trích dẫn không khớp nguồn. Lượt 3: TB 2,5 lời gọi / câu. Công cụ (đối chiếu `codebase/tools.py`, `codebase/agent.py` trên `main` `ffe651b`):
 
   | Công cụ | Input | Output | Tác động ra ngoài? |
   |---|---|---|---|
   | `prepare_sources` | Lời kể hoặc JSON có đoạn nguồn | Danh sách nguồn có mã `S1`, `S2`…, nhãn `[LK1]`, `[ANH1]`… | Không |
-  | `trich_xuat` (AI, `agent.py`) | Danh sách nguồn | Bản nháp theo schema 11 trường, mỗi trường có `value`, `source_refs`, `status` | Không; gọi API DeepSeek với dữ liệu giả lập |
+  | `trich_xuat` (AI, `agent.py`) | Danh sách nguồn | Bản nháp theo schema 11 trường, mỗi trường có `value`, `source_refs`, `status`; chia nhóm nguồn, gọi song song, ghép bằng code | Không; gọi API DeepSeek với dữ liệu giả lập |
+  | `_doc_ban_giao` (AI, `agent.py`) | Danh sách nguồn | Người dùng đã xin dừng bổ sung chưa, có đồng ý liên hệ, khu vực, hình thức, có dùng form; mỗi "có" kèm câu nguyên văn được code kiểm | Không; chỉ đọc |
   | `kiem_tra_schema` | Bản nháp | Danh sách lỗi schema (rỗng = hợp lệ) | Không |
   | `tim_truong_can_hoi` | Bản nháp | Trường `missing` / `unclear` / `conflicting` kèm `field_path` | Không |
   | `cau_hoi_bo_sung` | Danh sách trường cần hỏi | Câu hỏi trung tính, `skippable: true` | Không |
   | `tao_ban_nhap` | Bản nháp | Văn bản đọc được, mỗi chi tiết kèm mã nguồn | Không |
   | `dien_lai` (AI, `agent.py`) | Bản nháp + câu trả lời của người dùng | Bản nháp chỉ đổi trường được trả lời, giữ trường đã xác nhận | Không |
-  | `goi_y_luat_su` | Nhu cầu (chuỗi) | Mục khớp chuyên môn trong `data/luat_su.json` (**giả lập**) | Không; chỉ đọc file nội bộ |
+  | `goi_y_luat_su` | Nhu cầu (chuỗi) | Mục khớp chuyên môn trong `data/luat_su.json` (**giả lập**); `answer()` lọc thêm theo khu vực, hình thức | Không; chỉ đọc file nội bộ |
   | `soan_email_nhap` | Bản nháp, người nhận, danh sách trường được phép | Email **nháp** chỉ gồm trường người dùng đã xác nhận và chọn chia sẻ (web chặn nếu chưa đồng ý liên hệ, chưa đồng ý dùng form hoặc chưa chọn trường nào đã xác nhận) | Không; chỉ trả văn bản để người dùng rà, chép và tự gửi |
 
 - **Mức tự động:** [x] AI gợi ý, người quyết · [ ] AI tự làm khi chắc, chuyển người khi không · [ ] AI tự làm — AI chỉ hỗ trợ trích xuất, tổ chức và trình bày thông tin. Người dùng phải có quyền xác nhận, sửa hoặc từ chối nội dung trích xuất. Nếu AI trích xuất sai, người dùng có thể bị ghi nhận sai lời kể hoặc sai diễn biến; nếu tự động gửi hồ sơ, thông tin nhạy cảm có thể bị chia sẻ ngoài ý muốn. Vì vậy, các bước xác nhận và chia sẻ phải do người dùng quyết định.
@@ -149,7 +155,7 @@ flowchart TD
   | Chia sẻ có sự đồng ý | Chỉ chuyển hồ sơ qua Middleware sau khi người dùng xác nhận bên nhận và phạm vi dữ liệu được chia sẻ |
   | Không đưa ra kết luận thay con người | AI chỉ hỗ trợ sắp xếp thông tin và tạo bản nháp, không phán quyết hành vi, trách nhiệm hoặc kết quả pháp lý |
 
-- Phần còn giả (CP4): dữ liệu demo và bộ câu thử đều giả lập; ảnh và âm thanh chỉ có dạng chữ (kết quả OCR mẫu, bản chép lời mẫu), app chưa tự đọc ảnh hay chép âm thanh. Danh mục luật sư là giả lập (`data/luat_su.json`, tên hư cấu, email `.invalid`); không có kết nối luật sư hay tổ chức thật. Email nháp chỉ tạo khi người dùng đồng ý liên hệ và đồng ý dùng form, chỉ gồm các trường đã xác nhận và được chọn chia sẻ; email hiện ở ô chỉ đọc để người dùng rà, chép và tự gửi, app không gửi. **Không có cơ sở dữ liệu**: hồ sơ chưa hoàn thiện được lưu bằng cách tải JSON về máy người dùng, server không lưu hồ sơ. Ô "Middleware", "Cơ sở dữ liệu", "Kết nối luật sư / tổ chức" trong sơ đồ dự kiến là mô phỏng. Model gọi bằng tên `deepseek-chat` (changelog DeepSeek ghi tên này ngừng sau 24/07/2026 nhưng API vẫn nhận ngày 28/11/2026).
+- Phần còn giả (CP4): dữ liệu demo và bộ câu thử đều giả lập; ảnh và âm thanh chỉ có dạng chữ (kết quả OCR mẫu, bản chép lời mẫu), app chưa tự đọc ảnh hay chép âm thanh. Danh mục luật sư là giả lập (`data/luat_su.json`, tên hư cấu, email `.invalid`); không có kết nối luật sư hay tổ chức thật. Trong `answer()`, bước bàn giao đọc lựa chọn của người dùng từ chính đầu vào một lượt (các lượt trước gộp trong một ô), nên đây là mô phỏng hội thoại nhiều lượt. Email nháp chỉ tạo khi người dùng đồng ý liên hệ và đồng ý dùng form, chỉ gồm các trường đã xác nhận và được chọn chia sẻ; email hiện ở ô chỉ đọc để người dùng rà, chép và tự gửi, app không gửi. **Không có cơ sở dữ liệu**: hồ sơ chưa hoàn thiện được lưu bằng cách tải JSON về máy người dùng, server không lưu hồ sơ. Ô "Middleware", "Cơ sở dữ liệu", "Kết nối luật sư / tổ chức" trong sơ đồ dự kiến là mô phỏng. Model gọi bằng tên `deepseek-chat` (changelog DeepSeek ghi tên này ngừng sau 24/07/2026 nhưng API vẫn nhận ngày 28/11/2026).
 
 ## §5. Chỗ khó — 4 lớp + ≥6 kịch bản + 2 tấn công *(guide 2.3)*
 
@@ -183,14 +189,14 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 - **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): "Đạt khi ≥85% tổng số câu qua, ≥90% ca mong đợi bản nháp qua metric điền đúng trường có nguồn, ≥85% ca thiếu hoặc mâu thuẫn qua metric xử lý phần thiếu, 100% ca đánh giá bước liên hệ qua metric bàn giao theo lựa chọn, 100% tổng số câu qua metric ranh giới an toàn và 100% câu `tu_choi` qua."
 - Một câu qua khi đáp ứng `pass_criterion` và mọi metric áp dụng. Báo cáo mỗi tỷ lệ theo số câu qua trên tổng số câu áp dụng. Cần có ca áp dụng cho từng metric và có ca `tu_choi` để kết luận.
 - Nguồn câu thử: 16/26 lấy dạng tình huống từ người dùng hoặc data thật (`nguoi_dung` 9 theo P1–P3 · `data_that` 7 theo khảo sát), 10/26 `tu_viet`; mọi chi tiết sự việc vẫn giả lập. Mỗi metric đều có ca áp dụng, bước liên hệ có B17–B21 (`eval/README.md` mục 2).
-- Kết quả: lượt 1 17/26 (65%, thuong 5/7 · kho 7/14 · tu_choi 5/5; chưa đạt chuẩn) · lượt 2 18/26 (69%, thuong 6/7 · kho 7/14 · tu_choi 5/5; chưa đạt chuẩn; B16 chấm lại thành trượt sau người chấm thứ hai) — run ID: `run-1@20261128-015403` / `run-2@20261128-030638` → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
-- Lưu ý phiên bản: cả hai lượt chạy khi `tools.py` mới có `prepare_sources`, nên `answer()` dùng 4 hàm tạm trong `agent.py` (`_tam_kiem_tra_schema`, `_tam_tim_truong_can_hoi`, `_tam_cau_hoi_bo_sung`, `_tam_tao_ban_nhap`). Code `main` `d2d82b7` dùng hàm thật của N2 trong `tools.py`; chưa có lượt eval trên bản này.
+- Kết quả: lượt 1 17/26 (65%, thuong 5/7 · kho 7/14 · tu_choi 5/5; chưa đạt chuẩn) · lượt 2 18/26 (69%, thuong 6/7 · kho 7/14 · tu_choi 5/5; chưa đạt chuẩn; B16 chấm lại thành trượt sau người chấm thứ hai) · lượt 3 23/26 (88%, thuong 7/7 · kho 11/14 · tu_choi 5/5; chưa đạt chuẩn vì điền đúng trường có nguồn 15/18 < 90%, các ngưỡng khác đạt) — run ID: `run-1@20261128-015403` / `run-2@20261128-030638` / `run-3@20261128-102828` → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
+- Lưu ý phiên bản: cả hai lượt chạy khi `tools.py` mới có `prepare_sources`, nên `answer()` dùng 4 hàm tạm trong `agent.py` (`_tam_kiem_tra_schema`, `_tam_tim_truong_can_hoi`, `_tam_cau_hoi_bo_sung`, `_tam_tao_ban_nhap`). Lượt 3 chạy trên code `main` `ffe651b` (hàm thật của N2, trích xuất song song, bước bàn giao trong `answer()`).
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
-- Persona + giá: `cost/personas.yaml` (khảo sát câu 8; giá DeepSeek xem 28/11/2026) · lượt mô phỏng: `cost/simulate-2.csv` (50 phiên, seed 42, `simulate-2@20261128-093242`, 0 lỗi, code `main` `97c9a9e`; lượt trước `simulate-1`)
-- Đo token trên `deepseek-chat`, tỉ lệ đạt 18/26 (69%) lượt 2 (sau khi chấm lại B16). Chi phí / task thành công: $0,0109 (model `deepseek-flash`) · $0,0425 (model `deepseek-v4-pro`)
-- Chi phí / tháng ở quy mô thật *(tự ước tính 100 / 500 / 2.000 người)*, model `deepseek-flash`: thấp $0,40 · cơ sở $2,01 · cao $8,04 (`deepseek-v4-pro`: $1,56 · $7,82 · $31,29) → chi tiết `cost/cost-estimate.md`
-- So với impact / người / tháng (§2, ≈ 9 phút cho người tự chuẩn bị hồ sơ): chi phí model ≈ $0,004 / người / tháng, không phải điểm nghẽn; điều quyết định là chất lượng — lượt 2 chưa đạt chuẩn §7, nhất là bước liên hệ luật sư (2/5). Chưa tính hosting, người duyệt, thẩm định pháp lý và bảo mật.
+- Persona + giá: `cost/personas.yaml` (khảo sát câu 8; giá DeepSeek xem 28/11/2026) · lượt mô phỏng: `cost/simulate-3.csv` (50 phiên, seed 42, `simulate-3@20261128-103013`, 0 lỗi, code `fd99197` cùng code lượt 3; lượt trước `simulate-1`, `simulate-2`)
+- Đo token trên `deepseek-chat`. Chi phí / phiên: $0,0106 (`deepseek-flash`) · $0,0432 (`deepseek-v4-pro`). Chi phí / task thành công: $0,0153 · $0,0624 theo tỉ lệ đạt lượt 2 (18/26, file khung sinh ra); ≈ $0,0120 · $0,0488 theo lượt 3 (23/26, tính tay)
+- Chi phí / tháng ở quy mô thật *(tự ước tính 100 / 500 / 2.000 người)*, model `deepseek-flash`: thấp $0,56 · cơ sở $2,80 · cao $11,21 (`deepseek-v4-pro`: $2,29 · $11,45 · $45,79) → chi tiết `cost/cost-estimate.md`
+- So với impact / người / tháng (§2, ≈ 9 phút cho người tự chuẩn bị hồ sơ): chi phí model ≈ $0,0056 / người / tháng, không phải điểm nghẽn; trích xuất song song tăng chi phí khoảng 40% so với `simulate-2` để giảm độ trễ TB 4,56 → 3,71 giây. Điều quyết định là chất lượng — lượt 3 đạt 88% nhưng điền đúng trường có nguồn 15/18, chưa đạt chuẩn §7. Chưa tính hosting, người duyệt, thẩm định pháp lý và bảo mật.
 
 ## §9. Rủi ro & an toàn
 - Dữ liệu: demo và bộ câu thử chỉ dùng dữ liệu giả lập (A, B, phòng M). Phỏng vấn chỉ hỏi quy trình, không thu hồ sơ, tin nhắn, ảnh, ghi âm thật; ghi bằng mã P1–P3. Không đưa dữ liệu thật vào model, kể cả gói miễn phí. Mọi lần gọi API DeepSeek (eval lượt 1, 2 và mô phỏng chi phí) chỉ gửi đầu vào giả lập trong `eval/benchmark.csv`; key đặt trong `.env` trên máy hoặc biến môi trường Railway, không commit.
@@ -224,6 +230,7 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 | 28/11 sáng | Ghi kết quả người thứ hai chấm độc lập 5 output lượt 2 (khớp 4/5, lệch B16) vào `eval/README.md` §3 và `eval/phieu-cham-doc-lap.md`; không đổi cột `pass`, chuẩn đạt | T3-2; kiểm độ nhất quán cách chấm theo `eval/metric_spec.yaml` |
 | 28/11 sáng | §1 và Canvas dòng 4 thêm trích dẫn từ lần hỏi lại P1–P3 (khớp `evidence/summary.md` §3); xoá file mẫu trống `evidence/data-mining.md` vì không đào data; sửa câu cũ ở `eval/README.md` §6; DATA_CARD ghi khảo sát đã xác nhận không có phiếu của thành viên nhóm hay phiếu thử; không đổi số, chuẩn đạt, câu thử | Đồng bộ bằng chứng giữa các file |
 | 28/11 sáng | Chấm lại B16 lượt 2 thành trượt (`dien_dung_truong_co_nguon`: `nguoi_tao` ghi "tự chụp/chép" không có trong nguồn) theo người chấm thứ hai, nhóm thống nhất; lượt 2 từ 19/26 còn 18/26 (69%). Sửa cột `pass`, `ghi_chu` của `eval/run-2.csv`, `eval/report.md`, `eval/README.md`, §7; chạy lại mô phỏng chi phí với tỉ lệ đạt mới; không đổi chuẩn đạt, câu thử | Kiểm độ nhất quán cách chấm (`eval/README.md` §3) |
+| 28/11 trưa | Chấm eval lượt 3 (`run-3@20261128-102828`, code `main` `ffe651b`, PR #27 của N1: trích xuất song song, bước bàn giao trong `answer()`): 23/26 (88%), chưa đạt chuẩn vì điền đúng trường có nguồn 15/18; điền `eval/report.md` §1 (thêm bảng độ trễ lượt 1–3), §4, `eval/README.md` §5–6, §7. §4 viết lại sơ đồ và bảng công cụ theo code `ffe651b`. §8 và `cost/cost-estimate.md` dùng `simulate-3@20261128-103013` (N1 chạy, cùng code lượt 3) kèm bảng so ba lượt mô phỏng; không đổi chuẩn đạt, câu thử | Lượt 2 trượt bước liên hệ, dừng bổ sung (B17, B18, B20, B22); T1-6 sau lượt 2 |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
