@@ -37,15 +37,25 @@
 
 ## Ghi chép phỏng vấn · P1–P3
 
-Ba ghi chép từ người tham gia thật, dùng để tổng hợp bằng chứng về trải nghiệm tại nơi làm việc và việc chuẩn bị phản ánh. Nhóm dùng mã P1–P3 và lược bỏ thông tin nhận diện. Các ghi chép chủ yếu ở dạng tóm tắt. P1, P2 và P3 mỗi người có một đoạn trích nguyên văn. Các ghi chép không đưa vào model. Cách xoay xở của P1–P3 được dùng làm cơ sở dựng 9 câu thử giả lập (P2: B11–B14, B22 · P3: B23, B24 · P1: B25, B26); không đưa trích dẫn vào câu thử.
+Ba ghi chép từ người tham gia thật, dùng để tổng hợp bằng chứng về trải nghiệm tại nơi làm việc và việc chuẩn bị phản ánh. Nhóm dùng mã P1–P3 và lược bỏ thông tin nhận diện. Các ghi chép chủ yếu ở dạng tóm tắt. P1, P2 và P3 mỗi người có một đoạn trích nguyên văn trong [tổng hợp bằng chứng §3](../evidence/summary.md#3-5-trích-dẫn-hoặc-ví-dụ-nguyên-văn-có-nguồn-bỏ-tên). Các ghi chép không đưa vào model. Cách xoay xở của P1–P3 được dùng làm cơ sở dựng 9 câu thử giả lập (P2: B11–B14, B22 · P3: B23, B24 · P1: B25, B26); không đưa trích dẫn vào câu thử.
 
 | Hồ sơ | Nguồn và cách xử lý | Giới hạn |
 |---|---|---|
-| [P1](../evidence/interviews/P1.md) | Nhân viên tại chính phòng khám được nhắc đến. TV3 hỏi và ghi qua cuộc gọi điện thoại khoảng 10:00 ngày 27/11/2026. Bản tóm tắt ghi nhận việc nhân viên bị mắng, bị cho xem hình ảnh nhạy cảm và các hành vi, lời lẽ được kể lại. | Đoạn trích ghi nhận lo ngại về thu nhập và khả năng tìm việc khác. P1 nhắc gián tiếp đến ý định quay và đăng tố cáo, nhưng không dám làm vì sợ bị bác sĩ gây khó dễ. Khi hỏi lại, P1 xác nhận đã xin lời khuyên từ người thân và bắt đầu ghi Notes, rồi dừng trước khi ghi xong sự việc đầu tiên vì bận và chưa thấy sẽ dùng ghi chú vào việc gì. |
-| [P2](../evidence/interviews/P2.md) | Nhân viên gặp hành vi mang tính tình dục tại nơi làm việc. Ghi chép khoảng 22:00 ngày 27/11/2026. Bản tóm tắt ghi nhận việc P2 giữ tin nhắn, ghi chú trong Notes và một đoạn ghi âm, đồng thời từng ngồi định viết email cho HR. | Chưa xác nhận hình thức và người hỏi/ghi. Chưa rõ lần tự chuẩn bị phản ánh gần nhất. Ý kiến về công cụ là kỳ vọng của P2. |
-| [P3](../evidence/interviews/P3.md) | Nhân viên kể về hành vi tại nơi làm việc. TV3 hỏi và ghi qua tin nhắn lúc 23:47 ngày 27/11/2026. Ghi chép theo 9 câu là nguồn tham chiếu cho B23 và B24. Đoạn lời kể bổ sung ghi riêng việc P3 trao đổi với quản lý và các tư liệu có sẵn. | Chưa ghi nhận số lần trong tháng hay thời gian chuẩn bị phản ánh. |
+| [P1](../evidence/interviews/P1.md) | Nhân viên tại chính phòng khám được nhắc đến. TV3 hỏi và ghi qua cuộc gọi điện thoại khoảng 10:00 ngày 27/11/2026. Bản tóm tắt ghi nhận việc nhân viên bị mắng, bị cho xem hình ảnh nhạy cảm và các hành vi, lời lẽ được kể lại. | Đoạn trích ghi nhận lo ngại về thu nhập và khả năng tìm việc khác. P1 nhắc gián tiếp đến ý định quay và đăng tố cáo, nhưng ngần ngại vì lo mất thu nhập và khó tìm việc khác. Khi được hỏi lại qua tin nhắn lúc 22:38 ngày 27/11/2026, P1 xác nhận đã xin lời khuyên từ người thân và bắt đầu ghi Notes, rồi dừng trước khi ghi xong sự việc đầu tiên vì bận và chưa thấy sẽ dùng ghi chú vào việc gì. |
+| [P2](../evidence/interviews/P2.md) | Nhân viên gặp hành vi mang tính tình dục tại nơi làm việc. TV3 hỏi và ghi qua tin nhắn khoảng 22:00 ngày 27/11/2026. Bản tóm tắt ghi nhận việc P2 giữ tin nhắn, ghi chú trong Notes và một đoạn ghi âm, đồng thời từng ngồi định viết email cho HR. | Chưa rõ lần tự chuẩn bị phản ánh gần nhất. Ý kiến về công cụ là kỳ vọng của P2. |
+| [P3](../evidence/interviews/P3.md) | Nhân viên kể về hành vi tại nơi làm việc. TV3 hỏi và ghi qua tin nhắn lúc 23:47 ngày 27/11/2026. Ghi chép theo 9 câu là nguồn tham chiếu cho B23 và B24. Đoạn lời kể bổ sung nhận qua tin nhắn lúc 00:21 ngày 28/11/2026, ghi riêng việc P3 trao đổi với quản lý và các tư liệu có sẵn. | Chưa ghi nhận số lần trong tháng hay thời gian chuẩn bị phản ánh. |
 
-Cả ba người đã thực hiện bước chuẩn bị. Cần xác nhận cả ba ngoài nhóm để chốt ngưỡng phỏng vấn. Xem [tổng hợp bằng chứng](../evidence/summary.md) để đối chiếu với khảo sát.
+Cả ba người ngoài nhóm, tự nguyện tham gia và đã thực hiện bước chuẩn bị. Xem [tổng hợp bằng chứng](../evidence/summary.md) để đối chiếu với khảo sát.
+
+## Nguồn công khai đối chiếu bằng chứng
+
+Ba tài liệu công khai được dẫn trong [tổng hợp bằng chứng §3–4](../evidence/summary.md) để đối chiếu bối cảnh. Chỉ ghi đoạn trích ngắn hoặc tóm tắt, bỏ chi tiết nhận diện. Các tài liệu này không dùng làm đầu vào cho model hoặc benchmark.
+
+| Nguồn | Nội dung dùng và giới hạn |
+|---|---|
+| [Thanh Niên, 12/08/2026](https://thanhnien.vn/bi-quay-roi-tinh-duc-nhung-khong-dam-len-tieng-chung-cu-dau-ra-185260808175844689.htm) | Một lời kể trực tiếp về việc ngần ngại phản ánh khi thiếu chứng cứ và lo ảnh hưởng kết quả thực tập. |
+| [Báo Phụ Nữ, 28/07/2025](https://tuoitre.vn/phunuonline/ke-quay-roi-yen-vi-con-nan-nhan-mat-viec-1101556201.htm) | Bài ý kiến. Tác giả kể lại một trường hợp đã báo với bộ phận nhân sự. Bài chưa mô tả cách người đó chuẩn bị hồ sơ. |
+| [Tổng quan về bình đẳng giới ở Việt Nam 2021, bản tóm tắt, tr. 16](https://vietnam.un.org/sites/default/files/2021-12/CCGEP_Executive%20Summary_Ti%E1%BA%BFng%20Vi%E1%BB%87t.pdf) | Bối cảnh về trải nghiệm quấy rối tình dục trong đời tại Việt Nam. Phạm vi rộng hơn nơi làm việc và không đo việc chuẩn bị hồ sơ. |
 
 ## Ca chạy thử CP2 · `cp2_demo.json`
 
