@@ -214,6 +214,7 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 | 28/11 | §4 cập nhật theo code `main` `d2d82b7` (sau PR #14, #15, #16): sơ đồ CP4, bảng công cụ khớp `tools.py`/`agent.py`, phần còn giả (OCR, chép lời mẫu, danh mục luật sư giả lập, email nháp, không CSDL); §9 thêm dữ liệu gửi API và rủi ro theo P1, P3; ghi chú giá `deepseek-chat` trong `cost/personas.yaml` | T1-7, T3-7; code N2 đã merge |
 | 28/11 | Chạy `simulate` 50 phiên (`simulate-1@20261128-032943`), điền `cost/cost-estimate.md` và §8 | T3-8; tỉ lệ đạt từ lượt 2 |
 | 28/11 sáng | §4 ghi đủ điều kiện tạo email nháp (đồng ý liên hệ, đồng ý dùng form, chỉ trường đã xác nhận và được chọn); §6 bỏ "tải tài liệu/hình ảnh" vì web chỉ nhận chữ; §7 ghi lượt 1, 2 chạy trên hàm tạm trong `agent.py`; không đổi chuẩn đạt, câu thử, kết quả | Đối chiếu `codebase/web.py` `/email-draft`, `static/index.html` và `tools.py` tại `f9cc0d6`, `8dec952` |
+| 28/11 sáng | Ghi câu trả lời hỏi lại P2, P3 (tin nhắn 08:37) về lần chuẩn bị gần nhất, thời gian và số lần trong tháng vào `evidence/interviews/P2.md`, `P3.md`, `evidence/summary.md`, `data/DATA_CARD.md`; không đổi số §2 | Bảng phỏng vấn trong tổng hợp bằng chứng còn "Không rõ" ở hai cột số lần và thời gian |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
