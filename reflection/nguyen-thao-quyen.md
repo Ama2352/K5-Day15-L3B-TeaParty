@@ -2,7 +2,7 @@
 
 > Làm ở guide bước 5.3. Mỗi người một file: chép file này thành `reflection/<ten-khong-dau>.md` (viết thường, không dấu). Hạn: **23:59 Thứ Bảy 28/11**. Mỗi câu 3–6 dòng.
 
-1. **Vai trò + phần mình làm:** Phụ trách lõi AI (Người 1).
+1. **Vai trò + phần mình làm:** Nguyễn Thảo Quyên, phụ trách lõi AI.
    - **Chuẩn bị trước khi dựng:**
      - Cập nhật canvas (`c8053b0`) và điền spec §0–§7 (`c4b0e65`).
      - Chia kế hoạch 3 người theo ticket và sơ đồ §4 (`docs/TASKS.md`, `871cb85`).
@@ -16,9 +16,9 @@
    - **CP4:**
      - Sửa prompt theo các câu trượt ở lượt 1, gồm mâu thuẫn ngày gián tiếp và đoạn "không nghe rõ" (T1-6, `f552139`, `f9cc0d6`). Người chấm thứ hai cho lượt 2 (`8e0bec0`).
      - Tách trích xuất thành nhiều lời gọi song song theo từng đoạn nguồn, ghép bằng code. Thêm bước bàn giao: dừng bổ sung, gợi ý danh mục giả lập, email nháp (PR #27, `fd99197`). Thêm thử lại khi lỗi mạng tạm thời (`8e498c1`).
-     - Kết quả: lượt 1 17/26 → lượt 2 19/26 → lượt 3 23/26. Latency trung bình 4,56 s → 3,71 s (`eval/run-3.csv`).
+     - Kết quả: lượt 1 17/26 → lượt 2 18/26 (sau khi chấm lại B16) → lượt 3 23/26. Latency trung bình 4,56 s → 3,71 s (`eval/run-3.csv`).
 
-2. **AI hỗ trợ mình thế nào:** Dùng Claude Code với hai agent riêng. `n1-builder` sửa code của Người 1; `n1-tester` chỉ đọc và chạy test, eval thử. Phải sửa lại output AI ở các chỗ:
+2. **AI hỗ trợ mình thế nào:** Dùng Claude Code với hai agent riêng. `n1-builder` sửa code của Thảo Quyên (`ai.py`, `agent.py`); `n1-tester` chỉ đọc và chạy test, eval thử. Phải sửa lại output AI ở các chỗ:
    - Bộ lọc từ chối theo từ khoá làm rơi 10/12 yêu cầu vi phạm thật, phải đổi sang cách giữ lại mọi mục (fail-safe).
    - Code âm thầm xoá trích dẫn sai, che mất chi tiết bịa; phải đổi thành báo lỗi và thử lại.
    - Luật chốt cứng ở phía code bắt quá rộng ("lần thứ hai" bị đọc thành thứ Hai).

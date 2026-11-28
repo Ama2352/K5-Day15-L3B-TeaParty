@@ -6,30 +6,6 @@ Lát cắt CP1 giúp nhân viên chuyển lời kể và bằng chứng về m�
 
 ---
 
-## 0. Tạo repo nhóm từ khung này *(guide bước 1.0 — xoá mục này khi xong)*
-
-**Hai luật:** repo **mới, công khai (Public)** · tên `K5-Day15-<lớp>-<tên nhóm>`, vd `K5-Day15-L3A-StudyPulse` (tên nhóm viết liền, không dấu). Chép **nội dung bên trong** `starter-repo/` — `README.md`, `run.py` phải nằm ngay ở trang đầu repo.
-
-**(a) Không cần terminal — làm trên web GitHub**
-1. **New repository** → tên theo mẫu → **Public** → không tick thêm gì → tạo.
-2. Trên máy mở thư mục `starter-repo/`, **bật hiện file ẩn** (Mac Finder: `Cmd + Shift + .` · Windows: View → Show → Hidden items) để thấy `.gitignore`, `.env.example`.
-3. Trên repo vừa tạo: **Add file → Upload files** → **kéo thả** tất cả file và thư mục bên trong `starter-repo/` → **Commit changes**. Kéo thả mới giữ được thư mục con; lỗi vì nhiều file quá thì tải từng thư mục.
-4. Kiểm: có `.gitignore` chưa (hay thiếu nhất). Thiếu thì **Add file → Create new file**, tên `.gitignore`, dán nội dung từ máy.
-5. Từ giờ sửa file ngay trên web (biểu tượng bút chì → Commit). Phần code vẫn cần **một** người chạy được trên máy: trước mỗi lượt chạy tải **Code → Download ZIP** về thư mục mới (mang `.env` sang), chạy xong chỉ upload file kết quả và file vừa sửa; trong lúc đang chạy không ai sửa `eval/benchmark.csv` trên web.
-
-**(b) Dùng git**
-```bash
-git clone https://github.com/<tai-khoan>/K5-Day15-L3A-TenNhom.git
-cd K5-Day15-L3A-TenNhom
-cp -R ../duong-dan-toi/starter-repo/. .      # Windows PowerShell: Copy-Item -Recurse -Force ..\duong-dan-toi\starter-repo\* .
-git status                                   # không được có .env, data-btc/
-git add -A && git commit -m "Khung repo từ starter-repo" && git push
-```
-
-**Xong khi:** mở link repo bằng **cửa sổ ẩn danh** thấy được file (link nộp CP1) · đã mời thành viên (Settings → Collaborators) · đã điền `TEAMS.md` và `python run.py check` không báo gì ở phần "Kiểm TEAMS.md".
-
----
-
 ## Nhóm làm gì, khung làm gì
 
 | Nhóm quyết định và viết | Khung làm sẵn (không cần sửa) |
@@ -103,7 +79,7 @@ python -m pip install -r requirements.txt
 python -m uvicorn --app-dir codebase web:app --host 127.0.0.1 --port 8000
 ```
 
-Mở `http://127.0.0.1:8000/docs` để thử `POST /ask` với `{"text":"..."}`. Endpoint `GET /health` kiểm tra tiến trình web và không gọi model. Bản demo hiện dùng AI giả theo cấu hình mặc định của khung.
+Mở `http://127.0.0.1:8000/docs` để thử `POST /ask` với `{"text":"..."}`. Endpoint `GET /health` kiểm tra tiến trình web và không gọi model. Khi chạy local, web mặc định dùng chế độ mô phỏng nếu chưa đặt `MODEL_PROVIDER`. Đặt `MODEL_PROVIDER=fake` để chọn chế độ này rõ ràng. Cấu hình gọi DeepSeek nằm bên dưới.
 
 Mở `http://127.0.0.1:8000/` và chọn **Dùng ca mẫu** để thử giao diện. FastAPI phục vụ bundle React có sẵn trong repo. Khi sửa [mã nguồn phần rà soát](codebase/draft.jsx), cập nhật bundle bằng hai lệnh sau từ thư mục gốc. Trên Windows PowerShell, có thể dùng `npm.cmd` thay cho `npm`.
 
@@ -134,14 +110,16 @@ Khi đưa demo lên Railway, bật **Wait for CI** và tạo domain trong **Publ
 
 | Thành phần | Thật / Giả | Ghi chú |
 |---|---|---|
-| Lời gọi AI ở quyết định trung tâm | **Thật** (bắt buộc từ CP3) | Model: DeepSeek `deepseek-chat` (định dạng OpenAI, chế độ JSON); chỉ `trich_xuat` gọi AI |
-|  |  |  |
+| Lời gọi model | **Thật khi cấu hình DeepSeek** | Web gọi model để trích xuất và xử lý câu trả lời bổ sung. Luồng CLI/eval còn gọi model để đọc ý định bàn giao. Ba lượt eval đã chạy bằng DeepSeek `deepseek-chat` trên 26 ca giả lập mỗi lượt. Xem [hồ sơ đánh giá](eval/README.md). |
+| Chế độ mô phỏng local | **Giả lập** | Với `MODEL_PROVIDER=fake`, CLI và web dùng kết quả mô phỏng và không gọi API model. |
+| Đầu vào demo và benchmark | **Giả lập** | Ứng dụng nhận chữ. Nội dung từ ảnh và ghi âm được cung cấp dưới dạng chữ trích mẫu và bản chép lời mẫu. |
+| Rà bản nháp và tải JSON | **Chạy được** | Người dùng xem nguồn, sửa và xác nhận từng trường trên web rồi tải bản nháp. |
+| Gợi ý luật sư và email | **Danh mục giả lập, email nháp** | Ứng dụng soạn email nháp từ các trường người dùng đã xác nhận và chọn chia sẻ. Việc gửi email diễn ra ngoài ứng dụng. |
 
 ## Dùng AI vào việc gì
 
-2–3 dòng (bắt buộc): nhóm dùng công cụ AI nào để làm gì, người kiểm lại phần nào. Chi tiết: [docs/ai-usage.md](docs/ai-usage.md). Coding agent đọc [AGENTS.md](AGENTS.md).
-
-Nhóm dùng Claude Code để viết và sửa code (`agent.py`, `tools.py`, web), soạn prompt trích xuất và viết test. Người dùng đọc lại code và chạy test trước khi merge. Cột `pass` do Claude Code chấm nháp, N3 tự duyệt lại cả 26 câu mỗi lượt; người thứ hai chấm độc lập 5 output (khớp 4/5). Chỉ dữ liệu giả lập được gửi lên API.
+Nhóm dùng Claude Code để hỗ trợ viết code, soạn prompt, viết test và chấm nháp eval. Sang dùng Codex để rà tích hợp và chuyển logic hỏi bổ sung dùng chung cho CLI và web, rồi sửa và kiểm bằng ca hồi quy.
+Quỳnh Anh duyệt lại cả 26 câu mỗi lượt. Quyên chấm độc lập 5 đầu ra lượt 2, khớp 4/5 trước khi nhóm thống nhất chấm lại B16. Chỉ dữ liệu giả lập được gửi lên API. Xem [khai báo chi tiết](docs/ai-usage.md) và [hướng dẫn cho coding agent](AGENTS.md).
 
 ## File mẫu — điền ở bước nào
 
