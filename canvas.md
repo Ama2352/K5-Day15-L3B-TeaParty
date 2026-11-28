@@ -23,7 +23,7 @@ Trước CP1, cả nhóm thống nhất lát cắt và cách thu bằng chứng.
 
 **Pain.** Nhân viên bị quấy rối tình dục tại nơi làm việc gặp khó khăn trong việc thu thập, hệ thống hóa bằng chứng và chuẩn bị hồ sơ phản ánh sự việc.
 
-**Insight từ người dùng thật.** P1 đã bắt đầu ghi Notes rồi dừng. P2 gặp khó khi chọn sự việc để kể trong email cho HR. P3 nêu tư liệu rải rác và mốc thời gian chưa chắc. Giả thuyết về bước mất thời gian nhất trong tháng qua vẫn chưa kiểm được. [Tổng hợp bằng chứng](evidence/summary.md)
+**Insight từ người dùng thật.** P1 đã bắt đầu ghi Notes rồi dừng. P2 gặp khó khi chọn sự việc để kể trong email cho HR. P3 nêu tư liệu rải rác và mốc thời gian chưa chắc. Giả thuyết được ủng hộ một phần và phải đổi: 2/3 người nhắc tới nguồn rời và mốc chưa chắc, còn chỗ dừng lại là chọn và sắp xếp sự việc cần kể. [Tổng hợp bằng chứng](evidence/summary.md)
 
 **Nguồn công khai dự kiến kiểm tra.** (a) lời kể đã đăng báo — VnExpress 30/04/2022 (nữ nhân viên, phản ánh bị xem nhẹ), VietNamNet (nam giáo viên), Dân trí 23/11/2020 (nam nhân viên); (b) khảo sát ActionAid về quấy rối; (c) Điều 84 Nghị định 145/2020/NĐ-CP về các hình thức quấy rối tại nơi làm việc. Nhóm sẽ đối chiếu nội dung và mức độ liên quan trước khi dùng làm bằng chứng.
 

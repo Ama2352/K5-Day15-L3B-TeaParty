@@ -1,8 +1,8 @@
 # Khảo sát: chuẩn bị phản ánh vấn đề ở nơi làm việc
 
 - Công cụ: Google Form, ẩn danh, không thu email.
-- Kênh đã gửi: __
-- Giờ mở: __ · Giờ chốt: __
+- Kênh đã gửi: Zalo
+- Giờ mở: 19:09 ngày 27/11/2026 · Giờ chốt: 19:27 ngày 27/11/2026
 - Bản số liệu hiện tại: `results.csv`, lấy 27/11/2026; phản hồi từ 19:09:10 đến 19:27:21 (n = 21). Đã bỏ cột thời gian, thay bằng mã S01–S21.
 
 ## Nguyên bộ câu hỏi và phương án (mã tạo form)
