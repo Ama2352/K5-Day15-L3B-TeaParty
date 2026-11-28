@@ -7,13 +7,13 @@
 
 | Nguồn | Đạt ngưỡng? | File |
 |---|---|---|
-| Đào data (x/N, %, cách đếm chạy lại được, ≥5 ví dụ) | ☐ | `evidence/data-mining.md` |
+| Đào data (x/N, %, cách đếm chạy lại được, ≥5 ví dụ) | Không dùng | Nhóm không có data BTC hay data nhật ký để đếm; đã xoá file mẫu `evidence/data-mining.md` |
 | Phỏng vấn (≥3 người ngoài nhóm, đúng người dùng) | ☑ (3/3) | `evidence/interviews/P1.md`–`P3.md` (cả ba ngoài nhóm, tự nguyện tham gia và đã thực hiện bước chuẩn bị) |
 | Khảo sát (≥20 người ngoài nhóm, đúng người dùng) | ☐ (n = 21; đúng người dùng của lát cắt mới 2/21) | `evidence/survey/` |
 
 ## 2. Số chính
 
-- Đào data: chưa có kết quả đếm trong [ghi chép đào data](data-mining.md).
+- Đào data: nhóm không dùng nguồn này.
 - **Phỏng vấn:** đã ghi chép 3 cuộc. P2 đã giữ tin nhắn, ghi chú trong Notes và một đoạn ghi âm, đồng thời từng ngồi định viết email cho HR. P3 đã giữ chat, ghi âm và ghi chú, đồng thời nêu khó khăn khi gom các nguồn này thành bản phản ánh. P1 nhắc gián tiếp đến ý định quay lại sự việc ở phòng khám và đăng tố cáo, nhưng ngần ngại vì lo mất thu nhập và khó tìm việc khác. Khi được hỏi lại, P1 xác nhận đã xin lời khuyên từ người thân và bắt đầu ghi Notes, nhưng dừng trước khi ghi xong sự việc đầu tiên vì bận và chưa thấy sẽ dùng ghi chú vào việc gì. Cả ba người ngoài nhóm, tự nguyện tham gia và đã thực hiện bước chuẩn bị. Khi hỏi lại lúc 08:37 ngày 28/11/2026, P2 ước khoảng 2 lần trong tháng qua, lần gần nhất khoảng 20–30 phút trong một buổi tối; P3 ước khoảng 3 buổi trong tháng qua, đợt gần nhất rải ra hai tối khoảng 20 và 30 phút. Cả hai đều dừng trước khi xếp xong hoặc viết xong. P1 (hỏi lại 08:45) ước 1 lần trong tháng qua, khoảng 10 phút, dừng trước khi ghi xong sự việc đầu tiên và chưa mở lại.
 - Khảo sát: n = 21 (đến 19:27 ngày 27/11) · 13/21 (62%) nói chính mình hoặc người quen cần chuẩn bị bản phản ánh trong 12 tháng · **chính mình: 6/21**; chính mình và có vấn đề mang tính tình dục: **2/21**. Chi tiết:
 

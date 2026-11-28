@@ -26,6 +26,10 @@ Data BTC cấp đã dùng: không có.
   - “... chị tính ghi lại ông đó rồi mà không dám tại lương ổng trả cao, giờ chưa chắc kiếm được việc như thế... danh tiếng bác sĩ này lớn ... khó tìm được việc khác” — [P1](evidence/interviews/P1.md)
   - “Em từng định viết mail cho HR nhưng ngồi một lúc không biết viết như thế nào. Không biết nên kể hết từ đầu hay chỉ kể những lần nghiêm trọng nhất.” — [P2](evidence/interviews/P2.md)
   - “Mỗi thứ nằm một chỗ, có những chi tiết mình nhớ nhưng không chắc về thời điểm.” — [P3](evidence/interviews/P3.md)
+  - “Chị ghi chuyện đầu tiên còn chưa xong thì bận việc nên dừng. Sau đó chị cũng chưa biết ghi tiếp để làm gì nên cứ để đó.” — [P1](evidence/interviews/P1.md), hỏi lại 28/11
+  - “Em cứ phân vân nên kể từ đầu hay chỉ kể mấy lần nghiêm trọng hơn, rồi em để đó.” — [P2](evidence/interviews/P2.md), hỏi lại 28/11
+  - “Cuối tuần mình có mở Notes ghi vài dòng, tới tối thứ Hai thì mình lục lại chat nhóm xem có nhớ ra hôm đó là hôm nào không.” — [P3](evidence/interviews/P3.md), hỏi lại 28/11
+  - “Có mấy chuyện xảy ra trực tiếp, mình chỉ nhớ tầm lúc đó thôi nên cứ để đó, chưa xếp được hết.” — [P3](evidence/interviews/P3.md), hỏi lại 28/11
 
 ## §2. Impact & quyết định chọn *(guide 1.3)*
 
@@ -218,6 +222,7 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 | 28/11 sáng | Ghi câu trả lời hỏi lại P1 (tin nhắn 08:45) về lần gần nhất, thời gian, số lần trong tháng; thêm 4 trích dẫn nguyên văn từ lần hỏi lại P1–P3 vào `evidence/summary.md` §3 (7 trích dẫn phỏng vấn), tách 2 ví dụ báo chí thành bối cảnh không tính; cập nhật `data/DATA_CARD.md`; không đổi số §2 | Báo chí không thuộc ba nguồn được tính; R1 cần mốc 1 tháng qua cho cả ba người phỏng vấn |
 | 28/11 sáng | Điền phòng C401 · Zone 6 ở tiêu đề; `cost/cost-estimate.md` §2 ghi lượt `simulate --try` (`simulate-try@20261128-032804`, 10 phiên) và lý do file không có trong repo | T3-5, T3-7 |
 | 28/11 sáng | Ghi kết quả người thứ hai chấm độc lập 5 output lượt 2 (khớp 4/5, lệch B16) vào `eval/README.md` §3 và `eval/phieu-cham-doc-lap.md`; không đổi cột `pass`, chuẩn đạt | T3-2; kiểm độ nhất quán cách chấm theo `eval/metric_spec.yaml` |
+| 28/11 sáng | §1 và Canvas dòng 4 thêm trích dẫn từ lần hỏi lại P1–P3 (khớp `evidence/summary.md` §3); xoá file mẫu trống `evidence/data-mining.md` vì không đào data; sửa câu cũ ở `eval/README.md` §6; DATA_CARD ghi khảo sát đã xác nhận không có phiếu của thành viên nhóm hay phiếu thử; không đổi số, chuẩn đạt, câu thử | Đồng bộ bằng chứng giữa các file |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 

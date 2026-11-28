@@ -33,7 +33,7 @@
 | Nguồn và cách tạo | **Thật**, nhóm tự thu bằng Google Form ẩn danh. Câu hỏi: `evidence/survey/questions.md`. |
 | Xử lý | Bỏ cột thời gian, thay bằng mã S01–S21. Form không thu tên, email. Không loại phiếu nào. |
 | Quy mô / ngày lấy | 21 phiếu, phản hồi từ 19:09 đến 19:27 ngày 27/11/2026. |
-| Giới hạn | 16/21 ở độ tuổi 18–24; chỉ 2/21 đúng người dùng của lát cắt; gộp mọi loại vấn đề ở nơi làm việc; S04, S14 có phương án trái nhau; chưa xác nhận đã loại thành viên nhóm hoặc phiếu điền thử. |
+| Giới hạn | 16/21 ở độ tuổi 18–24; chỉ 2/21 đúng người dùng của lát cắt; gộp mọi loại vấn đề ở nơi làm việc; S04, S14 có phương án trái nhau; đã xác nhận không có phiếu của thành viên nhóm hay phiếu thử. |
 
 ## Ghi chép phỏng vấn · P1–P3
 
