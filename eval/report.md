@@ -13,6 +13,8 @@
 
 Lượt 1 chạy trên code `main` `8dec952` (PR #8 của N1), model `deepseek-chat`, 26 câu, 0 lỗi; N3 chấm, theo `eval/metric_spec.yaml`. Lượt 2 chạy trên `codebase/agent.py` của PR #14 (`f9cc0d6`, T1-6, chưa merge vào `main` lúc chạy), cùng model, cùng 26 câu, cùng cách chấm; 0 lỗi. Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`. Trace: `traces/run-1.jsonl`, `traces/run-2.jsonl`.
 
+Lưu ý phiên bản: ở cả hai lượt, `tools.py` mới có `prepare_sources`, nên `answer()` dùng 4 hàm tạm trong `agent.py` để kiểm schema, tìm trường cần hỏi, đặt câu hỏi và tạo bản nháp. Hai lượt so được với nhau vì cùng bộ hàm này. Code `main` `d2d82b7` đã chuyển sang hàm thật của N2 trong `tools.py`; chưa có lượt eval trên bản đó, nên 19/26 không phải số đo của bản đang chạy trên web.
+
 ## 2. Lỗi lượt 1 — gom thành nhóm có tên
 
 | Nhóm lỗi | Số câu | Câu |

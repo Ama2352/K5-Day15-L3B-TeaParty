@@ -100,7 +100,7 @@ flowchart TD
     E --> F["tao_ban_nhap: bản nháp có nguồn + câu hỏi bỏ qua được"]
     F --> G["Web: người dùng sửa, tick xác nhận, trả lời (dien_lai), tải JSON"]
     G --> H{"Có liên hệ? Có dùng form?"}
-    H -->|Có + có| I["goi_y_luat_su (danh mục giả lập) → soan_email_nhap (chỉ trường được phép, KHÔNG gửi)"]
+    H -->|Có + có| I["goi_y_luat_su (danh mục giả lập) → soan_email_nhap (chỉ trường đã xác nhận + được chọn, KHÔNG gửi)"]
     H -->|Không| J["Dừng, giữ bản nháp"]
   ```
 
@@ -122,7 +122,7 @@ flowchart TD
   | `tao_ban_nhap` | Bản nháp | Văn bản đọc được, mỗi chi tiết kèm mã nguồn | Không |
   | `dien_lai` (AI, `agent.py`) | Bản nháp + câu trả lời của người dùng | Bản nháp chỉ đổi trường được trả lời, giữ trường đã xác nhận | Không |
   | `goi_y_luat_su` | Nhu cầu (chuỗi) | Mục khớp chuyên môn trong `data/luat_su.json` (**giả lập**) | Không; chỉ đọc file nội bộ |
-  | `soan_email_nhap` | Bản nháp, người nhận, danh sách trường được phép | Email **nháp** chỉ gồm trường được phép | Không; chỉ trả văn bản để người dùng tự gửi |
+  | `soan_email_nhap` | Bản nháp, người nhận, danh sách trường được phép | Email **nháp** chỉ gồm trường người dùng đã xác nhận và chọn chia sẻ (web chặn nếu chưa đồng ý liên hệ, chưa đồng ý dùng form hoặc chưa chọn trường nào đã xác nhận) | Không; chỉ trả văn bản để người dùng rà, chép và tự gửi |
 
 - **Mức tự động:** [x] AI gợi ý, người quyết · [ ] AI tự làm khi chắc, chuyển người khi không · [ ] AI tự làm — AI chỉ hỗ trợ trích xuất, tổ chức và trình bày thông tin. Người dùng phải có quyền xác nhận, sửa hoặc từ chối nội dung trích xuất. Nếu AI trích xuất sai, người dùng có thể bị ghi nhận sai lời kể hoặc sai diễn biến; nếu tự động gửi hồ sơ, thông tin nhạy cảm có thể bị chia sẻ ngoài ý muốn. Vì vậy, các bước xác nhận và chia sẻ phải do người dùng quyết định.
 - **Chỗ chặn rủi ro:**
@@ -145,7 +145,7 @@ flowchart TD
   | Chia sẻ có sự đồng ý | Chỉ chuyển hồ sơ qua Middleware sau khi người dùng xác nhận bên nhận và phạm vi dữ liệu được chia sẻ |
   | Không đưa ra kết luận thay con người | AI chỉ hỗ trợ sắp xếp thông tin và tạo bản nháp, không phán quyết hành vi, trách nhiệm hoặc kết quả pháp lý |
 
-- Phần còn giả (CP4): dữ liệu demo và bộ câu thử đều giả lập; ảnh và âm thanh chỉ có dạng chữ (kết quả OCR mẫu, bản chép lời mẫu), app chưa tự đọc ảnh hay chép âm thanh. Danh mục luật sư là giả lập (`data/luat_su.json`, tên hư cấu, email `.invalid`); không có kết nối luật sư hay tổ chức thật. Email chỉ là bản nháp để người dùng tự chép, app không gửi. **Không có cơ sở dữ liệu**: hồ sơ chưa hoàn thiện được lưu bằng cách tải JSON về máy người dùng, server không lưu hồ sơ. Ô "Middleware", "Cơ sở dữ liệu", "Kết nối luật sư / tổ chức" trong sơ đồ dự kiến là mô phỏng. Model gọi bằng tên `deepseek-chat` (changelog DeepSeek ghi tên này ngừng sau 24/07/2026 nhưng API vẫn nhận ngày 28/11/2026).
+- Phần còn giả (CP4): dữ liệu demo và bộ câu thử đều giả lập; ảnh và âm thanh chỉ có dạng chữ (kết quả OCR mẫu, bản chép lời mẫu), app chưa tự đọc ảnh hay chép âm thanh. Danh mục luật sư là giả lập (`data/luat_su.json`, tên hư cấu, email `.invalid`); không có kết nối luật sư hay tổ chức thật. Email nháp chỉ tạo khi người dùng đồng ý liên hệ và đồng ý dùng form, chỉ gồm các trường đã xác nhận và được chọn chia sẻ; email hiện ở ô chỉ đọc để người dùng rà, chép và tự gửi, app không gửi. **Không có cơ sở dữ liệu**: hồ sơ chưa hoàn thiện được lưu bằng cách tải JSON về máy người dùng, server không lưu hồ sơ. Ô "Middleware", "Cơ sở dữ liệu", "Kết nối luật sư / tổ chức" trong sơ đồ dự kiến là mô phỏng. Model gọi bằng tên `deepseek-chat` (changelog DeepSeek ghi tên này ngừng sau 24/07/2026 nhưng API vẫn nhận ngày 28/11/2026).
 
 ## §5. Chỗ khó — 4 lớp + ≥6 kịch bản + 2 tấn công *(guide 2.3)*
 
@@ -167,7 +167,7 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 - **Lớp 4 — đặc thù lĩnh vực:** cần tiếp tục bổ sung và kiểm tra với người có chuyên môn. Rủi ro quan trọng là xử lý sai thông tin nhạy cảm trong bối cảnh quấy rối tình dục tại nơi làm việc, gây áp lực cho người dùng hoặc chia sẻ thông tin ngoài ý muốn. Không tự tuyên bố đã có quy trình nghiệp vụ/pháp lý được chuyên gia xác nhận.
 
 ## §6. Bốn đường đi của trải nghiệm
-- **Mọi thứ suôn sẻ:** người dùng nhập lời kể và tải tài liệu/hình ảnh → LLM trích xuất thông tin vào biểu mẫu 11 trường → backend kiểm tra các trường → biểu mẫu đủ thông tin theo quy tắc đã định → hệ thống tạo bản nháp hồ sơ → người dùng xem, chỉnh sửa và xác nhận → hệ thống hỏi người dùng có muốn kết nối luật sư/tổ chức hỗ trợ hay không.
+- **Mọi thứ suôn sẻ:** người dùng nhập lời kể và dán đoạn chữ từ tài liệu (bản chạy thử: kết quả OCR mẫu, bản chép lời mẫu; chưa có nút tải tệp) → LLM trích xuất thông tin vào biểu mẫu 11 trường → backend kiểm tra các trường → biểu mẫu đủ thông tin theo quy tắc đã định → hệ thống tạo bản nháp hồ sơ → người dùng xem, chỉnh sửa và xác nhận → hệ thống hỏi người dùng có muốn kết nối luật sư/tổ chức hỗ trợ hay không.
 - **Không chắc (lớp 2):** người dùng cung cấp thông tin mơ hồ hoặc thiếu → hệ thống đánh dấu trường cần xác nhận → hỏi bổ sung đúng phần còn thiếu → người dùng có thể trả lời, bỏ qua hoặc nói không biết → hệ thống cập nhật dữ liệu và kiểm tra lại.
 - **Không có căn cứ (lớp 1):** người dùng yêu cầu điền một thông tin không xuất hiện trong lời kể hoặc tài liệu → hệ thống không tự suy đoán → đánh dấu chưa có thông tin/cần xác nhận → giữ nguyên dữ liệu hiện có và cho phép lưu hồ sơ chưa hoàn thiện.
 - **Người dùng sửa:** người dùng xem kết quả trích xuất → phát hiện thông tin sai hoặc chưa chính xác → chỉnh sửa trường tương ứng → hệ thống cập nhật dữ liệu → kiểm tra lại mức độ đầy đủ → dùng dữ liệu đã được người dùng xác nhận cho bước tiếp theo.
@@ -180,6 +180,7 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 - Một câu qua khi đáp ứng `pass_criterion` và mọi metric áp dụng. Báo cáo mỗi tỷ lệ theo số câu qua trên tổng số câu áp dụng. Cần có ca áp dụng cho từng metric và có ca `tu_choi` để kết luận.
 - Nguồn câu thử: 16/26 lấy dạng tình huống từ người dùng hoặc data thật (`nguoi_dung` 9 theo P1–P3 · `data_that` 7 theo khảo sát), 10/26 `tu_viet`; mọi chi tiết sự việc vẫn giả lập. Mỗi metric đều có ca áp dụng, bước liên hệ có B17–B21 (`eval/README.md` mục 2).
 - Kết quả: lượt 1 17/26 (65%, thuong 5/7 · kho 7/14 · tu_choi 5/5; chưa đạt chuẩn) · lượt 2 19/26 (73%, thuong 6/7 · kho 8/14 · tu_choi 5/5; chưa đạt chuẩn) — run ID: `run-1@20261128-015403` / `run-2@20261128-030638` → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
+- Lưu ý phiên bản: cả hai lượt chạy khi `tools.py` mới có `prepare_sources`, nên `answer()` dùng 4 hàm tạm trong `agent.py` (`_tam_kiem_tra_schema`, `_tam_tim_truong_can_hoi`, `_tam_cau_hoi_bo_sung`, `_tam_tao_ban_nhap`). Code `main` `d2d82b7` dùng hàm thật của N2 trong `tools.py`; chưa có lượt eval trên bản này.
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
 - Persona + giá: `cost/personas.yaml` (khảo sát câu 8; giá DeepSeek xem 28/11/2026) · lượt mô phỏng: `cost/simulate-1.csv` (50 phiên, seed 42, `simulate-1@20261128-032943`, 0 lỗi)
@@ -212,6 +213,7 @@ Các kịch bản dưới đây là bộ tình huống thiết kế dự kiến 
 | 28/11 sáng | T1-6 (N1): luật và code đánh dấu mâu thuẫn ngày, chỗ không rõ, thiếu giờ; bắt buộc trích dẫn trường nội dung. Chạy eval lượt 2 (`run-2@20261128-030638`, `agent.py` PR #14 `f9cc0d6`), N3 chấm 19/26; điền `eval/report.md` §1, §3–4, README §5–6, §7; không đổi chuẩn đạt, câu thử | Nhóm lỗi lượt 1 "không đánh dấu mâu thuẫn, chỗ chưa rõ" (B12, B16, B17) — T1-6, T3-8 |
 | 28/11 | §4 cập nhật theo code `main` `d2d82b7` (sau PR #14, #15, #16): sơ đồ CP4, bảng công cụ khớp `tools.py`/`agent.py`, phần còn giả (OCR, chép lời mẫu, danh mục luật sư giả lập, email nháp, không CSDL); §9 thêm dữ liệu gửi API và rủi ro theo P1, P3; ghi chú giá `deepseek-chat` trong `cost/personas.yaml` | T1-7, T3-7; code N2 đã merge |
 | 28/11 | Chạy `simulate` 50 phiên (`simulate-1@20261128-032943`), điền `cost/cost-estimate.md` và §8 | T3-8; tỉ lệ đạt từ lượt 2 |
+| 28/11 sáng | §4 ghi đủ điều kiện tạo email nháp (đồng ý liên hệ, đồng ý dùng form, chỉ trường đã xác nhận và được chọn); §6 bỏ "tải tài liệu/hình ảnh" vì web chỉ nhận chữ; §7 ghi lượt 1, 2 chạy trên hàm tạm trong `agent.py`; không đổi chuẩn đạt, câu thử, kết quả | Đối chiếu `codebase/web.py` `/email-draft`, `static/index.html` và `tools.py` tại `f9cc0d6`, `8dec952` |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
