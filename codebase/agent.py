@@ -23,13 +23,19 @@ from concurrent.futures import ThreadPoolExecutor
 import ai
 from ai import call_model
 from tools import _LAWYER_CATALOG, goi_y_luat_su, prepare_sources, soan_email_nhap
+from tools import (
+    MAX_CAU_HOI,
+    _DAU_KHONG_RO,
+    _ngan,
+    cau_hoi_bo_sung,
+    tim_truong_can_hoi,
+)
 from tracing import note
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCHEMA_PATH = os.path.join(ROOT, "codebase", "van_ban_xuat_xu.schema.json")
 MAU_PATH = os.path.join(ROOT, "data", "mau_ban_nhap.json")
 DRAFT_LABEL = "Bản nháp do AI hỗ trợ soạn, cần kiểm tra trước khi ký"
-MAX_CAU_HOI = 8
 
 
 # Prompt luồng CP2 — chỉ dùng cho chế độ fake (model giả bỏ qua system, đầu ra không đổi).
@@ -360,17 +366,6 @@ def _ep_mau_thuan_thu(items: list) -> None:
             field["status"] = "conflicting"
             field["conflict_note"] = ghi_chu
         note("chuẩn hoá: thứ trong tuần lệch giữa lời kể và tài liệu lập ngay sau sự việc → conflicting")
-
-
-# Ký hiệu nguồn tự đánh dấu phần không xác định được (bản chép lời, OCR…). Chỉ bắt:
-#  (a) dấu đánh trong ngoặc vuông / ngoặc tròn: [không nghe rõ], (không đọc được), [mờ], [ồn]…;
-#  (b) "đoạn|chữ|dòng|phần …" + "bị ồn|bị mờ|bị nhòe|không nghe rõ|không đọc được" trong cùng câu,
-#      và không có "không" ngay trước "bị". Câu kể thường ("tôi nói không nghe rõ", "ảnh không bị mờ") không bắt.
-_DAU_TRONG = r"(?:không|chưa)\s+(?:nghe|đọc|nhìn)\s+(?:rõ|được)|bị\s+(?:ồn|mờ|nhòe|nhoè|cắt)|mờ|ồn|nhòe|nhoè"
-_DAU_KHONG_RO = re.compile(
-    rf"[\[(]\s*(?:{_DAU_TRONG})[^\])]*[\])]"
-    r"|\b(?:đoạn|chữ|dòng|phần)\b[^.!?\n]*?(?:(?<!không\s)\bbị\s+(?:ồn|mờ|nhòe|nhoè)|\bkhông\s+nghe\s+rõ|\bkhông\s+đọc\s+được)",
-    re.IGNORECASE)
 
 
 _CO_GIO = re.compile(r"\b\d{1,2}\s*(?::|h|giờ)\s*\d{0,2}", re.IGNORECASE)
@@ -1200,12 +1195,6 @@ def _gan_cau_hoi(draft: dict) -> tuple:
     """Sinh câu hỏi bổ sung, ghi vào draft.questions_for_user. → (gaps, questions)."""
     gaps = tim_truong_can_hoi(draft)
     questions = cau_hoi_bo_sung(gaps)
-    # Câu hỏi của tools.py chưa có ưu tiên / giới hạn (13–18 câu ở ca nhiều tài liệu, chưa hỏi riêng đoạn "không nghe rõ").
-    # Tạm thời agent.py xếp lại theo luật đã thống nhất (_tam_cau_hoi_bo_sung): conflicting → unclear → missing, tối đa
-    # MAX_CAU_HOI câu, gộp mâu thuẫn trùng. Chuyển hẳn sang tools.py khi Người 2 port xong.
-    rieng = _tam_cau_hoi_bo_sung(_tam_tim_truong_can_hoi(draft))
-    if rieng or not questions:
-        questions = rieng
     draft["questions_for_user"] = [
         {"field_path": q["field_path"], "question": q["question"], "skippable": True} for q in questions]
     return gaps, questions
@@ -1525,7 +1514,7 @@ def _all_refs(node) -> set:
 
 
 # =====================================================================================
-# TẠM — xoá khi tools.py có hàm thật (kiem_tra_schema, tim_truong_can_hoi, cau_hoi_bo_sung, tao_ban_nhap).
+# Các hàm dự phòng cho kiểm schema và trình bày bản nháp.
 # Cùng tên, cùng tham số với docs/TASKS.md mục 1.2. Chỉ thư viện chuẩn, không gọi AI, không tác động ra ngoài.
 # =====================================================================================
 
@@ -1614,13 +1603,6 @@ _LABELS = {
     "thoi_diem_cung_cap": "Thời điểm cung cấp", "cach_cung_cap": "Cách cung cấp",
     "nguon_cua_nguoi_cung_cap": "Nguồn của người cung cấp",
 }
-# Thứ tự hỏi trong nhóm "missing": trường quan trọng cho văn bản trước, trường kỹ thuật sau.
-_MISSING_ORDER = ["noi_nhan", "thoi_diem_tao", "dia_diem_hoan_canh", "nguoi_co_mat", "nguoi_tao", "tu_cach",
-                  "loai_tai_lieu", "mo_ta_noi_dung", "lien_quan_su_viec", "quan_he_hoac_vai_tro",
-                  "thoi_diem_cung_cap", "cach_cung_cap", "nguon_cua_nguoi_cung_cap",
-                  "thiet_bi_ung_dung", "cach_luu_giu", "tinh_trang_chinh_sua"]
-
-
 def _field_of(node):
     """Trường bọc (nguoi_tao, tinh_trang_chinh_sua) giữ field ở khoá "field"."""
     if isinstance(node, dict) and isinstance(node.get("field"), dict) and "status" not in node:
@@ -1641,142 +1623,6 @@ def _label_of(field_path: str) -> str:
     name = _LABELS.get(_key_of(field_path), _key_of(field_path))
     i = _doc_index(field_path)
     return f"{name} (tài liệu {i + 1})" if i is not None else name
-
-
-def _tam_tim_truong_can_hoi(draft: dict) -> list:  # TẠM — xoá khi tools.py có hàm thật
-    """dict → list[{field_path, status}] cho mọi trường missing / unclear / conflicting.
-    ĐỀ XUẤT đổi hợp đồng mục 1.2 (chờ cả nhóm duyệt): kèm thêm value, conflict_note, quote (nếu có)
-    để cau_hoi_bo_sung nêu được cả hai nguồn và điều cụ thể còn chưa rõ."""
-    gaps = []
-
-    def add(path, node):
-        field = _field_of(node)
-        if field and field.get("status") in ("missing", "unclear", "conflicting"):
-            gap = {"field_path": path, "status": field["status"]}
-            if field.get("value"):
-                gap["value"] = field["value"]
-            if field.get("conflict_note"):
-                gap["conflict_note"] = field["conflict_note"]
-            quotes = [r["quote"] for r in field.get("source_refs") or []
-                      if isinstance(r, dict) and isinstance(r.get("quote"), str) and r["quote"].strip()]
-            if quotes:
-                gap["quote"] = quotes[0]
-            gaps.append(gap)
-
-    for key in ("noi_nhan", "tu_cach"):
-        add(key, draft.get(key))
-    for i, item in enumerate(draft.get("tai_lieu") or []):
-        if not isinstance(item, dict):
-            continue
-        for key in _ITEM_FIELDS:
-            if key == "nguoi_cung_cap":
-                provider = item.get(key)
-                if isinstance(provider, dict):
-                    for sub in _PROVIDER_FIELDS:
-                        add(f"tai_lieu[{i}].nguoi_cung_cap.{sub}", provider.get(sub))
-                continue
-            add(f"tai_lieu[{i}].{key}", item.get(key))
-    return gaps
-
-
-def _ngan(text, limit=90) -> str:
-    text = " ".join(str(text).split())
-    return text if len(text) <= limit else text[:limit - 1].rstrip() + "…"
-
-
-# Câu hỏi cho trường "unclear" theo loại trường: hỏi đúng điều còn thiếu thay vì "có muốn làm rõ không".
-_HOI_CHUA_RO = {
-    "thoi_diem_tao": "Bạn có nhớ thời điểm cụ thể hơn không (ngày, giờ)?",
-    "thoi_diem_cung_cap": "Bạn có nhớ thời điểm cụ thể hơn không (ngày, giờ)?",
-    "dia_diem_hoan_canh": "Bạn có thể nói rõ hơn nơi chốn hoặc hoàn cảnh không?",
-    "nguoi_co_mat": "Bạn có thể cho biết rõ hơn ai có mặt không?",
-    "nguoi_tao": "Ai đã lập, chụp, chép hoặc ghi tài liệu này?",
-    "thiet_bi_ung_dung": "Tài liệu được tạo bằng thiết bị hoặc ứng dụng nào?",
-    "cach_luu_giu": "Tài liệu đang được lưu ở đâu, bằng cách nào?",
-    "tinh_trang_chinh_sua": "Tài liệu đã bị cắt, chụp lại, đổi định dạng hay chỉnh sửa gì chưa?",
-}
-_CACH_GOI_MO_HO = re.compile(r"[\"“]([^\"”]{1,30})[\"”]")
-# Ký hiệu định danh người: một chữ in hoa A–Z (không dấu; Ă, Đ… KHÔNG tính) kèm số tuỳ chọn, có thể có tới 2 từ
-# chỉ vai trong danh sách đóng đứng trước — "A", "B2", "đồng nghiệp A", "anh quản lý C". Danh sách "A, B", "A và B" cũng là
-# ký hiệu; "A hoặc B" (chưa rõ người nào) thì KHÔNG.
-_TU_CHI_VAI = ["đồng nghiệp", "anh", "chị", "em", "ông", "bà", "cô", "chú", "bác", "bạn", "sếp", "quản lý",
-               "trưởng phòng", "trưởng nhóm", "phó phòng", "giám đốc", "nhân viên", "khách hàng", "bảo vệ",
-               "giáo viên", "học sinh", "sinh viên", "người quản lý"]
-_VAI = "|".join(sorted((re.escape(t) for t in _TU_CHI_VAI), key=len, reverse=True))
-_MOT_KY_HIEU = re.compile(rf"(?i:(?:{_VAI})\s+){{0,2}}[A-Z]\d*")
-_TRUONG_NGUOI = ("nguoi_co_mat", "mo_ta_noi_dung", "nguoi_tao")
-
-
-def _la_ky_hieu(text: str) -> bool:
-    """Chuỗi chỉ gồm ký hiệu định danh người (hoặc danh sách nối bằng dấu phẩy / "và")."""
-    text = unicodedata.normalize("NFC", " ".join(str(text).split()))
-    items = [x for x in re.split(r"\s*,\s*|\s+và\s+", text)]
-    return bool(items) and all(x and _MOT_KY_HIEU.fullmatch(x) for x in items)
-
-
-def _cau_hoi_chua_ro(label: str, key: str, gap: dict) -> str:
-    """Nêu cụ thể điều chưa rõ: cách gọi trong ngoặc kép (vd một đại từ) → hỏi đó là ai; còn lại hỏi theo trường."""
-    value = gap.get("value") or ""
-    ghi = f" bản nháp đang ghi \"{_ngan(value)}\"." if value else (
-        f" nguồn ghi \"{_ngan(gap['quote'], 60)}\"." if gap.get("quote") else "")
-    goi = [g for g in _CACH_GOI_MO_HO.findall(value) if not _la_ky_hieu(g)]
-    if goi and key in _TRUONG_NGUOI:
-        return f"{label}:{ghi} \"{goi[0]}\" là ai? Nếu bạn muốn, hãy ghi rõ (có thể dùng ký hiệu như A, B)."
-    if key == "mo_ta_noi_dung" and _DAU_KHONG_RO.search(unicodedata.normalize("NFC", value)):
-        return (f"{label}: nguồn có đoạn được đánh dấu là không nghe hoặc không đọc rõ. Bạn có nhớ nội dung "
-                "đoạn đó không? Nếu không chắc, cứ để trống — bản nháp sẽ giữ nguyên dấu \"không rõ\".")
-    if value and gap.get("quote"):
-        ghi += f" Nguồn: \"{_ngan(gap['quote'], 60)}\"."
-    mac_dinh = ("Ai là người được nhắc tới, hoặc chi tiết nào bạn chưa chắc, cần ghi rõ hơn?"
-                if key == "mo_ta_noi_dung" else "Bạn có thể nói rõ hơn phần này không?")
-    return f"{label} còn chưa rõ:{ghi} " + _HOI_CHUA_RO.get(key, mac_dinh)
-
-
-def _tam_cau_hoi_bo_sung(gaps: list) -> list:  # TẠM — xoá khi tools.py có hàm thật
-    """list gaps → list[{field_path, question, skippable}], tối đa MAX_CAU_HOI câu, trung tính, bỏ qua được.
-
-    Đề xuất để Người 2 làm giống trong hàm thật:
-    - Ưu tiên conflicting → unclear → missing; trong missing, trường quan trọng trước (_MISSING_ORDER).
-    - Tài liệu chưa gửi nội dung (mo_ta_noi_dung missing) → gộp thành 1 câu "bạn có thể cung cấp tài liệu không",
-      không hỏi lẻ từng trường còn lại của nó (trừ trường conflicting).
-    - Mâu thuẫn trùng conflict_note ở nhiều tài liệu → hỏi 1 lần.
-    - unclear mà không có value → không nêu giá trị rỗng.
-    """
-    chua_gui = {_doc_index(g["field_path"]) for g in gaps
-                if _key_of(g["field_path"]) == "mo_ta_noi_dung" and g["status"] == "missing"}
-    chua_gui.discard(None)
-    conflicts, unclears, missings = [], [], []
-    seen_paths, seen_notes = set(), set()
-
-    for gap in gaps:
-        path, status = gap["field_path"], gap["status"]
-        if path in seen_paths:
-            continue
-        seen_paths.add(path)
-        label, idx, key = _label_of(path), _doc_index(path), _key_of(path)
-        if status == "conflicting":
-            cnote = gap.get("conflict_note", "")
-            if cnote and cnote in seen_notes:
-                continue
-            seen_notes.add(cnote)
-            q = (f"{label}: các nguồn đang ghi khác nhau ({cnote or 'xem nguồn'}). "
-                 "Bạn có thể xác nhận thông tin đúng không?")
-            conflicts.append((0, path, q))
-        elif idx in chua_gui:
-            if key == "mo_ta_noi_dung":
-                q = (f"Tài liệu {idx + 1} mới được nhắc tới, chưa có nội dung. Bạn có thể cung cấp tài liệu này "
-                     "(nội dung, thời điểm tạo, cách lưu giữ) không?")
-                missings.append((-1, path, q))
-        elif status == "unclear":
-            unclears.append((0, path, _cau_hoi_chua_ro(label, key, gap)))
-        else:
-            order = _MISSING_ORDER.index(key) if key in _MISSING_ORDER else len(_MISSING_ORDER)
-            q = f"{label} chưa có thông tin. Nếu bạn biết và muốn ghi vào, bạn có thể bổ sung."
-            missings.append((order, path, q))
-
-    missings.sort(key=lambda x: x[0])   # sort ổn định: cùng mức thì giữ thứ tự tài liệu
-    chosen = (conflicts + unclears + missings)[:MAX_CAU_HOI]
-    return [{"field_path": p, "question": q + " (Có thể bỏ qua.)", "skippable": True} for _, p, q in chosen]
 
 
 _STATUS_TEXT = {"unclear": "chưa rõ — cần xác nhận", "conflicting": "mâu thuẫn — cần xác nhận"}
@@ -1836,14 +1682,6 @@ try:
     from tools import kiem_tra_schema
 except ImportError:
     kiem_tra_schema = _tam_kiem_tra_schema
-try:
-    from tools import tim_truong_can_hoi
-except ImportError:
-    tim_truong_can_hoi = _tam_tim_truong_can_hoi
-try:
-    from tools import cau_hoi_bo_sung
-except ImportError:
-    cau_hoi_bo_sung = _tam_cau_hoi_bo_sung
 try:
     from tools import tao_ban_nhap
 except ImportError:
