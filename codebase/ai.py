@@ -22,6 +22,7 @@ Nối model thật: điền .env (chép từ .env.example), rồi viết nhánh 
 import json
 import os
 import urllib.error
+import time
 import urllib.request
 
 from tracing import model_call
@@ -90,16 +91,34 @@ SHOW_RAW = False   # đổi thành True để in nguyên phản hồi của API 
 URL_OPENAI = (os.environ.get("MODEL_URL") or "https://api.deepseek.com/chat/completions").strip()
 
 
-def post_json(url, headers, body, timeout=60):
-    """Gửi POST JSON, trả về JSON phản hồi. Chỉ dùng thư viện chuẩn (urllib)."""
+_THU_LAI_HTTP = {429, 500, 502, 503, 504}   # lỗi tạm thời phía API → thử lại
+
+
+def post_json(url, headers, body, timeout=60, thu_lai=1):
+    """Gửi POST JSON, trả về JSON phản hồi. Chỉ dùng thư viện chuẩn (urllib).
+
+    Lỗi mạng tạm thời (kết nối / bắt tay TLS bị treo quá `timeout` giây, mất kết nối, HTTP 429 / 5xx) → thử lại
+    `thu_lai` lần sau 1 giây. Lỗi khác (sai key, sai tham số) → báo ngay, không thử lại.
+    """
     req = urllib.request.Request(
         url, data=json.dumps(body).encode("utf-8"), method="POST",
         headers=dict({"Content-Type": "application/json"}, **headers))
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as r:
-            data = json.loads(r.read().decode("utf-8"))
-    except urllib.error.HTTPError as e:
-        raise RuntimeError("HTTP %d: %s" % (e.code, e.read().decode("utf-8", "replace")[:300]))
+    for lan in range(thu_lai + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                data = json.loads(r.read().decode("utf-8"))
+            break
+        except urllib.error.HTTPError as e:
+            if e.code in _THU_LAI_HTTP and lan < thu_lai:
+                time.sleep(1)
+                continue
+            raise RuntimeError("HTTP %d: %s" % (e.code, e.read().decode("utf-8", "replace")[:300]))
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
+            if lan < thu_lai:
+                time.sleep(1)
+                continue
+            raise RuntimeError("Không kết nối được tới API model sau %d lần thử (%s). Kiểm tra mạng / VPN rồi thử lại."
+                               % (thu_lai + 1, getattr(e, "reason", e)))
     if SHOW_RAW:
         print(json.dumps(data, ensure_ascii=False, indent=2)[:3000])
     return data
@@ -112,7 +131,7 @@ def call_openai(system, user, json_mode=False):
     body = {"model": MODEL_NAME, "messages": messages}
     if json_mode:
         body["response_format"] = {"type": "json_object"}
-    data = post_json(URL_OPENAI, {"Authorization": "Bearer " + API_KEY}, body, timeout=120)
+    data = post_json(URL_OPENAI, {"Authorization": "Bearer " + API_KEY}, body, timeout=45)
     u = data["usage"]
     return {"text": data["choices"][0]["message"]["content"] or "",
             "tokens_in": u["prompt_tokens"], "tokens_out": u["completion_tokens"]}
