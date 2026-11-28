@@ -34,6 +34,9 @@ personas:           # ≥3 kiểu người dùng; share cộng lại = 1
 # Mỗi lượt hỏi lấy ngẫu nhiên một đầu vào trong eval/benchmark.csv (type thuong và kho).
 
 prices:             # USD / 1 triệu token — giá giờ cao điểm, input tính cache miss (mức cao, an toàn khi ước chi phí). ≥2 mức model
+                    # Token đo trên `deepseek-chat` (MODEL_NAME lúc chạy eval). Trang giá không còn liệt kê tên này; changelog DeepSeek
+                    # (https://api-docs.deepseek.com/updates/, mục 2026-04-24) ghi deepseek-chat trỏ tới deepseek-v4-flash và ngừng sau 24/07/2026,
+                    # nhưng API vẫn nhận tên này ngày 28/11/2026. Áp giá deepseek-flash làm mức chính, deepseek-v4-pro làm mức cao (tự ước tính).
   - model: deepseek-flash
     input: 0.30
     output: 1.20
