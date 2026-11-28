@@ -139,7 +139,7 @@ Khi đưa demo lên Railway, bật **Wait for CI** và tạo domain trong **Publ
 
 2–3 dòng (bắt buộc): nhóm dùng công cụ AI nào để làm gì, người kiểm lại phần nào. Chi tiết: [docs/ai-usage.md](docs/ai-usage.md). Coding agent đọc [AGENTS.md](AGENTS.md).
 
-Nhóm dùng Claude Code để viết và sửa code (`agent.py`, `tools.py`, web), soạn prompt trích xuất và viết test. Người dùng đọc lại code, chạy test trước khi merge và chấm cột `pass` bằng tay. Chỉ dữ liệu giả lập được gửi lên API.
+Nhóm dùng Claude Code để viết và sửa code (`agent.py`, `tools.py`, web), soạn prompt trích xuất và viết test. Người dùng đọc lại code và chạy test trước khi merge. Cột `pass` do Claude Code chấm nháp, N3 tự duyệt lại cả 26 câu mỗi lượt; người thứ hai chấm độc lập 5 output (khớp 4/5). Chỉ dữ liệu giả lập được gửi lên API.
 
 ## File mẫu — điền ở bước nào
 
