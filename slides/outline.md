@@ -2,8 +2,7 @@
 
 > Làm ở guide bước 5.1. Luật: **không có bằng chứng thì không có slide** — mỗi trang ≥1 con số / trích dẫn có nguồn / kết quả đo.
 > Xuất PDF thành `demo-slides.pdf` ở thư mục gốc repo, nộp tại CP4 14:30 Thứ Bảy 28/11. Nộp PDF, không nộp link.
-> Bản đã xuất: `demo-slides.pdf` (13 trang), xuất từ deck "Hồ Sơ An Toàn · AI Evidence Assistant · TeaParty · CP4". Nếu deck đổi thì xuất lại và chép đè file này.
-> Kịch bản thuyết trình 5 phút: [kich-ban-5-phut.md](kich-ban-5-phut.md).
+> [PDF bản chốt](../demo-slides.pdf) có 8 trang theo khung của BTC. Dàn dưới đây ghi lại bản trình bày CP4 13 trang để đối chiếu với phần demo CP4.
 
 | # | Trang | Có gì | Số lấy từ | Xong |
 |---|---|---|---|---|
